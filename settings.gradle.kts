@@ -30,9 +30,11 @@ include(
     "feature:orders",
     "feature:order-scan",
     "feature:tickets",
-    "feature:ticketscan",
+    "feature:ticket-scan",
 
     ":core:data",
-    ":core:net",
+    ":core:database",
+    ":core:model",
+    ":core:network",
     ":core:ui"
 )

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.convention.android.application)
-    alias(libs.plugins.convention.compose)
 }
 
 android {
@@ -14,16 +13,9 @@ android {
 }
 
 dependencies {
-//    implementation(projects.feature.auth)
-//    implementation(projects.feature.cafeteria)
-//    implementation(projects.feature.events)
-//    implementation(projects.feature.orders)
-//    implementation(projects.feature.tickets)
-
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.navigation.compose)
+    implementation(projects.feature.auth)
+    implementation(projects.feature.cafeteria)
+    implementation(projects.feature.events)
+    implementation(projects.feature.orders)
+    implementation(projects.feature.tickets)
 }

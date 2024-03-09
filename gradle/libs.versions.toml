@@ -73,5 +73,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 
 convention-android-application = { id = "tiktek.android.application", version = "unspecified" }
+convention-android-feature = { id = "tiktek.android.feature", version = "unspecified" }
 convention-android-library = { id = "tiktek.android.library", version = "unspecified" }
 convention-compose = { id = "tiktek.compose", version = "unspecified" }
+convention-hilt = { id = "tiktek.hilt", version = "unspecified" }
+convention-library = { id = "tiktek.library", version = "unspecified" }

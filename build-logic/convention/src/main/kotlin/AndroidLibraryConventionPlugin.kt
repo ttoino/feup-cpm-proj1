@@ -9,8 +9,6 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
             with(pluginManager) {
                 apply(plugin("android.library"))
                 apply(plugin("kotlin.android"))
-                apply(plugin("hilt"))
-                apply(plugin("ksp"))
             }
 
             extensions.configure<LibraryExtension> {
