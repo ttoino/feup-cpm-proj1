@@ -6,9 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 
-open class ScreenActivity(
-    val Screen: @Composable () -> Unit
-) : ComponentActivity() {
+abstract class ScreenActivity : ComponentActivity() {
+    @Composable
+    abstract fun Screen()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
