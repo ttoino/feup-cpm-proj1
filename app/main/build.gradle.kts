@@ -18,4 +18,6 @@ dependencies {
     implementation(projects.feature.events)
     implementation(projects.feature.orders)
     implementation(projects.feature.tickets)
+
+    implementation(projects.core.ui)
 }
