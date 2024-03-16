@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek
+package pt.up.fe.cpm.tiktek.cafeteria
 
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.AndroidEntryPoint

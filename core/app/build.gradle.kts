@@ -4,8 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "pt.up.fe.cpm.tiktek.core.ui"
+    namespace = "pt.up.fe.cpm.tiktek.core.app"
 }
 
 dependencies {
+    implementation(projects.core.ui)
+
+    implementation(libs.androidx.activity.compose)
 }

@@ -37,6 +37,12 @@ gradlePlugin {
         }
     }
     plugins {
+        register("dagger") {
+            id = "tiktek.dagger"
+            implementationClass = "DaggerConventionPlugin"
+        }
+    }
+    plugins {
         register("hilt") {
             id = "tiktek.hilt"
             implementationClass = "HiltConventionPlugin"

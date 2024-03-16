@@ -9,6 +9,8 @@ java {
 }
 
 dependencies {
+    implementation(projects.core.database)
+
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.serialization.kotlinx.json)

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_settings">Definições</string>
-    <string name="first_fragment_label">Primeiro Fragmento</string>
-    <string name="second_fragment_label">Segundo Fragmento</string>
-    <string name="next">Próximo</string>
-    <string name="previous">Anterior</string>
-    <string name="email">Email</string>
+    <string name="events">Eventos</string>
+    <string name="tickets">Bilhetes</string>
+    <string name="cafeteria">Cafetaria</string>
+    <string name="profile">Perfil</string>
 </resources>
