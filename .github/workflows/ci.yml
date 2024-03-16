@@ -1,0 +1,72 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: adopt
+          cache: gradle
+
+      - name: Lint
+        run: ./gradlew lint
+
+      - name: Upload lint reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint-reports
+          path: '**/build/reports/lint*'
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: adopt
+          cache: gradle
+
+      - name: Test
+        run: ./gradlew test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: adopt
+          cache: gradle
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Upload apks
+        uses: actions/upload-artifact@v2
+        with:
+          name: apks
+          path: '**/build/outputs/apk/*.apk'
