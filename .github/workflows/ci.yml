@@ -27,7 +27,7 @@ jobs:
         run: ./gradlew lint
 
       - name: Upload lint reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: lint-reports
           path: '**/build/reports/lint*'
@@ -69,7 +69,7 @@ jobs:
         run: ./gradlew build
 
       - name: Upload apks
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: apks
           path: '**/build/outputs/apk/*.apk'
