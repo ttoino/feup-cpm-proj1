@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.android.library)
+    alias(libs.plugins.convention.hilt)
 }
 
 android {
@@ -7,4 +8,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.model)
+    implementation(projects.core.network)
 }

@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.convention.android.library)
+    alias(libs.plugins.convention.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -7,4 +9,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.model)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.kotlinx.serialization.json)
 }
