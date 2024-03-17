@@ -8,6 +8,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+application {
+    mainClass = "pt.up.fe.cpm.tiktek.backend.MainKt"
+}
+
 dependencies {
     implementation(projects.core.database)
 
