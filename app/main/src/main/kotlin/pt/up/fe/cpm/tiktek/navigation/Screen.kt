@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ConfirmationNumber
@@ -15,7 +16,7 @@ import pt.up.fe.cpm.tiktek.R
 enum class Screen(
     val icon: ImageVector,
     val selectedIcon: ImageVector,
-    val label: Int,
+    @StringRes val label: Int
 ) {
     EVENTS(
         Icons.Outlined.CalendarMonth,

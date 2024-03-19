@@ -17,6 +17,7 @@ dependencies {
     implementation(projects.feature.cafeteria)
     implementation(projects.feature.events)
     implementation(projects.feature.orders)
+    implementation(projects.feature.profile)
     implementation(projects.feature.tickets)
 
     implementation(projects.core.ui)

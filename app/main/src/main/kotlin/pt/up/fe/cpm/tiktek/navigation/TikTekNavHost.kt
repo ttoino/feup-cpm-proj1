@@ -2,70 +2,63 @@ package pt.up.fe.cpm.tiktek.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.util.trace
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navOptions
-import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CAFETERIA_ROUTE
-import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.cafeteriaScreen
-import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.navigateToCafeteria
-import pt.up.fe.cpm.tiktek.feature.events.navigation.EVENTS_ROUTE
-import pt.up.fe.cpm.tiktek.feature.events.navigation.eventsScreen
-import pt.up.fe.cpm.tiktek.feature.events.navigation.navigateToEvents
-import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TICKETS_ROUTE
-import pt.up.fe.cpm.tiktek.feature.tickets.navigation.navigateToTickets
-import pt.up.fe.cpm.tiktek.feature.tickets.navigation.ticketsScreen
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.annotation.ExternalNavGraph
+import com.ramcosta.composedestinations.annotation.NavHostGraph
+import com.ramcosta.composedestinations.generated.NavGraphs
+import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
+import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
+import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
+import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGraph
+import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.utils.currentDestinationAsState
+import com.ramcosta.composedestinations.utils.startDestination
+
+@NavHostGraph
+annotation class TikTekGraph {
+    @ExternalNavGraph<EventsNavGraph>(start = true)
+    @ExternalNavGraph<TicketsNavGraph>
+    @ExternalNavGraph<CafeteriaNavGraph>
+    @ExternalNavGraph<ProfileNavGraph>
+    companion object Includes
+}
 
 @Composable
 fun TikTekNavHost(
     navController: NavHostController,
     modifier: Modifier
 ) {
-    NavHost(
+    DestinationsNavHost(
+        navGraph = NavGraphs.tikTek,
         navController = navController,
-        startDestination = EVENTS_ROUTE,
-        modifier = modifier
-    ) {
-        eventsScreen()
-        ticketsScreen()
-        cafeteriaScreen()
+        modifier = modifier,
+    )
+}
+
+fun NavController.navigateToScreen(screen: Screen) {
+    val route = when (screen) {
+        Screen.EVENTS -> EventsNavGraph
+        Screen.TICKETS -> TicketsNavGraph
+        Screen.CAFETERIA -> CafeteriaNavGraph
+        Screen.PROFILE -> ProfileNavGraph
+    }
+
+    navigate(route) {
+        popUpTo(graph.startDestinationId) {
+//            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 
-fun NavHostController.navigateToScreen(screen: Screen) {
-    trace("Navigation: ${screen.name}") {
-        val topLevelNavOptions = navOptions {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(graph.findStartDestination().id) {
-                saveState = true
-            }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
-        }
-
-        when (screen) {
-            Screen.EVENTS -> navigateToEvents(topLevelNavOptions)
-            Screen.TICKETS -> navigateToTickets(topLevelNavOptions)
-            Screen.CAFETERIA -> navigateToCafeteria(topLevelNavOptions)
-            Screen.PROFILE -> Unit
-        }
-    }
-}
-
-val NavHostController.currentDestinationComposable
-    @Composable get() = currentBackStackEntryAsState().value?.destination
-
-val NavHostController.currentScreen
-    @Composable get() = when (currentDestinationComposable?.route) {
-        EVENTS_ROUTE -> Screen.EVENTS
-        TICKETS_ROUTE -> Screen.TICKETS
-        CAFETERIA_ROUTE -> Screen.CAFETERIA
+val NavController.currentScreen
+    @Composable get() = when (currentDestinationAsState().value?.startDestination) {
+        EventsNavGraph.startDestination -> Screen.EVENTS
+        TicketsNavGraph.startDestination -> Screen.TICKETS
+        CafeteriaNavGraph.startDestination -> Screen.CAFETERIA
+        ProfileNavGraph.startDestination -> Screen.PROFILE
         else -> null
     }

@@ -29,6 +29,7 @@ include(
     ":feature:events",
     ":feature:orders",
     ":feature:order-scan",
+    ":feature:profile",
     ":feature:tickets",
     ":feature:ticket-scan",
 

@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.feature.events
+package pt.up.fe.cpm.tiktek.feature.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,26 +9,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
+import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
 
-@Destination<EventsGraph>(
+@Destination<ProfileGraph>(
     start = true,
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun EventsRoute() {
+internal fun ProfileRoute() {
     // TODO: Get data
 
-    EventsScreen()
+    ProfileScreen()
 }
 
 @Composable
-internal fun EventsScreen() {
+internal fun ProfileScreen() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("Events")
+        Text("Profile")
     }
 }
