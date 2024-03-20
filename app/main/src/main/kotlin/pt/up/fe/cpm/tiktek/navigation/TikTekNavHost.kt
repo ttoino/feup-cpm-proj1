@@ -48,6 +48,7 @@ fun NavController.navigateToScreen(screen: Screen) {
     navigate(route) {
         popUpTo(graph.startDestinationId) {
 //            saveState = true
+            inclusive = true
         }
         launchSingleTop = true
         restoreState = true

@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,7 +19,8 @@ fun MainScreen() {
         bottomBar = { BottomBar(
             navController.currentScreen,
             navController::navigateToScreen
-        ) }
+        ) },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         TikTekNavHost(
             navController = navController,
