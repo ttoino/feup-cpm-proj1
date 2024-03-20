@@ -37,6 +37,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
+import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
 @Destination<EventsGraph>(
@@ -93,12 +94,7 @@ internal fun EventScreen() {
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 8.dp)
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-                            layout(placeable.width, placeable.height) {
-                                placeable.placeRelative(0, placeable.height / 2)
-                            }
-                        },
+                        .relativeOffset(y = 0.5f)
                 ) {
                     Icon(Icons.Default.AddShoppingCart, contentDescription = "Add to cart")
                 }
