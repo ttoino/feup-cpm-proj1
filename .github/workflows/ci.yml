@@ -8,6 +8,30 @@ env:
   JAVA_VERSION: 17
 
 jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: adopt
+          cache: gradle
+
+      - name: Format
+        run: ./gradlew --continue ktlintCheck
+
+      - name: Upload format reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: format-reports
+          path: '**/build/reports/ktlint/**/*'
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -24,7 +48,7 @@ jobs:
           cache: gradle
 
       - name: Lint
-        run: ./gradlew lint
+        run: ./gradlew --continue lint
 
       - name: Upload lint reports
         uses: actions/upload-artifact@v4
@@ -72,10 +96,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apks
-          path: '**/build/outputs/apk/**.apk'
+          path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload jars
         uses: actions/upload-artifact@v4
         with:
           name: jars
-          path: '**/build/libs/**.jar'
+          path: '**/build/libs/*.jar'

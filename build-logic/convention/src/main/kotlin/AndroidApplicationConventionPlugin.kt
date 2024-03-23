@@ -4,12 +4,13 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-class AndroidApplicationConventionPlugin: Plugin<Project> {
+class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply(plugin("android.application"))
                 apply(plugin("kotlin.android"))
+                apply(plugin("convention.base"))
                 apply(plugin("convention.compose"))
                 apply(plugin("convention.hilt"))
             }
@@ -31,7 +32,7 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
                 add("implementation", lib("androidx.navigation.compose"))
                 add("implementation", lib("compose.destinations.core"))
                 add("ksp", lib("compose.destinations.ksp"))
-                
+
                 // JUnit
                 add("testImplementation", lib("junit"))
                 add("androidTestImplementation", lib("androidx.test.ext"))

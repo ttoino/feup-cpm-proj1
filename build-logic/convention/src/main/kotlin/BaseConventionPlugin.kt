@@ -1,12 +1,11 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class LibraryConventionPlugin : Plugin<Project> {
+class BaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply(plugin("kotlin.jvm"))
-                apply(plugin("convention.base"))
+                apply(plugin("ktlint"))
             }
         }
     }
