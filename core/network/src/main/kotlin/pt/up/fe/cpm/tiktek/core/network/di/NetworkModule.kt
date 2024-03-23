@@ -16,9 +16,10 @@ internal abstract class NetworkModule {
     companion object {
         @Provides
         @Singleton
-        fun providesJson() = Json {
-            ignoreUnknownKeys = true
-        }
+        fun providesJson() =
+            Json {
+                ignoreUnknownKeys = true
+            }
     }
 
     @Binds

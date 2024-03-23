@@ -30,9 +30,7 @@ import pt.up.fe.cpm.tiktek.feature.auth.navigation.AuthGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun AuthRoute(
-    navigator: DestinationsNavigator
-) {
+internal fun AuthRoute(navigator: DestinationsNavigator) {
     AuthScreen(
         onLogin = { navigator.navigate(LoginRouteDestination) },
         onRegister = { navigator.navigate(RegisterStartRouteDestination) },
@@ -46,12 +44,13 @@ internal fun AuthScreen(
 ) {
     Scaffold {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .padding(64.dp)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(it)
+                    .padding(64.dp)
+                    .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+            verticalArrangement = Arrangement.SpaceAround,
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),

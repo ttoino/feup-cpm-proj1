@@ -27,16 +27,17 @@ internal fun AuthLayout(
     onMainAction: () -> Unit,
     @StringRes secondaryAction: Int,
     onSecondaryAction: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Scaffold {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .padding(24.dp)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(it)
+                    .padding(24.dp)
+                    .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -44,12 +45,12 @@ internal fun AuthLayout(
                 Column {
                     Text(
                         stringResource(title),
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.headlineSmall,
                     )
                     Text(
                         stringResource(subtitle),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
@@ -61,14 +62,14 @@ internal fun AuthLayout(
             Column {
                 Button(
                     onClick = onMainAction,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(stringResource(mainAction))
                 }
 
                 TextButton(
                     onClick = onSecondaryAction,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(stringResource(secondaryAction))
                 }

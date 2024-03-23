@@ -21,20 +21,19 @@ class SeparatorVisualTransformation(
     private val chunk: Int,
     private val separator: Char = ' ',
     private val maxSize: Int = Int.MAX_VALUE,
-): VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText
-        = TransformedText(
+) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText =
+        TransformedText(
             AnnotatedString(
                 text.text.chunked(chunk).joinToString(separator.toString()) +
-                if (text.text.isNotEmpty() && text.text.length < maxSize && text.text.length % chunk == 0) separator else ""
+                    if (text.text.isNotEmpty() && text.text.length < maxSize && text.text.length % chunk == 0) separator else "",
             ),
-            offsetMapping = object : OffsetMapping {
-                override fun originalToTransformed(offset: Int): Int
-                    = offset + (offset - 1) / chunk
+            offsetMapping =
+                object : OffsetMapping {
+                    override fun originalToTransformed(offset: Int): Int = offset + (offset - 1) / chunk
 
-                override fun transformedToOriginal(offset: Int): Int
-                    = offset - (offset - 1) / chunk
-            }
+                    override fun transformedToOriginal(offset: Int): Int = offset - (offset - 1) / chunk
+                },
         )
 
     override fun equals(other: Any?): Boolean {

@@ -14,15 +14,17 @@ private interface TikTekApi {
     suspend fun getEvents(): List<Event>
 }
 
-class RetrofitNetworkDataSource @Inject constructor(
-    json: Json,
-): NetworkDataSource {
-    private val api = Retrofit.Builder()
-        .baseUrl("")
-        .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
-        .build()
-        .create(TikTekApi::class.java)
+class RetrofitNetworkDataSource
+    @Inject
+    constructor(
+        json: Json,
+    ) : NetworkDataSource {
+        private val api =
+            Retrofit.Builder()
+                .baseUrl("")
+                .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
+                .build()
+                .create(TikTekApi::class.java)
 
-    override suspend fun getEvents(): List<Event>
-        = api.getEvents()
-}
+        override suspend fun getEvents(): List<Event> = api.getEvents()
+    }

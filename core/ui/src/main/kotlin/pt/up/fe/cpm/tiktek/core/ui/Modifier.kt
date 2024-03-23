@@ -5,7 +5,7 @@ import androidx.compose.ui.layout.layout
 
 fun Modifier.relativeOffset(
     x: Float = 0f,
-    y: Float = 0f
+    y: Float = 0f,
 ) = layout { measurable, constraints ->
     val placeable = measurable.measure(constraints)
     layout(placeable.width, placeable.height) {

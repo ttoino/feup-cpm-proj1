@@ -28,14 +28,14 @@ import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun LoginRoute(
-    navigator: DestinationsNavigator
-) {
+internal fun LoginRoute(navigator: DestinationsNavigator) {
     LoginScreen(
         onLogin = { },
-        onRegister = { navigator.navigate(RegisterStartRouteDestination) {
-            popUpTo(AuthRouteDestination)
-        } }
+        onRegister = {
+            navigator.navigate(RegisterStartRouteDestination) {
+                popUpTo(AuthRouteDestination)
+            }
+        },
     )
 }
 
@@ -50,7 +50,7 @@ internal fun LoginScreen(
         mainAction = R.string.login_action,
         onMainAction = onLogin,
         secondaryAction = R.string.login_register_action,
-        onSecondaryAction = onRegister
+        onSecondaryAction = onRegister,
     ) {
         TextField(
             value = "",
@@ -61,11 +61,12 @@ internal fun LoginScreen(
             leadingIcon = {
                 Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email))
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier.fillMaxWidth()
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         TextField(
@@ -77,12 +78,13 @@ internal fun LoginScreen(
             leadingIcon = {
                 Icon(Icons.Default.Key, contentDescription = stringResource(R.string.password))
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -92,6 +94,6 @@ internal fun LoginScreen(
 fun LoginScreenPreview() {
     LoginScreen(
         onLogin = { },
-        onRegister = { }
+        onRegister = { },
     )
 }

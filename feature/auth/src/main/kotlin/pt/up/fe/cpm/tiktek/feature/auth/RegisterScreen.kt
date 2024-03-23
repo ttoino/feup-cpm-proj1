@@ -41,14 +41,14 @@ import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun RegisterStartRoute(
-    navigator: DestinationsNavigator
-) {
+internal fun RegisterStartRoute(navigator: DestinationsNavigator) {
     RegisterStartScreen(
         onContinue = { navigator.navigate(RegisterFinishRouteDestination) },
-        onLogin = { navigator.navigate(LoginRouteDestination) {
-            popUpTo(AuthRouteDestination)
-        } }
+        onLogin = {
+            navigator.navigate(LoginRouteDestination) {
+                popUpTo(AuthRouteDestination)
+            }
+        },
     )
 }
 
@@ -56,14 +56,14 @@ internal fun RegisterStartRoute(
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun RegisterFinishRoute(
-    navigator: DestinationsNavigator
-) {
+internal fun RegisterFinishRoute(navigator: DestinationsNavigator) {
     RegisterFinishScreen(
         onRegister = { },
-        onLogin = { navigator.navigate(LoginRouteDestination) {
-            popUpTo(AuthRouteDestination)
-        } }
+        onLogin = {
+            navigator.navigate(LoginRouteDestination) {
+                popUpTo(AuthRouteDestination)
+            }
+        },
     )
 }
 
@@ -78,7 +78,7 @@ internal fun RegisterStartScreen(
         mainAction = R.string.register_continue_action,
         onMainAction = onContinue,
         secondaryAction = R.string.register_login_action,
-        onSecondaryAction = onLogin
+        onSecondaryAction = onLogin,
     ) {
         TextField(
             value = "",
@@ -89,15 +89,16 @@ internal fun RegisterStartScreen(
             leadingIcon = {
                 Icon(Icons.Default.Person, contentDescription = stringResource(R.string.name))
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier.fillMaxWidth()
+            keyboardOptions =
+                KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
                 value = "",
@@ -108,11 +109,12 @@ internal fun RegisterStartScreen(
                 leadingIcon = {
                     Icon(Icons.Default.Pin, contentDescription = stringResource(R.string.nif))
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier.weight(1f)
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
+                modifier = Modifier.weight(1f),
             )
 
             TextField(
@@ -124,11 +126,12 @@ internal fun RegisterStartScreen(
                 leadingIcon = {
                     Icon(Icons.Default.Today, contentDescription = stringResource(R.string.birthdate))
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier.weight(1f)
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
+                modifier = Modifier.weight(1f),
             )
         }
 
@@ -141,11 +144,12 @@ internal fun RegisterStartScreen(
             leadingIcon = {
                 Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email))
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier.fillMaxWidth()
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         TextField(
@@ -157,12 +161,13 @@ internal fun RegisterStartScreen(
             leadingIcon = {
                 Icon(Icons.Default.Key, contentDescription = stringResource(R.string.password))
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -178,7 +183,7 @@ internal fun RegisterFinishScreen(
         mainAction = R.string.register_action,
         onMainAction = onRegister,
         secondaryAction = R.string.register_login_action,
-        onSecondaryAction = onLogin
+        onSecondaryAction = onLogin,
     ) {
         TextField(
             value = "",
@@ -189,10 +194,11 @@ internal fun RegisterFinishScreen(
             leadingIcon = {
                 Icon(Icons.Default.Person, contentDescription = stringResource(R.string.name_cc))
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier.fillMaxWidth()
+            keyboardOptions =
+                KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                ),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         TextField(
@@ -204,19 +210,19 @@ internal fun RegisterFinishScreen(
             leadingIcon = {
                 Icon(Icons.Default.CreditCard, contentDescription = stringResource(R.string.number_cc))
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next,
+                ),
             visualTransformation = SeparatorVisualTransformation(4, maxSize = 16),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
-
             TextField(
                 value = "",
                 onValueChange = { },
@@ -226,12 +232,13 @@ internal fun RegisterFinishScreen(
                 leadingIcon = {
                     Icon(Icons.Default.DateRange, contentDescription = stringResource(R.string.expiry_cc))
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
                 visualTransformation = SeparatorVisualTransformation(2, '/', 4),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             TextField(
@@ -243,18 +250,19 @@ internal fun RegisterFinishScreen(
                 leadingIcon = {
                     Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.cvc_cc))
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier.weight(1f)
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done,
+                    ),
+                modifier = Modifier.weight(1f),
             )
         }
 
         Text(
             stringResource(R.string.data_collection_advisory),
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Row(
@@ -263,7 +271,7 @@ internal fun RegisterFinishScreen(
         ) {
             Checkbox(
                 checked = false,
-                onCheckedChange = { }
+                onCheckedChange = { },
             )
 
             Text(stringResource(R.string.terms_and_conditions))

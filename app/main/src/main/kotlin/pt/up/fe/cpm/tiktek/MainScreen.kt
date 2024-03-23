@@ -16,15 +16,17 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = { BottomBar(
-            navController.currentScreen,
-            navController::navigateToScreen
-        ) },
+        bottomBar = {
+            BottomBar(
+                navController.currentScreen,
+                navController::navigateToScreen,
+            )
+        },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         TikTekNavHost(
             navController = navController,
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         )
     }
 }

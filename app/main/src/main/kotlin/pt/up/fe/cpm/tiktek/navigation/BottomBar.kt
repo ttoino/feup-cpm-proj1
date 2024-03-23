@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun BottomBar(
     currentScreen: Screen?,
-    navigateTo: (Screen) -> Unit
+    navigateTo: (Screen) -> Unit,
 ) {
     NavigationBar {
         for (screen in Screen.entries) {
@@ -32,14 +32,14 @@ fun BottomBar(
                         label = "${screen.label} bottom bar icon",
                         transitionSpec = {
                             fadeIn() togetherWith fadeOut()
-                        }
+                        },
                     ) {
                         Icon(if (it) screen.selectedIcon else screen.icon, stringResource(screen.label))
                     }
                 },
                 label = { Text(stringResource(screen.label)) },
                 onClick = { navigateTo(screen) },
-                alwaysShowLabel = false
+                alwaysShowLabel = false,
             )
         }
     }
