@@ -65,7 +65,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-//import com.ramcosta.composedestinations.generated.events.destinations.EventDestination
+import com.ramcosta.composedestinations.generated.events.destinations.EventDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
@@ -143,25 +143,29 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
                     eventImageLink = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
                     eventName = "O Pato Lindo",
                     eventDate = "20 de Fevereiro",
-                    eventTime = "12:30"
+                    eventTime = "12:30",
+                    navigator = navigator
                 )
                 RecommendedEvent(
                     eventImageLink = "https://parade.com/.image/t_share/MjAzMzU3NzQxMzU4NTIzOTgz/happy-birthday-wishes-messages.jpg",
                     eventName = "Aniversário",
                     eventDate = "2 de Abril",
-                    eventTime = "20:30"
+                    eventTime = "20:30",
+                    navigator = navigator
                 )
                 RecommendedEvent(
                     eventImageLink = "https://i.pinimg.com/564x/b8/85/4c/b8854cfb077f5e7f6646899455f27704.jpg",
                     eventName = "Fada Julia - Um momento bom",
                     eventDate = "10 de Abril",
-                    eventTime = "14:45"
+                    eventTime = "14:45",
+                    navigator = navigator
                 )
                 RecommendedEvent(
                     eventImageLink = "https://s.calendarr.com/upload/datas/di/ai/dia-internacional-da-mulher_c.jpg?auto_optimize=low&width=640",
                     eventName = "Dia das mulheres",
                     eventDate = "8 de Março",
-                    eventTime = "14:45"
+                    eventTime = "14:45",
+                    navigator = navigator
                 )
             }
             Text(
@@ -264,13 +268,17 @@ private fun RecommendedEvent(
     eventImageLink: String,
     eventName: String,
     eventDate: String,
-    eventTime: String
+    eventTime: String,
+    navigator: DestinationsNavigator
 ) {
     Column(
         modifier =
         Modifier
             .size(width = 150.dp, height = 220.dp)
             .padding(10.dp)
+            .clickable(
+                onClick = { navigator.navigate(EventDestination("")) }
+            )
     )
     {
         Box(
@@ -318,9 +326,9 @@ private fun TodayEvent(
         modifier =
         Modifier
             .padding(5.dp)
-            /*.clickable(
+            .clickable(
                 onClick = { navigator.navigate(EventDestination("")) }
-            )*/
+            )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
