@@ -7,10 +7,13 @@ import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
 import javax.inject.Inject
 
-class RemoteEventsRepository @Inject constructor(
-    private val networkDataSource: NetworkDataSource
-): EventsRepository {
-    override fun getEvents(): Flow<List<Event>> = flow {
-        networkDataSource.getEvents()
+class RemoteEventsRepository
+    @Inject
+    constructor(
+        private val networkDataSource: NetworkDataSource,
+    ) : EventsRepository {
+        override fun getEvents(): Flow<List<Event>> =
+            flow {
+                networkDataSource.getEvents()
+            }
     }
-}

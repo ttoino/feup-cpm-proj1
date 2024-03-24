@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainScreen() {
-    Scaffold() {
+    Scaffold {
         Column(
             modifier = Modifier.padding(it),
             horizontalAlignment = Alignment.CenterHorizontally,

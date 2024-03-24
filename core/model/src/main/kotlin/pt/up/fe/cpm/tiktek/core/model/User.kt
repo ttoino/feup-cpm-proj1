@@ -8,3 +8,11 @@ data class User(
     val name: String,
     val email: String,
 )
+
+@Serializable
+data class UserWithPassword(
+    val id: String,
+    val name: String,
+    val email: String,
+    val password: String,
+)

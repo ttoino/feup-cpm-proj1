@@ -14,14 +14,18 @@ private val DarkColorScheme = darkColorScheme()
 private val LightColorScheme = lightColorScheme()
 
 @Composable
-fun TikTekTheme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun TikTekTheme(
+    dark: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit,
+) {
     val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val colorScheme = when {
-        dynamicColor && dark -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor -> dynamicLightColorScheme(LocalContext.current)
-        dark -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme =
+        when {
+            dynamicColor && dark -> dynamicDarkColorScheme(LocalContext.current)
+            dynamicColor -> dynamicLightColorScheme(LocalContext.current)
+            dark -> DarkColorScheme
+            else -> LightColorScheme
+        }
 
     MaterialTheme(
         colorScheme = colorScheme,

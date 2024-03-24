@@ -8,6 +8,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.ExternalNavGraph
 import com.ramcosta.composedestinations.annotation.NavHostGraph
 import com.ramcosta.composedestinations.generated.NavGraphs
+import com.ramcosta.composedestinations.generated.auth.navgraphs.AuthNavGraph
 import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
 import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
 import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
@@ -18,7 +19,8 @@ import com.ramcosta.composedestinations.utils.startDestination
 
 @NavHostGraph
 annotation class TikTekGraph {
-    @ExternalNavGraph<EventsNavGraph>(start = true)
+    @ExternalNavGraph<AuthNavGraph>(start = true)
+    @ExternalNavGraph<EventsNavGraph> // (start = true)
     @ExternalNavGraph<TicketsNavGraph>
     @ExternalNavGraph<CafeteriaNavGraph>
     @ExternalNavGraph<ProfileNavGraph>
@@ -28,7 +30,7 @@ annotation class TikTekGraph {
 @Composable
 fun TikTekNavHost(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     DestinationsNavHost(
         navGraph = NavGraphs.tikTek,
@@ -38,12 +40,13 @@ fun TikTekNavHost(
 }
 
 fun NavController.navigateToScreen(screen: Screen) {
-    val route = when (screen) {
-        Screen.EVENTS -> EventsNavGraph
-        Screen.TICKETS -> TicketsNavGraph
-        Screen.CAFETERIA -> CafeteriaNavGraph
-        Screen.PROFILE -> ProfileNavGraph
-    }
+    val route =
+        when (screen) {
+            Screen.EVENTS -> EventsNavGraph
+            Screen.TICKETS -> TicketsNavGraph
+            Screen.CAFETERIA -> CafeteriaNavGraph
+            Screen.PROFILE -> ProfileNavGraph
+        }
 
     navigate(route) {
         popUpTo(graph.startDestinationId) {
@@ -56,10 +59,11 @@ fun NavController.navigateToScreen(screen: Screen) {
 }
 
 val NavController.currentScreen
-    @Composable get() = when (currentDestinationAsState().value?.startDestination) {
-        EventsNavGraph.startDestination -> Screen.EVENTS
-        TicketsNavGraph.startDestination -> Screen.TICKETS
-        CafeteriaNavGraph.startDestination -> Screen.CAFETERIA
-        ProfileNavGraph.startDestination -> Screen.PROFILE
-        else -> null
-    }
+    @Composable get() =
+        when (currentDestinationAsState().value?.startDestination) {
+            EventsNavGraph.startDestination -> Screen.EVENTS
+            TicketsNavGraph.startDestination -> Screen.TICKETS
+            CafeteriaNavGraph.startDestination -> Screen.CAFETERIA
+            ProfileNavGraph.startDestination -> Screen.PROFILE
+            else -> null
+        }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name</string>
+    <string name="name_cc">Name on card</string>
+    <string name="email">Email</string>
+    <string name="nif">Tax number</string>
+    <string name="birthdate">Birthdate</string>
+    <string name="password">Password</string>
+    <string name="number_cc">Card number</string>
+    <string name="expiry_cc">Expiry</string>
+    <string name="cvc_cc">CVC</string>
+    <string name="login_title">Login</string>
+    <string name="login_subtitle">It\'s good to see you again!</string>
+    <string name="login_action">Login</string>
+    <string name="login_register_action">I don\'t have an account</string>
+    <string name="register_title">Register</string>
+    <string name="register_start_subtitle">Personal info</string>
+    <string name="register_finish_subtitle">Payment method</string>
+    <string name="register_continue_action">Continue</string>
+    <string name="register_action">Register</string>
+    <string name="register_login_action">I already have an account</string>
+    <string name="terms_and_conditions">I have read and accept the terms and conditions</string>
+    <string name="data_collection_advisory">This data blabla</string>
+</resources>

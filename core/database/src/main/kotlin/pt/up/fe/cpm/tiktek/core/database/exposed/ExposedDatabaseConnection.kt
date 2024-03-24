@@ -9,18 +9,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ExposedDatabaseConnection @Inject constructor() {
-    private val database: Database
+class ExposedDatabaseConnection
+    @Inject
+    constructor() {
+        private val database: Database
 
-    init {
-        val driverClassName = "org.h2.Driver"
-        val jdbcURL = "jdbc:h2:file:./build/db"
-        database = Database.connect(jdbcURL, driverClassName)
-        transaction(database) {
-            SchemaUtils.createMissingTablesAndColumns(Events)
+        init {
+            val driverClassName = "org.h2.Driver"
+            val jdbcURL = "jdbc:h2:file:./build/db"
+            database = Database.connect(jdbcURL, driverClassName)
+            transaction(database) {
+                SchemaUtils.createMissingTablesAndColumns(Events)
+            }
         }
-    }
 
-    suspend fun <T> query(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO, database) { block() }
-}
+        suspend fun <T> query(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO, database) { block() }
+    }

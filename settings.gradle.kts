@@ -38,5 +38,5 @@ include(
     ":core:database",
     ":core:model",
     ":core:network",
-    ":core:ui"
+    ":core:ui",
 )
