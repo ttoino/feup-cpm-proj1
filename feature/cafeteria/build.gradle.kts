@@ -11,4 +11,7 @@ ksp {
 }
 
 dependencies {
+    implementation(projects.core.ui)
+
+    implementation(libs.coil.compose)
 }
