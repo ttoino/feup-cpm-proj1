@@ -1,7 +1,9 @@
 package pt.up.fe.cpm.tiktek.feature.events
 
 import android.graphics.drawable.Icon
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -60,7 +64,7 @@ import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 @Composable
 internal fun EventsRoute(navigator: DestinationsNavigator) {
     // TODO: Get data
-    EventsScreen()
+    EventsScreen(navigator)
     /*Button(
         onClick = { navigator.navigate(EventDestination("")) },
         modifier =
@@ -73,7 +77,7 @@ internal fun EventsRoute(navigator: DestinationsNavigator) {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun EventsScreen() {
+internal fun EventsScreen(navigator: DestinationsNavigator) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -107,25 +111,25 @@ internal fun EventsScreen() {
                     .horizontalScroll(rememberScrollState())
                     .padding(vertical = 16.dp)
             ) {
-                RecommendedEvents(
+                RecommendedEvent(
                     eventImageLink = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
                     eventName = "O Pato Lindo",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30"
                 )
-                RecommendedEvents(
+                RecommendedEvent(
                     eventImageLink = "https://parade.com/.image/t_share/MjAzMzU3NzQxMzU4NTIzOTgz/happy-birthday-wishes-messages.jpg",
                     eventName = "Aniversário",
                     eventDate = "2 de Abril",
                     eventTime = "20:30"
                 )
-                RecommendedEvents(
+                RecommendedEvent(
                     eventImageLink = "https://i.pinimg.com/564x/b8/85/4c/b8854cfb077f5e7f6646899455f27704.jpg",
                     eventName = "Fada Julia - Um momento bom",
                     eventDate = "10 de Abril",
                     eventTime = "14:45"
                 )
-                RecommendedEvents(
+                RecommendedEvent(
                     eventImageLink = "https://s.calendarr.com/upload/datas/di/ai/dia-internacional-da-mulher_c.jpg?auto_optimize=low&width=640",
                     eventName = "Dia das mulheres",
                     eventDate = "8 de Março",
@@ -136,6 +140,33 @@ internal fun EventsScreen() {
                 text = "Hoje",
                 style = TextStyle(fontSize = 20.sp),
             )
+            Column(
+                modifier =
+                Modifier
+                    .padding(vertical = 16.dp)
+            ) {
+                TodayEvent(
+                    eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
+                    eventName = "Hamilton Infantil",
+                    eventDate = "20 de Fevereiro",
+                    eventTime = "12:30",
+                    navigator = navigator
+                )
+                TodayEvent(
+                    eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
+                    eventName = "O pequeno mundo de Teresa",
+                    eventDate = "20 de Fevereiro",
+                    eventTime = "12:30",
+                    navigator = navigator
+                )
+                TodayEvent(
+                    eventImageLink = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
+                    eventName = "O Pato Lindo",
+                    eventDate = "20 de Fevereiro",
+                    eventTime = "12:30",
+                    navigator = navigator
+                )
+            }
         }
     }
 }
@@ -146,8 +177,9 @@ private fun FilterEvents() {
 }
 
 
+// TODO: make it clickable and open event page
 @Composable
-private fun RecommendedEvents (
+private fun RecommendedEvent (
     eventImageLink: String,
     eventName: String,
     eventDate: String,
@@ -187,7 +219,54 @@ private fun RecommendedEvents (
 }
 
 
+// TODO: make it clickable and open event page
+// TODO: organize layout
 @Composable
-private fun TodayEvents() {
+private fun TodayEvent(
+    eventImageLink: String,
+    eventName: String,
+    eventDate: String,
+    eventTime: String,
+    navigator: DestinationsNavigator
+) {
+    Card (
+        border = BorderStroke(
+            2.dp,
+            MaterialTheme.colorScheme.inversePrimary),
+        modifier =
+            Modifier
+               .padding(5.dp)
+                .clickable (
+                    onClick = { navigator.navigate(EventDestination("")) }
+        )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            Column (
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = eventName,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "$eventDate | $eventTime",
+                    fontSize = 15.sp
+                )
+            }
+            AsyncImage(
+                model = eventImageLink,
+                contentDescription = "Event Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+            )
 
+        }
+        
+    }
 }
