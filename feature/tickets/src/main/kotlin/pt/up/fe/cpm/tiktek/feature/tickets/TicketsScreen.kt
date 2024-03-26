@@ -1,14 +1,53 @@
 package pt.up.fe.cpm.tiktek.feature.tickets
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocalCafe
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.TheaterComedy
+import androidx.compose.material.icons.outlined.LocalCafe
+import androidx.compose.material.icons.outlined.TheaterComedy
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
 @Destination<TicketsGraph>(
@@ -22,13 +61,158 @@ internal fun TicketsRoute() {
     TicketsScreen()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TicketsScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize(),
+    var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    var tabItems = listOf(
+        TabItem(
+            title = "Espetáculo",
+            unselectedIcon = Icons.Outlined.TheaterComedy,
+            selectedIcon = Icons.Filled.TheaterComedy
+        ),
+        TabItem(
+            title = "Cafetaria",
+            unselectedIcon = Icons.Outlined.LocalCafe,
+            selectedIcon = Icons.Filled.LocalCafe
+        )
+    )
+    var selectedTabIndex by remember {
+        mutableIntStateOf(0)
+    }
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        text = "As minhas compras"
+                    )
+                }
+            )
+        }
     ) {
-        Text("Tickets")
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                TabRow(selectedTabIndex = selectedTabIndex) {
+                    tabItems.forEachIndexed { index, item ->
+                        Tab(
+                            selected = index == selectedTabIndex,
+                            onClick = {
+                                selectedTabIndex = index
+                            },
+                            text = {
+                                Text(text = item.title)
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (index == selectedTabIndex) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.unselectedIcon
+                                    },
+                                    contentDescription = item.title
+                                )
+                            })
+                    }
+                }
+            }
+            if (selectedTabIndex == 0){
+                Column(
+                    modifier =
+                    Modifier
+                        .padding(vertical = 16.dp)
+                ) {
+                    EventTicket(
+                        //eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
+                        eventName = "Hamilton Infantil",
+                        ticketStatus = true,
+                    )
+                    EventTicket(
+                        //eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
+                        eventName = "O pequeno mundo de Teresa",
+                        ticketStatus = false,
+                    )
+                }
+            }
+        }
+
+    }
+}
+
+
+data class TabItem(
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector
+)
+
+
+@Composable
+private fun EventTicket(
+    //eventImageLink: String,
+    eventName: String,
+    ticketStatus: Boolean, // TODO: Talvez usar outra coisa em vez de bool
+) {
+    Card(
+        border = BorderStroke(
+            2.dp,
+            MaterialTheme.colorScheme.inversePrimary
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+        modifier =
+        Modifier
+            .padding(5.dp)
+        /*.clickable(
+            onClick = { navigator.navigate(EventDestination("")) }
+        )*/
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = eventName,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = if (ticketStatus == true) {
+                        "Por usar"
+                    } else {
+                        "Usado"
+                    },
+                    fontSize = 15.sp,
+                    color = if (ticketStatus == true) {
+                        Color(0xFF3CB371)
+                    } else {
+                        Color(0xFF8B0000)
+                    }
+                )
+            }
+            /*AsyncImage(
+                model = eventImageLink,
+                contentDescription = "Event Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+            )*/
+        }
+
     }
 }
