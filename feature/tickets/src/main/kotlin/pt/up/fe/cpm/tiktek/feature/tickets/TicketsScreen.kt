@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -132,12 +133,12 @@ internal fun TicketsScreen() {
                         .padding(vertical = 16.dp)
                 ) {
                     EventTicket(
-                        //eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
+                        eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
                         eventName = "Hamilton Infantil",
                         ticketStatus = true,
                     )
                     EventTicket(
-                        //eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
+                        eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
                         eventName = "O pequeno mundo de Teresa",
                         ticketStatus = false,
                     )
@@ -158,17 +159,17 @@ data class TabItem(
 
 @Composable
 private fun EventTicket(
-    //eventImageLink: String,
+    eventImageLink: String,
     eventName: String,
     ticketStatus: Boolean, // TODO: Talvez usar outra coisa em vez de bool
 ) {
     Card(
         border = BorderStroke(
             2.dp,
-            MaterialTheme.colorScheme.inversePrimary
+            MaterialTheme.colorScheme.outlineVariant
         ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier =
         Modifier
@@ -205,13 +206,13 @@ private fun EventTicket(
                     }
                 )
             }
-            /*AsyncImage(
+            AsyncImage(
                 model = eventImageLink,
                 contentDescription = "Event Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(80.dp)
-            )*/
+            )
         }
 
     }

@@ -11,4 +11,5 @@ ksp {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
 }

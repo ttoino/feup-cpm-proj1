@@ -321,7 +321,10 @@ private fun TodayEvent(
     Card(
         border = BorderStroke(
             2.dp,
-            MaterialTheme.colorScheme.inversePrimary
+            MaterialTheme.colorScheme.outlineVariant
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier =
         Modifier
