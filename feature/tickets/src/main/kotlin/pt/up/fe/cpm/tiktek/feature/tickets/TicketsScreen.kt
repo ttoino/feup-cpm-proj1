@@ -3,20 +3,26 @@ package pt.up.fe.cpm.tiktek.feature.tickets
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TheaterComedy
+import androidx.compose.material.icons.outlined.ArrowCircleDown
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.LocalCafe
 import androidx.compose.material.icons.outlined.TheaterComedy
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -131,6 +137,7 @@ internal fun TicketsScreen() {
                     modifier =
                     Modifier
                         .padding(vertical = 16.dp)
+
                 ) {
                     EventTicket(
                         eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
@@ -142,10 +149,37 @@ internal fun TicketsScreen() {
                         eventName = "O pequeno mundo de Teresa",
                         ticketStatus = false,
                     )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 50.dp)
+                    ) {
+                        Button(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier.align(
+                                Alignment.Center)
+
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.History,
+                                contentDescription = "Ver histórico de compras",
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(
+                                modifier = Modifier.width(8.dp)
+                            )
+                            Text(text = "Consultar histórico de compras")
+                        }
+                    }
                 }
+            } else if (selectedTabIndex == 1){
+                EventTicket(
+                    eventImageLink = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
+                    eventName = "Café",
+                    ticketStatus = true,
+                )
             }
         }
-
     }
 }
 
