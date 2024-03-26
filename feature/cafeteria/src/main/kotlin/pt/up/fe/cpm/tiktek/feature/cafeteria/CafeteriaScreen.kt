@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -92,8 +94,8 @@ internal fun CafeteriaScreen() {
                 contentDescription = "Cafeteria Image - an environment with tables and lights the window scenery shows the ending of an afternoon",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .clip(MaterialTheme.shapes.medium)
+                    .aspectRatio(16.dp / 9.dp),
+                contentScale = ContentScale.Fit
             )
 
             Text(
@@ -107,25 +109,25 @@ internal fun CafeteriaScreen() {
             ) {
                 ItemCafeteria(
                     itemName = "Café",
-                    itemLinkImg = "https://i.pinimg.com/564x/ce/4c/a1/ce4ca1c74bf6ac65549a19743e31a83c.jpg",
+                    itemLinkImg = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
                     itemPrice = 0.67,
                     modifier = Modifier.weight(1f)
                 )
                 ItemCafeteria(
                     itemName = "Pipoca",
-                    itemLinkImg = "https://i.pinimg.com/564x/02/dd/6a/02dd6a9440587210747532a5f47c9ab1.jpg",
+                    itemLinkImg = "https://i.pinimg.com/564x/b8/98/f5/b898f57f93e6ef44d43940c22c92564c.jpg",
                     itemPrice = 1.23,
                     modifier = Modifier.weight(1f)
                 )
                 ItemCafeteria(
                     itemName = "Sanduíche",
-                    itemLinkImg = "https://i.pinimg.com/564x/a4/f7/b6/a4f7b6e90bd6df463a5c7be1534eaf38.jpg",
+                    itemLinkImg = "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                     itemPrice = 2.55,
                     modifier = Modifier.weight(1f)
                 )
                 ItemCafeteria(
                     itemName = "Refrigerante",
-                    itemLinkImg = "https://i.pinimg.com/564x/12/03/bc/1203bc70590271c0fcfb9ce798a370a2.jpg",
+                    itemLinkImg = "https://i.pinimg.com/564x/0d/99/d9/0d99d9474c57590b2f0814fbcbc3f138.jpg",
                     itemPrice = 0.90,
                     modifier = Modifier.weight(1f)
                 )
@@ -150,17 +152,27 @@ internal fun ItemCafeteria(
         ),
         modifier = modifier,
     ) {
-        AsyncImage(
-            model = itemLinkImg,
-            contentDescription = "Cafeteria Image - an environment with tables and lights the window scenery shows the ending of an afternoon",
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(3f / 5f)
+                .aspectRatio(5f / 3f)
                 .height(0.dp)
-        )
+        ) {
+            AsyncImage(
+                model = itemLinkImg,
+                contentDescription = "Cafeteria Image - an environment with tables and lights the window scenery shows the ending of an afternoon",
+                contentScale = ContentScale.Crop
+            )
+        }
         Text(
             text = itemName,
             textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(
+                    start = 10.dp,
+                    top = 10.dp
+                    ),
+            fontSize = 20.sp
         )
 
         Row(
@@ -180,7 +192,7 @@ internal fun ItemCafeteria(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(
-                        top = 7.dp,
+                        top = 10.dp,
                         bottom = 2.dp,
                         start = 2.dp
                     )
