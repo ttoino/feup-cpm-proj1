@@ -173,11 +173,41 @@ internal fun TicketsScreen() {
                     }
                 }
             } else if (selectedTabIndex == 1){
-                EventTicket(
-                    eventImageLink = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
-                    eventName = "Café",
-                    ticketStatus = true,
-                )
+                Column(
+                    modifier =
+                    Modifier
+                        .padding(vertical = 16.dp)
+
+                ) {
+                    EventTicket(
+                        eventImageLink = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
+                        eventName = "Café",
+                        ticketStatus = true,
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 50.dp)
+                ) {
+                    Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier.align(
+                            Alignment.Center)
+
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.History,
+                            contentDescription = "Ver histórico de compras",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(
+                            modifier = Modifier.width(8.dp)
+                        )
+                        Text(text = "Consultar histórico de compras")
+                    }
+                }
             }
         }
     }
