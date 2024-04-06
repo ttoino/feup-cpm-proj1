@@ -146,7 +146,7 @@ internal fun TicketsScreen() {
                     EventTicket(
                         eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
                         eventName = "O pequeno mundo de Teresa",
-                        ticketStatus = false,
+                        ticketStatus = true,
                     )
                     Box(
                         modifier =
@@ -225,7 +225,6 @@ data class TabItem(
 private fun EventTicket(
     eventImageLink: String,
     eventName: String,
-    ticketStatus: Boolean, // TODO: Talvez usar outra coisa em vez de bool
 ) {
     Card(
         border =
@@ -260,19 +259,9 @@ private fun EventTicket(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text =
-                        if (ticketStatus == true) {
-                            "Por usar\nVálido até [data]"
-                        } else {
-                            "Usado"
-                        },
+                    text = "Por usar\nVálido até [data]",
                     fontSize = 15.sp,
-                    color =
-                        if (ticketStatus == true) {
-                            Color(0xffb2f98a)
-                        } else {
-                            Color(0xfff98a8a)
-                        },
+                    color = Color(0xffb2f98a),
                 )
             }
             AsyncImage(
@@ -281,7 +270,7 @@ private fun EventTicket(
                 contentScale = ContentScale.Crop,
                 modifier =
                     Modifier
-                        .size(80.dp),
+                        .size(105.dp),
             )
         }
     }
