@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Mail
@@ -26,12 +27,15 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Pin
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.icons.outlined.AddCard
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -111,7 +115,7 @@ internal fun ProfileScreen() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                Image(
+                Image( // profile picture
                     painter = rememberAsyncImagePainter("https://i.pinimg.com/736x/b1/cb/57/b1cb57bcb04183c6aaf293210a6ba8a8.jpg"),
                     contentDescription = "avatar",
                     alignment = Alignment.Center,
@@ -121,6 +125,14 @@ internal fun ProfileScreen() {
                             .size(128.dp)
                             .clip(CircleShape),
                 )
+                SmallFloatingActionButton(
+                    onClick = { },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(start = 100.dp),
+                ) {
+                    Icon(Icons.Filled.Edit, "Add profile picture.")
+                }
             }
 
             Text(
