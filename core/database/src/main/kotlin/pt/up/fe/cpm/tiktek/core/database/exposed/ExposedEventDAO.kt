@@ -61,7 +61,7 @@ private fun ResultRow.toEvent() =
         imageUrl = this[Events.imageUrl],
     )
 
-private fun UpdateBuilder<Any>.fromEvent(event: Event) =
+private fun UpdateBuilder<*>.fromEvent(event: Event) =
     apply {
         this[Events.id] = event.id
         this[Events.name] = event.name

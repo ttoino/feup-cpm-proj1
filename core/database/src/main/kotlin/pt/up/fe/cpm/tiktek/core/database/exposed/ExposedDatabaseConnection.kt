@@ -20,6 +20,7 @@ class ExposedDatabaseConnection
             database = Database.connect(jdbcURL, driverClassName)
             transaction(database) {
                 SchemaUtils.createMissingTablesAndColumns(Events)
+                SchemaUtils.createMissingTablesAndColumns(Users)
             }
         }
 
