@@ -6,11 +6,13 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.response.respond
-import kotlinx.serialization.Serializable
+import pt.up.fe.cpm.tiktek.backend.di.database
 import pt.up.fe.cpm.tiktek.backend.isEmailAddress
+import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 
 lateinit var secret: String
 
@@ -32,9 +34,14 @@ fun Application.jwtModule() {
     }
 }
 
-@Serializable
-data class JWTResponse(val token: String)
-
 suspend fun ApplicationCall.respondWithToken(email: String) {
-    respond(JWTResponse(JWT.create().withClaim("email", email).sign(Algorithm.HMAC512(secret))))
+    respond(AuthResponse(JWT.create().withClaim("email", email).sign(Algorithm.HMAC512(secret))))
 }
+
+val ApplicationCall.userEmail
+    get() =
+        authentication.principal<JWTPrincipal>()?.payload?.getClaim(
+            "email",
+        )?.asString() ?: throw IllegalStateException("No user authenticated")
+
+suspend fun ApplicationCall.user() = application.database.user.getByEmail(userEmail)

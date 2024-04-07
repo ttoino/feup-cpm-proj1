@@ -5,27 +5,20 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.application
 import io.ktor.server.application.call
 import io.ktor.server.plugins.requestvalidation.RequestValidationConfig
-import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
-import kotlinx.serialization.Serializable
 import pt.up.fe.cpm.tiktek.backend.di.database
 import pt.up.fe.cpm.tiktek.backend.isEmailAddress
+import pt.up.fe.cpm.tiktek.backend.validates
+import pt.up.fe.cpm.tiktek.core.model.LoginRequest
 
 fun RequestValidationConfig.loginRequest() {
-    validate<LoginRequest> {
-        if (!it.email.isEmailAddress()) {
-            ValidationResult.Invalid("Invalid email")
-        } else {
-            ValidationResult.Valid
-        }
+    validates<LoginRequest> {
+        validate(it.email.isEmailAddress(), "Invalid email")
     }
 }
-
-@Serializable
-data class LoginRequest(val email: String, val password: String)
 
 val verifier: BCrypt.Verifyer = BCrypt.verifyer()
 
