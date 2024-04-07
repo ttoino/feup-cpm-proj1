@@ -2,36 +2,27 @@ package pt.up.fe.cpm.tiktek.feature.events
 
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowColumn
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TheaterComedy
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,10 +41,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -96,36 +85,38 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
         topBar = {
             TopAppBar(
                 scrollBehavior = scrollBehavior,
-                title = { Text(
-                    text = "Eventos"
-                ) },
+                title = {
+                    Text(
+                        text = "Eventos",
+                    )
+                },
                 actions = {
                     IconButton(onClick = { }) {
                         Icon(Icons.Default.Search, contentDescription = "Search")
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            //verticalArrangement = Arrangement.spacedBy(16.dp),
+            // verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier =
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(it)
-                .padding(16.dp)
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(it)
+                    .padding(16.dp),
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
             ) {
                 for (category in getAllEventCategories()) {
                     FilterEventChip(
                         categoryName = category.value,
                         iconImageVector = category.icon,
-                        iconContentDescription = category.contentDescription
+                        iconContentDescription = category.contentDescription,
                     )
                 }
             }
@@ -135,37 +126,37 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
             )
             Row(
                 modifier =
-                Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp)
+                    Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(vertical = 16.dp),
             ) {
                 RecommendedEvent(
                     eventImageLink = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
                     eventName = "O Pato Lindo",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
-                    navigator = navigator
+                    navigator = navigator,
                 )
                 RecommendedEvent(
                     eventImageLink = "https://parade.com/.image/t_share/MjAzMzU3NzQxMzU4NTIzOTgz/happy-birthday-wishes-messages.jpg",
                     eventName = "Aniversário",
                     eventDate = "2 de Abril",
                     eventTime = "20:30",
-                    navigator = navigator
+                    navigator = navigator,
                 )
                 RecommendedEvent(
                     eventImageLink = "https://i.pinimg.com/564x/b8/85/4c/b8854cfb077f5e7f6646899455f27704.jpg",
                     eventName = "Fada Julia - Um momento bom",
                     eventDate = "10 de Abril",
                     eventTime = "14:45",
-                    navigator = navigator
+                    navigator = navigator,
                 )
                 RecommendedEvent(
                     eventImageLink = "https://s.calendarr.com/upload/datas/di/ai/dia-internacional-da-mulher_c.jpg?auto_optimize=low&width=640",
                     eventName = "Dia das mulheres",
                     eventDate = "8 de Março",
                     eventTime = "14:45",
-                    navigator = navigator
+                    navigator = navigator,
                 )
             }
             Text(
@@ -174,29 +165,29 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
             )
             Column(
                 modifier =
-                Modifier
-                    .padding(vertical = 16.dp)
+                    Modifier
+                        .padding(vertical = 16.dp),
             ) {
                 TodayEvent(
                     eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
                     eventName = "Hamilton Infantil",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
-                    navigator = navigator
+                    navigator = navigator,
                 )
                 TodayEvent(
                     eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
                     eventName = "O pequeno mundo de Teresa",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
-                    navigator = navigator
+                    navigator = navigator,
                 )
                 TodayEvent(
                     eventImageLink = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
                     eventName = "O Pato Lindo",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
-                    navigator = navigator
+                    navigator = navigator,
                 )
             }
         }
@@ -218,23 +209,24 @@ private fun FilterEventChip(
         },
         modifier = Modifier.padding(5.dp),
         selected = selected,
-        leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = Icons.Filled.Done,
-                    contentDescription = "Done icon",
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        } else {
-            {
-                Icon(
-                    imageVector = iconImageVector,
-                    contentDescription = iconContentDescription,
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        },
+        leadingIcon =
+            if (selected) {
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        contentDescription = "Done icon",
+                        modifier = Modifier.size(FilterChipDefaults.IconSize),
+                    )
+                }
+            } else {
+                {
+                    Icon(
+                        imageVector = iconImageVector,
+                        contentDescription = iconContentDescription,
+                        modifier = Modifier.size(FilterChipDefaults.IconSize),
+                    )
+                }
+            },
     )
 }
 
@@ -243,8 +235,7 @@ enum class EventCategory(val value: String, val icon: ImageVector, val contentDe
     MUSICAL("Musical", Icons.Filled.MusicNote, "Musical category icon"),
     FILME("Filme", Icons.Filled.Movie, "Movie category icon"),
     WI("Filme", Icons.Filled.Movie, "Movie category icon"),
-    WU("Filme", Icons.Filled.Movie, "Movie category icon")
-
+    WU("Filme", Icons.Filled.Movie, "Movie category icon"),
 }
 
 fun getAllEventCategories(): List<EventCategory> {
@@ -269,40 +260,40 @@ private fun RecommendedEvent(
     eventName: String,
     eventDate: String,
     eventTime: String,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
     Column(
         modifier =
-        Modifier
-            .size(width = 150.dp, height = 220.dp)
-            .padding(10.dp)
-            .clickable(
-                onClick = { navigator.navigate(EventDestination("")) }
-            )
-    )
-    {
+            Modifier
+                .size(width = 150.dp, height = 220.dp)
+                .padding(10.dp)
+                .clickable(
+                    onClick = { navigator.navigate(EventDestination("")) },
+                ),
+    ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .clip(MaterialTheme.shapes.medium)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(MaterialTheme.shapes.medium),
         ) {
             AsyncImage(
                 model = eventImageLink,
                 contentDescription = "Event Image",
                 contentScale = ContentScale.Crop, // Maintain aspect ratio and crop if necessary
-                modifier = Modifier.fillMaxSize() // Fill the available space within the Box
+                modifier = Modifier.fillMaxSize(), // Fill the available space within the Box
             )
         }
         Text(
             text = eventName,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
             text = "$eventDate | $eventTime",
-            fontSize = 15.sp
+            fontSize = 15.sp,
         )
     }
 }
@@ -316,50 +307,51 @@ private fun TodayEvent(
     eventName: String,
     eventDate: String,
     eventTime: String,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
     Card(
-        border = BorderStroke(
-            2.dp,
-            MaterialTheme.colorScheme.outlineVariant
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+        border =
+            BorderStroke(
+                2.dp,
+                MaterialTheme.colorScheme.outlineVariant,
+            ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
         modifier =
-        Modifier
-            .padding(5.dp)
-            .clickable(
-                onClick = { navigator.navigate(EventDestination("")) }
-            )
+            Modifier
+                .padding(5.dp)
+                .clickable(
+                    onClick = { navigator.navigate(EventDestination("")) },
+                ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
             ) {
                 Text(
                     text = eventName,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = "$eventDate | $eventTime",
-                    fontSize = 15.sp
+                    fontSize = 15.sp,
                 )
             }
             AsyncImage(
                 model = eventImageLink,
                 contentDescription = "Event Image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(80.dp)
+                modifier =
+                    Modifier
+                        .size(80.dp),
             )
-
         }
-
     }
 }
