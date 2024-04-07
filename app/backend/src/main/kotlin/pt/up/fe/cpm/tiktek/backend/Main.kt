@@ -13,7 +13,12 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import kotlinx.serialization.Serializable
 import pt.up.fe.cpm.tiktek.backend.auth.authModule
+import pt.up.fe.cpm.tiktek.backend.cafeteria.cafeteriaModule
+import pt.up.fe.cpm.tiktek.backend.event.eventModule
+import pt.up.fe.cpm.tiktek.backend.order.orderModule
 import pt.up.fe.cpm.tiktek.backend.profile.profileModule
+import pt.up.fe.cpm.tiktek.backend.ticket.ticketModule
+import pt.up.fe.cpm.tiktek.backend.voucher.voucherModule
 
 @Serializable
 data class ErrorResponse(val status: Int, val title: String, val details: String? = null)
@@ -37,6 +42,11 @@ fun main() {
         }
 
         authModule()
+        cafeteriaModule()
+        eventModule()
+        orderModule()
         profileModule()
+        ticketModule()
+        voucherModule()
     }.start(true)
 }
