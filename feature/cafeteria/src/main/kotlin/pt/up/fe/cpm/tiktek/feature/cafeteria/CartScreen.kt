@@ -36,7 +36,7 @@ import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
     deepLinks = [
         DeepLink(uriPattern = "tiktek://$FULL_ROUTE_PLACEHOLDER"),
     ],
-    route = "event",
+    route = "cart",
 )
 @Composable
 internal fun CartRoute(eventId: String) {
@@ -81,6 +81,6 @@ internal fun CartScreen() {
                             .clip(MaterialTheme.shapes.medium),
                 )
             }
-        } 
-    } 
+        }
+    }
 }
