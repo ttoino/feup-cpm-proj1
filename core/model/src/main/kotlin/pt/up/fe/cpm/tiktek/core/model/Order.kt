@@ -1,13 +1,16 @@
 package pt.up.fe.cpm.tiktek.core.model
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Ticket(
+data class Order(
     val id: String,
-    val eventId: String,
     val userEmail: String,
-    val seat: String,
-    val purchaseDate: Instant,
+    val items: List<OrderItem>,
+)
+
+@Serializable
+data class OrderItem(
+    val itemId: String,
+    val quantity: Int,
 )

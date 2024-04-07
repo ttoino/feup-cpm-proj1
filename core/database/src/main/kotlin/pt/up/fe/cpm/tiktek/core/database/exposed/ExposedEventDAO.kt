@@ -5,7 +5,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.jetbrains.exposed.sql.kotlin.datetime.date
+import org.jetbrains.exposed.sql.kotlin.datetime.time
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
@@ -54,10 +55,13 @@ private fun ResultRow.toEvent() =
     Event(
         id = this[Events.id],
         name = this[Events.name],
-        shortDescription = this[Events.shortDescription],
         description = this[Events.description],
         date = this[Events.date],
+        startTime = this[Events.startTime],
+        endTime = this[Events.endTime],
         location = this[Events.location],
+        locationDetails = this[Events.locationDetails],
+        price = this[Events.price],
         imageUrl = this[Events.imageUrl],
     )
 
@@ -65,20 +69,26 @@ private fun UpdateBuilder<*>.fromEvent(event: Event) =
     apply {
         this[Events.id] = event.id
         this[Events.name] = event.name
-        this[Events.shortDescription] = event.shortDescription
         this[Events.description] = event.description
         this[Events.date] = event.date
+        this[Events.startTime] = event.startTime
+        this[Events.endTime] = event.endTime
         this[Events.location] = event.location
+        this[Events.locationDetails] = event.locationDetails
+        this[Events.price] = event.price
         this[Events.imageUrl] = event.imageUrl
     }
 
 internal object Events : Table() {
     val id = varchar("id", 128)
-    val name = varchar("name", 128)
-    val shortDescription = varchar("short_description", 256)
+    val name = varchar("name", 255)
     val description = text("description")
-    val date = timestamp("date")
+    val date = date("date")
+    val startTime = time("start_time")
+    val endTime = time("end_time")
     val location = varchar("location", 128)
+    val locationDetails = varchar("location_details", 128).nullable()
+    val price = integer("price")
     val imageUrl = varchar("image_url", 256)
 
     override val primaryKey = PrimaryKey(id)

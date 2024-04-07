@@ -19,8 +19,13 @@ class ExposedDatabaseConnection
             val jdbcURL = "jdbc:h2:file:./build/db"
             database = Database.connect(jdbcURL, driverClassName)
             transaction(database) {
+                SchemaUtils.createMissingTablesAndColumns(CafeteriaItems)
                 SchemaUtils.createMissingTablesAndColumns(Events)
+                SchemaUtils.createMissingTablesAndColumns(Orders)
+                SchemaUtils.createMissingTablesAndColumns(OrderItems)
+                SchemaUtils.createMissingTablesAndColumns(Tickets)
                 SchemaUtils.createMissingTablesAndColumns(Users)
+                SchemaUtils.createMissingTablesAndColumns(Vouchers)
             }
         }
 
