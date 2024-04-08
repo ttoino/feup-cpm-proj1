@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -83,10 +84,11 @@ internal fun VouchersScreen(navigator: DestinationsNavigator) {
                     .padding(16.dp),
         ) {
             VouchersCard(
-                voucherName = "Café Grátis!",
+                voucherName = "☕  Café Grátis!",
                 voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
                 voucherQuantity = 2,
-                voucherDescription = "Este voucher equivale a um café grátis!",
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
             )
         }
     }
@@ -98,6 +100,7 @@ internal fun VouchersCard(
     voucherImg: String,
     voucherQuantity: Int,
     voucherDescription: String,
+    isUsed: Boolean,
 ) {
     Card(
         border =
@@ -114,6 +117,14 @@ internal fun VouchersCard(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
+            AsyncImage(
+                model = voucherImg,
+                contentDescription = "Voucher Image",
+                contentScale = ContentScale.Crop,
+                modifier =
+                    Modifier
+                        .size(80.dp),
+            )
             Column(
                 modifier =
                     Modifier.padding(16.dp)
@@ -140,14 +151,12 @@ internal fun VouchersCard(
                 ) {
                 }
             }
-            AsyncImage(
-                model = voucherImg,
-                contentDescription = "Voucher Image",
-                contentScale = ContentScale.Crop,
-                modifier =
-                    Modifier
-                        .size(80.dp),
-            )
+            Column {
+                Checkbox(
+                    checked = isUsed,
+                    onCheckedChange = { !isUsed }, // ponho dirieto quando se puser a base de dados
+                )
+            }
         }
     }
 }
