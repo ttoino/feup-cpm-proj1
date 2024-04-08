@@ -47,6 +47,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.VouchersDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
@@ -128,7 +129,7 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                         .fillMaxWidth(),
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navigator.navigate(VouchersDestination()) },
                     modifier =
                         Modifier
                             .align(Alignment.Center)
