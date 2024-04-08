@@ -47,6 +47,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -57,13 +58,13 @@ import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
     route = "cart",
 )
 @Composable
-internal fun CartRoute(eventId: String) {
-    CartScreen()
+internal fun CartRoute(navigator: DestinationsNavigator) {
+    CartScreen(navigator)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun CartScreen() {
+internal fun CartScreen(navigator: DestinationsNavigator) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -73,7 +74,9 @@ internal fun CartScreen() {
                 scrollBehavior = scrollBehavior,
                 title = { Text("Carrinho") },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(
+                        onClick = { navigator.navigateUp() },
+                    ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -95,28 +98,24 @@ internal fun CartScreen() {
                 "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                 2.55,
                 3,
-                modifier = Modifier.weight(1f),
             )
             ItemCard(
                 "Sanduíche",
                 "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                 2.55,
                 3,
-                modifier = Modifier.weight(1f),
             )
             ItemCard(
                 "Sanduíche",
                 "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                 2.55,
                 3,
-                modifier = Modifier.weight(1f),
             )
             ItemCard(
                 "Sanduíche",
                 "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                 2.55,
                 3,
-                modifier = Modifier.weight(1f),
             )
 
             // ------------- fim dos items --------------------
@@ -210,7 +209,6 @@ internal fun ItemCard(
     itemLinkImg: String,
     itemPrice: Double,
     itemQuantity: Int,
-    modifier: Modifier,
 ) {
     Card(
         border =
@@ -263,7 +261,7 @@ internal fun ItemCard(
                     }
                     InputChip(
                         onClick = { },
-                        label = { Text("1") },
+                        label = { Text("$itemQuantity") },
                         selected = true,
                     )
 

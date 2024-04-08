@@ -72,7 +72,7 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                     Row {
                         Spacer(modifier = Modifier.width(16.dp))
                         TextButton(
-                            onClick = { navigator.navigate(CartDestination("")) },
+                            onClick = { navigator.navigate(CartDestination()) },
                             modifier =
                                 Modifier
                                     .padding(8.dp)
