@@ -14,7 +14,7 @@ import pt.up.fe.cpm.tiktek.backend.isEmailAddress
 import pt.up.fe.cpm.tiktek.backend.validates
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
 
-fun RequestValidationConfig.loginRequest() {
+fun RequestValidationConfig.validateLogin() {
     validates<LoginRequest> {
         validate(it.email.isEmailAddress(), "Invalid email")
     }

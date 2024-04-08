@@ -18,7 +18,7 @@ import pt.up.fe.cpm.tiktek.backend.validates
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
 
-fun RequestValidationConfig.registerRequest() {
+fun RequestValidationConfig.validateRegister() {
     validates<RegisterRequest> {
         validate(it.name.isNotBlank(), "Invalid name")
         validate(it.nif.isNif(), "Invalid NIF")

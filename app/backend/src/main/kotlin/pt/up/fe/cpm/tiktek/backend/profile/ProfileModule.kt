@@ -4,9 +4,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
 import io.ktor.server.application.call
-import io.ktor.server.application.install
 import io.ktor.server.auth.authenticate
-import io.ktor.server.plugins.requestvalidation.RequestValidation
+import io.ktor.server.plugins.requestvalidation.RequestValidationConfig
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.delete
@@ -24,19 +23,19 @@ import pt.up.fe.cpm.tiktek.backend.isNif
 import pt.up.fe.cpm.tiktek.backend.validates
 import pt.up.fe.cpm.tiktek.core.model.User
 
-fun Application.profileModule() {
-    install(RequestValidation) {
-        validates<User> {
-            validate(it.name.isNotBlank(), "Invalid name")
-            validate(it.nif.isNif(), "Invalid NIF")
-            validate(it.email.isEmailAddress(), "Invalid email")
-            validate(it.nameCc.isNotBlank(), "Invalid name on credit card")
-            validate(it.numberCc.isCreditCardNumber(), "Invalid number on credit card")
-            validate(it.expirationDateCc.isExpirationDate(), "Invalid expiration date on credit card")
-            validate(it.cvvCc.isCvv(), "Invalid CVV on credit card")
-        }
+fun RequestValidationConfig.validateProfile() {
+    validates<User> {
+        validate(it.name.isNotBlank(), "Invalid name")
+        validate(it.nif.isNif(), "Invalid NIF")
+        validate(it.email.isEmailAddress(), "Invalid email")
+        validate(it.nameCc.isNotBlank(), "Invalid name on credit card")
+        validate(it.numberCc.isCreditCardNumber(), "Invalid number on credit card")
+        validate(it.expirationDateCc.isExpirationDate(), "Invalid expiration date on credit card")
+        validate(it.cvvCc.isCvv(), "Invalid CVV on credit card")
     }
+}
 
+fun Application.profileModule() {
     routing {
         authenticate {
             get("/profile") {

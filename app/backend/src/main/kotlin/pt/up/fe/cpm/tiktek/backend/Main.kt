@@ -8,15 +8,18 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.RequestValidationException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import kotlinx.serialization.Serializable
 import pt.up.fe.cpm.tiktek.backend.auth.authModule
+import pt.up.fe.cpm.tiktek.backend.auth.validateAuth
 import pt.up.fe.cpm.tiktek.backend.cafeteria.cafeteriaModule
 import pt.up.fe.cpm.tiktek.backend.event.eventModule
 import pt.up.fe.cpm.tiktek.backend.order.orderModule
 import pt.up.fe.cpm.tiktek.backend.profile.profileModule
+import pt.up.fe.cpm.tiktek.backend.profile.validateProfile
 import pt.up.fe.cpm.tiktek.backend.ticket.ticketModule
 import pt.up.fe.cpm.tiktek.backend.voucher.voucherModule
 
@@ -39,6 +42,10 @@ fun main() {
                     ErrorResponse(HttpStatusCode.BadRequest.value, HttpStatusCode.BadRequest.description, cause.reasons.joinToString("\n")),
                 )
             }
+        }
+        install(RequestValidation) {
+            validateAuth()
+            validateProfile()
         }
 
         authModule()
