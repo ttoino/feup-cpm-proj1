@@ -14,6 +14,6 @@ class RemoteEventsRepository
     ) : EventsRepository {
         override fun getEvents(): Flow<List<Event>> =
             flow {
-                networkDataSource.getEvents()
+//                networkDataSource.getEvents()
             }
     }

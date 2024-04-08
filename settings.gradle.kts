@@ -23,7 +23,6 @@ include(
     ":app:cafeteria",
     ":app:main",
     ":app:tickets",
-
     ":feature:auth",
     ":feature:cafeteria",
     ":feature:events",
@@ -32,10 +31,10 @@ include(
     ":feature:profile",
     ":feature:tickets",
     ":feature:ticket-scan",
-
     ":core:app",
     ":core:data",
     ":core:database",
+    ":core:local",
     ":core:model",
     ":core:network",
     ":core:ui",
