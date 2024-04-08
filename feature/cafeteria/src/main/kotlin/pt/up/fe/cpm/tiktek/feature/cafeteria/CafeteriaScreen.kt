@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.feature.cafeteria
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -46,15 +51,15 @@ import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun CafeteriaRoute() {
+internal fun CafeteriaRoute(navigator: DestinationsNavigator) {
     // TODO: Get data
 
-    CafeteriaScreen()
+    CafeteriaScreen(navigator)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun CafeteriaScreen() {
+internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -66,7 +71,15 @@ internal fun CafeteriaScreen() {
                 actions = {
                     Row {
                         Spacer(modifier = Modifier.width(16.dp))
-                        TextButton(onClick = { /*mandar p outra pag */ }) {
+                        TextButton(
+                            onClick = { navigator.navigate(CartDestination("")) },
+                            modifier =
+                                Modifier
+                                    .padding(8.dp)
+                                    .clickable {
+                                        // Handle click here if needed
+                                    },
+                        ) {
                             Text("Ver carrinho")
                         }
                     }
@@ -74,9 +87,8 @@ internal fun CafeteriaScreen() {
             )
         },
     ) {
-        Column(/*
-                horizontalAlignment = Alignment.CenterHorizontally,
-*/
+        Column(
+            // horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier =
                 Modifier
@@ -94,6 +106,25 @@ internal fun CafeteriaScreen() {
                 contentScale = ContentScale.Fit,
             )
 
+            // __________________________________Time open ________________________________________
+
+            Row {
+                Text(
+                    text = "Aberto",
+                    fontSize = 15.sp,
+                    color = Color(0xffb2f98a),
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomEnd,
+                ) {
+                    Text(
+                        text = "Horário: 9h00 - 23h30",
+                        color = Color(0xffb2f98a),
+                    )
+                }
+            }
             Text(
                 text = "Menu",
                 style = TextStyle(fontSize = 20.sp),
