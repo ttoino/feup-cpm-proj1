@@ -152,7 +152,9 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
                     navigator = navigator,
                 )
                 RecommendedEvent(
-                    eventImageLink = "https://s.calendarr.com/upload/datas/di/ai/dia-internacional-da-mulher_c.jpg?auto_optimize=low&width=640",
+                    eventImageLink =
+                        "https://s.calendarr.com/upload/datas/di/ai/" +
+                            "dia-internacional-da-mulher_c.jpg?auto_optimize=low&width=640",
                     eventName = "Dia das mulheres",
                     eventDate = "8 de Março",
                     eventTime = "14:45",
@@ -169,14 +171,18 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
                         .padding(vertical = 16.dp),
             ) {
                 TodayEvent(
-                    eventImageLink = "https://cdn-images.rtp.pt/icm/noticias/images/70/702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
+                    eventImageLink =
+                        "https://cdn-images.rtp.pt/icm/noticias/images/70/" +
+                            "702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
                     eventName = "Hamilton Infantil",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
                     navigator = navigator,
                 )
                 TodayEvent(
-                    eventImageLink = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
+                    eventImageLink =
+                        "https://images-na.ssl-images-amazon.com/images/S/" +
+                            "compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
                     eventName = "O pequeno mundo de Teresa",
                     eventDate = "20 de Fevereiro",
                     eventTime = "12:30",
@@ -281,8 +287,10 @@ private fun RecommendedEvent(
             AsyncImage(
                 model = eventImageLink,
                 contentDescription = "Event Image",
-                contentScale = ContentScale.Crop, // Maintain aspect ratio and crop if necessary
-                modifier = Modifier.fillMaxSize(), // Fill the available space within the Box
+                // Maintain aspect ratio and crop if necessary
+                contentScale = ContentScale.Crop,
+                // Fill the available space within the Box
+                modifier = Modifier.fillMaxSize(),
             )
         }
         Text(

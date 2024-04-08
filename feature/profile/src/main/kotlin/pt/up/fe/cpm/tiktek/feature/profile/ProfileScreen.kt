@@ -115,7 +115,8 @@ internal fun ProfileScreen() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                Image( // profile picture
+                // profile picture
+                Image(
                     painter = rememberAsyncImagePainter("https://i.pinimg.com/736x/b1/cb/57/b1cb57bcb04183c6aaf293210a6ba8a8.jpg"),
                     contentDescription = "avatar",
                     alignment = Alignment.Center,

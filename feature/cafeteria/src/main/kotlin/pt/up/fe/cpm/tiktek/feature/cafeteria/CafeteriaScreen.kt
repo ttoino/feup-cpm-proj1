@@ -98,7 +98,9 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
         ) {
             AsyncImage(
                 model = "https://i.pinimg.com/564x/b8/85/4c/b8854cfb077f5e7f6646899455f27704.jpg",
-                contentDescription = "Cafeteria Image - an environment with tables and lights the window scenery shows the ending of an afternoon",
+                contentDescription =
+                    "Cafeteria Image - an environment with tables " +
+                        "and lights the window scenery shows the ending of an afternoon",
                 modifier =
                     Modifier
                         .fillMaxWidth()
@@ -186,7 +188,9 @@ internal fun ItemCafeteria(
         ) {
             AsyncImage(
                 model = itemLinkImg,
-                contentDescription = "Cafeteria Image - an environment with tables and lights the window scenery shows the ending of an afternoon",
+                contentDescription =
+                    "Cafeteria Image - an environment with tables " +
+                        "and lights the window scenery shows the ending of an afternoon",
                 contentScale = ContentScale.Crop,
             )
         }
