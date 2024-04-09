@@ -114,7 +114,7 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                 Text(
                     text = "Aberto",
                     fontSize = 15.sp,
-                    color = Color(0xffb2f98a),
+                    color = Color(0xFF557C3F),
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Box(

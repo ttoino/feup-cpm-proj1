@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -23,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -33,17 +35,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.PreviewDynamicColors
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
-import pt.up.fe.cpm.tiktek.core.ui.TikTekTheme
+import com.ramcosta.composedestinations.generated.events.destinations.EventConfirmationDialogDestination
+import com.ramcosta.composedestinations.generated.events.destinations.EventDestination
+import com.ramcosta.composedestinations.generated.events.destinations.EventDialogDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
@@ -55,13 +57,19 @@ import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
     route = "event",
 )
 @Composable
-internal fun EventRoute(eventId: String) {
-    EventScreen()
+internal fun EventRoute(
+    eventId: String,
+    navigator: DestinationsNavigator,
+) {
+    EventScreen(navigator, eventId)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun EventScreen() {
+internal fun EventScreen(
+    navigator: DestinationsNavigator,
+    eventId: String,
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -102,7 +110,7 @@ internal fun EventScreen() {
                             .clip(MaterialTheme.shapes.medium),
                 )
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navigator.navigate(EventDialogDestination(eventId)) },
                     modifier =
                         Modifier
                             .align(Alignment.BottomEnd)
@@ -167,13 +175,105 @@ private fun InfoRow(
     }
 }
 
-@PreviewScreenSizes
-@PreviewLightDark
-@PreviewDynamicColors
-@PreviewFontScale
+@Destination<EventsGraph>(style = DestinationStyle.Dialog::class)
 @Composable
-private fun EventScreenPreview() {
-    TikTekTheme {
-        EventScreen()
-    }
+fun EventDialog(
+    eventId: String,
+    navigator: DestinationsNavigator,
+) {
+    // buscar cenas
+    EventDialogContent(eventName = "O Pato Lindo", navigator, eventId)
+}
+
+@Destination<EventsGraph>(style = DestinationStyle.Dialog::class)
+@Composable
+fun EventConfirmationDialog(
+    eventId: String,
+    navigator: DestinationsNavigator,
+) {
+    EventDialogConfirmationContent(
+        eventName = "O Pato Lindo",
+        eventDate = "23 de março",
+        eventTime = "13:00",
+        ticketQuantity = 3,
+        navigator,
+    )
+}
+
+@Composable
+fun EventDialogConfirmationContent(
+    eventName: String,
+    eventDate: String,
+    eventTime: String,
+    ticketQuantity: Int,
+    navigator: DestinationsNavigator,
+) {
+    AlertDialog(
+        title = {
+            Text(text = "Compra de Bilhetes")
+        },
+        text = {
+            Text(
+                text = "Tens a certeza que queres comprar $ticketQuantity bilhete(s) para \"$eventName\" no dia $eventDate às $eventTime?\nEsta ação é irreversível. ",
+            )
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.popBackStack(EventDestination, false)
+                },
+            ) {
+                Text("Confirmar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
+}
+
+@Composable
+fun EventDialogContent(
+    eventName: String,
+    navigator: DestinationsNavigator,
+    eventId: String,
+) {
+    AlertDialog(
+        title = {
+            Text(text = "Compra de Bilhetes")
+        },
+        text = {
+            Text(text = "Quantos bilhetes quer comprar para \"$eventName\" ?")
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigate(EventConfirmationDialogDestination(eventId))
+                },
+            ) {
+                Text("Continuar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
 }
