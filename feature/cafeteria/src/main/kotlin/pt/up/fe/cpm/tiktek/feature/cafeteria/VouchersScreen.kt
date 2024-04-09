@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -90,6 +89,55 @@ internal fun VouchersScreen(navigator: DestinationsNavigator) {
                 voucherDescription = "Este voucher equivale a um café grátis.",
                 isUsed = false,
             )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
+            VouchersCard(
+                voucherName = "☕  Café Grátis!",
+                voucherImg = "https://i.pinimg.com/564x/37/ae/2b/37ae2b49e4a4061272e8dd6fde5a210d.jpg",
+                voucherQuantity = 2,
+                voucherDescription = "Este voucher equivale a um café grátis.",
+                isUsed = false,
+            )
         }
     }
 }
@@ -103,32 +151,25 @@ internal fun VouchersCard(
     isUsed: Boolean,
 ) {
     Card(
-        border =
-            BorderStroke(
-                2.dp,
-                MaterialTheme.colorScheme.outlineVariant,
-            ),
-        colors =
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically, // Align children vertically in the center
         ) {
             AsyncImage(
                 model = voucherImg,
                 contentDescription = "Voucher Image",
                 contentScale = ContentScale.Crop,
-                modifier =
-                    Modifier
-                        .size(80.dp),
+                modifier = Modifier.size(120.dp),
             )
             Column(
                 modifier =
-                    Modifier.padding(16.dp)
-                        .fillMaxHeight(),
+                    Modifier
+                        .padding(16.dp)
+                        .weight(2f), // Occupy 2/3 of the space
             ) {
                 Text(
                     text = voucherName,
@@ -139,22 +180,17 @@ internal fun VouchersCard(
 
                 Spacer(modifier = Modifier.weight(1f)) // Spacer to push text to bottom
                 Text(
-                    text = "$voucherDescription",
+                    text = voucherDescription,
                     fontSize = 15.sp,
                 )
             }
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 15.dp),
-                ) {
-                }
-            }
-            Column {
+            Column(
+                modifier = Modifier.weight(1f), // Occupy 1/3 of the space
+                horizontalAlignment = Alignment.CenterHorizontally, // Center the checkbox horizontally
+            ) {
                 Checkbox(
                     checked = isUsed,
-                    onCheckedChange = { !isUsed }, // ponho dirieto quando se puser a base de dados
+                    onCheckedChange = { /* Implement your logic here */ },
                 )
             }
         }
