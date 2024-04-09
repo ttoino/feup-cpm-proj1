@@ -1,7 +1,6 @@
 package pt.up.fe.cpm.tiktek.feature.auth.navigation
 
-import com.ramcosta.composedestinations.annotation.ExternalModuleGraph
-import com.ramcosta.composedestinations.annotation.NavGraph
+import com.ramcosta.composedestinations.annotation.NavHostGraph
 
-@NavGraph<ExternalModuleGraph>
+@NavHostGraph
 internal annotation class AuthGraph

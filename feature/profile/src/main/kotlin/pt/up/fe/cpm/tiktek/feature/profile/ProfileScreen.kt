@@ -55,6 +55,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
@@ -65,10 +66,12 @@ import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun ProfileRoute() {
-    // TODO: Get data
-
-    ProfileScreen()
+internal fun ProfileRoute(
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
+    ProfileScreen(
+        onLogout = viewModel::logout,
+    )
 }
 
 @Composable
@@ -83,7 +86,9 @@ fun DrawCircle() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun ProfileScreen() {
+internal fun ProfileScreen(
+    onLogout: () -> Unit,
+) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -95,7 +100,7 @@ internal fun ProfileScreen() {
                 actions = {
                     Row {
                         Spacer(modifier = Modifier.width(16.dp))
-                        TextButton(onClick = { /*mandar p outra pag */ }) {
+                        TextButton(onClick = onLogout) {
                             Text("Logout")
                         }
                     }

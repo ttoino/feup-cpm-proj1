@@ -8,6 +8,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.local)
     implementation(projects.core.model)
     implementation(projects.core.network)
+
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.timber)
 }

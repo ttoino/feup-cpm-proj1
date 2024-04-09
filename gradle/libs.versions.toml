@@ -5,6 +5,7 @@ androidxActivity = "1.8.2"
 androidxComposeBom = "2024.02.02"
 androidxComposeCompiler = "1.5.11"
 androidxCore = "1.12.0"
+androidxDatastore = "1.0.0"
 androidxHilt = "1.2.0"
 androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.7"
@@ -30,6 +31,7 @@ ktor = "2.3.9"
 logback = "1.5.3"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
+timber = "5.0.1"
 
 sdk = "34"
 minSdk = "24"
@@ -47,6 +49,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
@@ -94,6 +97,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

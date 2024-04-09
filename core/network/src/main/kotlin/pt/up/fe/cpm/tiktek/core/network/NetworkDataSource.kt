@@ -24,9 +24,10 @@ interface NetworkDataSource {
     ): AuthResponse
 
     // Profile
-    suspend fun getProfile(): User
+    suspend fun getProfile(token: String): User
 
     suspend fun updateProfile(
+        token: String,
         name: String,
         nif: String,
         birthdate: LocalDate,
@@ -37,5 +38,5 @@ interface NetworkDataSource {
         cvvCc: String,
     ): User
 
-    suspend fun deleteProfile(): Boolean
+    suspend fun deleteProfile(token: String): Boolean
 }

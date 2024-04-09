@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import javax.inject.Inject
@@ -31,16 +32,24 @@ private interface TikTekApi {
 
     // Profile
     @GET("profile")
-    suspend fun getProfile(): User
+    suspend fun getProfile(
+        @Header("Authorization") authorization: String,
+    ): User
 
     @PUT("profile")
     suspend fun updateProfile(
+        @Header("Authorization") authorization: String,
         @Body body: User,
     ): User
 
     @DELETE("profile")
-    suspend fun deleteProfile(): Boolean
+    suspend fun deleteProfile(
+        @Header("Authorization") authorization: String,
+    ): Boolean
 }
+
+private val String.auth
+    get() = "Bearer $this"
 
 class RetrofitNetworkDataSource
     @Inject
@@ -49,7 +58,7 @@ class RetrofitNetworkDataSource
     ) : NetworkDataSource {
         private val api =
             Retrofit.Builder()
-                .baseUrl("")
+                .baseUrl("http://192.168.105.192:8080")
                 .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
                 .build()
                 .create(TikTekApi::class.java)
@@ -86,9 +95,10 @@ class RetrofitNetworkDataSource
             )
 
         // Profile
-        override suspend fun getProfile(): User = api.getProfile()
+        override suspend fun getProfile(token: String): User = api.getProfile(token.auth)
 
         override suspend fun updateProfile(
+            token: String,
             name: String,
             nif: String,
             birthdate: LocalDate,
@@ -99,6 +109,7 @@ class RetrofitNetworkDataSource
             cvvCc: String,
         ): User =
             api.updateProfile(
+                token.auth,
                 User(
                     name,
                     nif,
@@ -111,5 +122,5 @@ class RetrofitNetworkDataSource
                 ),
             )
 
-        override suspend fun deleteProfile(): Boolean = api.deleteProfile()
+        override suspend fun deleteProfile(token: String): Boolean = api.deleteProfile(token.auth)
     }

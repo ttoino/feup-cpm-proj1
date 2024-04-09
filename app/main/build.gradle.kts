@@ -20,5 +20,8 @@ dependencies {
     implementation(projects.feature.profile)
     implementation(projects.feature.tickets)
 
+    implementation(projects.core.data)
     implementation(projects.core.ui)
+
+    implementation(libs.timber)
 }

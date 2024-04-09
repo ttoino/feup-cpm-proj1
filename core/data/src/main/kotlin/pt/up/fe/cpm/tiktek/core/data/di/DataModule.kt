@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pt.up.fe.cpm.tiktek.core.data.EventsRepository
+import pt.up.fe.cpm.tiktek.core.data.UserRepository
+import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstUserRepository
 import pt.up.fe.cpm.tiktek.core.data.remote.RemoteEventsRepository
 
 @Module
@@ -12,4 +14,7 @@ import pt.up.fe.cpm.tiktek.core.data.remote.RemoteEventsRepository
 abstract class DataModule {
     @Binds
     abstract fun bindEventsRepository(repo: RemoteEventsRepository): EventsRepository
+
+    @Binds
+    abstract fun bindUserRepository(repo: LocalFirstUserRepository): UserRepository
 }

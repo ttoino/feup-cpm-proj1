@@ -15,6 +15,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.auth.destinations.AuthRouteDestination
@@ -28,9 +30,15 @@ import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun LoginRoute(navigator: DestinationsNavigator) {
+internal fun LoginRoute(
+    navigator: DestinationsNavigator,
+    viewModel: LoginViewModel = hiltViewModel(),
+) {
     LoginScreen(
-        onLogin = { },
+        uiState = viewModel.uiState,
+        onUpdateEmail = viewModel::updateEmail,
+        onUpdatePassword = viewModel::updatePassword,
+        onLogin = viewModel::login,
         onRegister = {
             navigator.navigate(RegisterStartRouteDestination) {
                 popUpTo(AuthRouteDestination)
@@ -41,6 +49,9 @@ internal fun LoginRoute(navigator: DestinationsNavigator) {
 
 @Composable
 internal fun LoginScreen(
+    uiState: LoginUiState,
+    onUpdateEmail: (String) -> Unit,
+    onUpdatePassword: (String) -> Unit,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
 ) {
@@ -49,12 +60,14 @@ internal fun LoginScreen(
         subtitle = R.string.login_subtitle,
         mainAction = R.string.login_action,
         onMainAction = onLogin,
+        mainActionDisabled = uiState.isLoading,
         secondaryAction = R.string.login_register_action,
         onSecondaryAction = onRegister,
+        errorMessage = uiState.errorMessage,
     ) {
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.email,
+            onValueChange = onUpdateEmail,
             label = {
                 Text(stringResource(R.string.email))
             },
@@ -70,8 +83,8 @@ internal fun LoginScreen(
         )
 
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.password,
+            onValueChange = onUpdatePassword,
             label = {
                 Text(stringResource(R.string.password))
             },
@@ -93,6 +106,9 @@ internal fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     LoginScreen(
+        uiState = LoginUiState(),
+        onUpdateEmail = { },
+        onUpdatePassword = { },
         onLogin = { },
         onRegister = { },
     )

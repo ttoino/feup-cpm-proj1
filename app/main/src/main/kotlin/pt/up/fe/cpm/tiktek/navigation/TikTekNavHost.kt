@@ -8,7 +8,6 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.ExternalNavGraph
 import com.ramcosta.composedestinations.annotation.NavHostGraph
 import com.ramcosta.composedestinations.generated.NavGraphs
-import com.ramcosta.composedestinations.generated.auth.navgraphs.AuthNavGraph
 import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
 import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
 import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
@@ -19,8 +18,8 @@ import com.ramcosta.composedestinations.utils.startDestination
 
 @NavHostGraph
 annotation class TikTekGraph {
-    @ExternalNavGraph<AuthNavGraph>(start = true)
-    @ExternalNavGraph<EventsNavGraph> // (start = true)
+//    @ExternalNavGraph<AuthNavGraph>(start = true)
+    @ExternalNavGraph<EventsNavGraph>(start = true)
     @ExternalNavGraph<TicketsNavGraph>
     @ExternalNavGraph<CafeteriaNavGraph>
     @ExternalNavGraph<ProfileNavGraph>

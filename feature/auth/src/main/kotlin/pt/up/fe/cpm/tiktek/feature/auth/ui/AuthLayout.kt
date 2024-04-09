@@ -25,8 +25,10 @@ internal fun AuthLayout(
     @StringRes subtitle: Int,
     @StringRes mainAction: Int,
     onMainAction: () -> Unit,
+    mainActionDisabled: Boolean = false,
     @StringRes secondaryAction: Int,
     onSecondaryAction: () -> Unit,
+    errorMessage: String? = null,
     content: @Composable () -> Unit,
 ) {
     Scaffold {
@@ -60,9 +62,18 @@ internal fun AuthLayout(
             }
 
             Column {
+                if (errorMessage != null) {
+                    Text(
+                        errorMessage,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+
                 Button(
                     onClick = onMainAction,
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = !mainActionDisabled,
                 ) {
                     Text(stringResource(mainAction))
                 }

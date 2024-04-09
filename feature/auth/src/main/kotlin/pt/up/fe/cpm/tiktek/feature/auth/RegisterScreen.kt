@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.auth.destinations.AuthRouteDestination
@@ -41,8 +42,17 @@ import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun RegisterStartRoute(navigator: DestinationsNavigator) {
+internal fun RegisterStartRoute(
+    navigator: DestinationsNavigator,
+    viewModel: RegisterViewModel,
+) {
     RegisterStartScreen(
+        uiState = viewModel.uiState,
+        onUpdateName = viewModel::updateName,
+        onUpdateNif = viewModel::updateNif,
+        onUpdateBirthdate = viewModel::updateBirthdate,
+        onUpdateEmail = viewModel::updateEmail,
+        onUpdatePassword = viewModel::updatePassword,
         onContinue = { navigator.navigate(RegisterFinishRouteDestination) },
         onLogin = {
             navigator.navigate(LoginRouteDestination) {
@@ -56,9 +66,18 @@ internal fun RegisterStartRoute(navigator: DestinationsNavigator) {
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun RegisterFinishRoute(navigator: DestinationsNavigator) {
+internal fun RegisterFinishRoute(
+    navigator: DestinationsNavigator,
+    viewModel: RegisterViewModel,
+) {
     RegisterFinishScreen(
-        onRegister = { },
+        uiState = viewModel.uiState,
+        onUpdateNameCc = viewModel::updateNameCc,
+        onUpdateNumberCc = viewModel::updateNumberCc,
+        onUpdateExpirationDateCc = viewModel::updateExpirationDateCc,
+        onUpdateCvcCc = viewModel::updateCvcCc,
+        onUpdateTermsAccepted = viewModel::updateTermsAccepted,
+        onRegister = viewModel::register,
         onLogin = {
             navigator.navigate(LoginRouteDestination) {
                 popUpTo(AuthRouteDestination)
@@ -69,6 +88,12 @@ internal fun RegisterFinishRoute(navigator: DestinationsNavigator) {
 
 @Composable
 internal fun RegisterStartScreen(
+    uiState: RegisterUiState,
+    onUpdateName: (String) -> Unit,
+    onUpdateNif: (String) -> Unit,
+    onUpdateBirthdate: (String) -> Unit,
+    onUpdateEmail: (String) -> Unit,
+    onUpdatePassword: (String) -> Unit,
     onContinue: () -> Unit,
     onLogin: () -> Unit,
 ) {
@@ -81,8 +106,8 @@ internal fun RegisterStartScreen(
         onSecondaryAction = onLogin,
     ) {
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.name,
+            onValueChange = onUpdateName,
             label = {
                 Text(stringResource(R.string.name))
             },
@@ -101,8 +126,8 @@ internal fun RegisterStartScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
-                value = "",
-                onValueChange = {},
+                value = uiState.nif,
+                onValueChange = onUpdateNif,
                 label = {
                     Text(stringResource(R.string.nif))
                 },
@@ -118,8 +143,8 @@ internal fun RegisterStartScreen(
             )
 
             TextField(
-                value = "",
-                onValueChange = {},
+                value = uiState.birthdate,
+                onValueChange = onUpdateBirthdate,
                 label = {
                     Text(stringResource(R.string.birthdate))
                 },
@@ -136,8 +161,8 @@ internal fun RegisterStartScreen(
         }
 
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.email,
+            onValueChange = onUpdateEmail,
             label = {
                 Text(stringResource(R.string.email))
             },
@@ -153,8 +178,8 @@ internal fun RegisterStartScreen(
         )
 
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.password,
+            onValueChange = onUpdatePassword,
             label = {
                 Text(stringResource(R.string.password))
             },
@@ -174,6 +199,12 @@ internal fun RegisterStartScreen(
 
 @Composable
 internal fun RegisterFinishScreen(
+    uiState: RegisterUiState,
+    onUpdateNameCc: (String) -> Unit,
+    onUpdateNumberCc: (String) -> Unit,
+    onUpdateExpirationDateCc: (String) -> Unit,
+    onUpdateCvcCc: (String) -> Unit,
+    onUpdateTermsAccepted: (Boolean) -> Unit,
     onRegister: () -> Unit,
     onLogin: () -> Unit,
 ) {
@@ -182,12 +213,14 @@ internal fun RegisterFinishScreen(
         subtitle = R.string.register_finish_subtitle,
         mainAction = R.string.register_action,
         onMainAction = onRegister,
+        mainActionDisabled = uiState.isLoading,
         secondaryAction = R.string.register_login_action,
         onSecondaryAction = onLogin,
+        errorMessage = uiState.errorMessage,
     ) {
         TextField(
-            value = "",
-            onValueChange = {},
+            value = uiState.nameCc,
+            onValueChange = onUpdateNameCc,
             label = {
                 Text(stringResource(R.string.name_cc))
             },
@@ -202,8 +235,8 @@ internal fun RegisterFinishScreen(
         )
 
         TextField(
-            value = "",
-            onValueChange = { },
+            value = uiState.numberCc,
+            onValueChange = onUpdateNumberCc,
             label = {
                 Text(stringResource(R.string.number_cc))
             },
@@ -224,8 +257,8 @@ internal fun RegisterFinishScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
-                value = "",
-                onValueChange = { },
+                value = uiState.expirationDateCc,
+                onValueChange = onUpdateExpirationDateCc,
                 label = {
                     Text(stringResource(R.string.expiry_cc))
                 },
@@ -242,8 +275,8 @@ internal fun RegisterFinishScreen(
             )
 
             TextField(
-                value = "",
-                onValueChange = {},
+                value = uiState.cvcCc,
+                onValueChange = onUpdateCvcCc,
                 label = {
                     Text(stringResource(R.string.cvc_cc))
                 },
@@ -270,8 +303,8 @@ internal fun RegisterFinishScreen(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Checkbox(
-                checked = false,
-                onCheckedChange = { },
+                checked = uiState.termsAccepted,
+                onCheckedChange = onUpdateTermsAccepted,
             )
 
             Text(stringResource(R.string.terms_and_conditions))
