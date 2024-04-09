@@ -157,7 +157,8 @@ internal fun VouchersCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically, // Align children vertically in the center
+            // Align children vertically in the center
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
                 model = voucherImg,
@@ -169,7 +170,8 @@ internal fun VouchersCard(
                 modifier =
                     Modifier
                         .padding(16.dp)
-                        .weight(2f), // Occupy 2/3 of the space
+                        // Occupy 2/3 of the space
+                        .weight(2f),
             ) {
                 Text(
                     text = voucherName,
@@ -178,15 +180,18 @@ internal fun VouchersCard(
                     overflow = TextOverflow.Ellipsis,
                 )
 
-                Spacer(modifier = Modifier.weight(1f)) // Spacer to push text to bottom
+                // Spacer to push text to bottom
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = voucherDescription,
                     fontSize = 15.sp,
                 )
             }
             Column(
-                modifier = Modifier.weight(1f), // Occupy 1/3 of the space
-                horizontalAlignment = Alignment.CenterHorizontally, // Center the checkbox horizontally
+                // Occupy 1/3 of the space
+                modifier = Modifier.weight(1f),
+                // Center the checkbox horizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Checkbox(
                     checked = isUsed,

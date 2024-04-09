@@ -4,5 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalAuthenticationTokenDataSource {
     fun token(): Flow<String?>
+
     suspend fun setToken(token: String?)
 }
