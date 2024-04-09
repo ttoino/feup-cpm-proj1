@@ -20,6 +20,7 @@ import pt.up.fe.cpm.tiktek.backend.event.eventModule
 import pt.up.fe.cpm.tiktek.backend.order.orderModule
 import pt.up.fe.cpm.tiktek.backend.profile.profileModule
 import pt.up.fe.cpm.tiktek.backend.profile.validateProfile
+import pt.up.fe.cpm.tiktek.backend.seed.seedDatabase
 import pt.up.fe.cpm.tiktek.backend.ticket.ticketModule
 import pt.up.fe.cpm.tiktek.backend.voucher.voucherModule
 
@@ -28,6 +29,8 @@ data class ErrorResponse(val status: Int, val title: String, val details: String
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
+        seedDatabase()
+
         install(CallLogging)
         install(ContentNegotiation) {
             json()

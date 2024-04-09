@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.core.model)
 
     implementation(libs.bcrypt)
+    implementation(libs.faker)
     implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.auth)

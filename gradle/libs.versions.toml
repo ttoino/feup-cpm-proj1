@@ -18,6 +18,7 @@ coil = "2.6.0"
 composeDestinations = "2.0.0-alpha07"
 dagger = "2.51"
 exposed = "0.48.0"
+faker = "1.16.0"
 h2 = "2.2.224"
 junit = "4.13.2"
 kotlin = "1.9.23"
@@ -69,6 +70,7 @@ exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version
 exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
 exposed-datetime = { group = "org.jetbrains.exposed", name = "exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+faker = { group = "io.github.serpro69", name = "kotlin-faker", version.ref = "faker" }
 h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }

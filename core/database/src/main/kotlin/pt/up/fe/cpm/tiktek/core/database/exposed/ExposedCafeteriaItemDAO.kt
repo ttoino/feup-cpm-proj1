@@ -3,6 +3,7 @@ package pt.up.fe.cpm.tiktek.core.database.exposed
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -33,6 +34,14 @@ class ExposedCafeteriaItemDAO
                     it.fromCafeteriaItem(cafeteriaItem)
                 }
                 cafeteriaItem
+            }
+
+        override suspend fun createAll(cafeteriaItems: List<CafeteriaItem>): List<CafeteriaItem> =
+            db.query {
+                CafeteriaItems.batchInsert(cafeteriaItems) {
+                    fromCafeteriaItem(it)
+                }
+                cafeteriaItems
             }
 
         override suspend fun update(cafeteriaItem: CafeteriaItem): CafeteriaItem =

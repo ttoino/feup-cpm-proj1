@@ -9,6 +9,8 @@ interface EventDAO {
 
     suspend fun create(event: Event): Event
 
+    suspend fun createAll(events: List<Event>): List<Event>
+
     suspend fun update(event: Event): Event
 
     suspend fun delete(id: String): Boolean

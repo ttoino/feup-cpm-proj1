@@ -9,6 +9,8 @@ interface CafeteriaItemDAO {
 
     suspend fun create(cafeteriaItem: CafeteriaItem): CafeteriaItem
 
+    suspend fun createAll(cafeteriaItems: List<CafeteriaItem>): List<CafeteriaItem>
+
     suspend fun update(cafeteriaItem: CafeteriaItem): CafeteriaItem
 
     suspend fun delete(id: String): Boolean
