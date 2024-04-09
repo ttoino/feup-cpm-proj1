@@ -45,18 +45,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import com.ramcosta.composedestinations.annotation.parameters.DeepLink
-import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.VouchersDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
     visibility = CodeGenVisibility.INTERNAL,
-    deepLinks = [
-        DeepLink(uriPattern = "tiktek://$FULL_ROUTE_PLACEHOLDER"),
-    ],
-    route = "cart",
 )
 @Composable
 internal fun CartRoute(navigator: DestinationsNavigator) {
