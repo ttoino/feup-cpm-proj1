@@ -26,6 +26,11 @@ class LoginViewModel
         var uiState by mutableStateOf(LoginUiState())
             private set
 
+        val canLogin: Boolean
+            get() =
+                uiState.email.isNotBlank() &&
+                    uiState.password.isNotBlank()
+
         fun updateEmail(email: String) {
             uiState = uiState.copy(email = email)
         }

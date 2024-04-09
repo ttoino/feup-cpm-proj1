@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.defaults.DefaultFadingTransitions
 import com.ramcosta.composedestinations.annotation.ExternalNavGraph
 import com.ramcosta.composedestinations.annotation.NavHostGraph
 import com.ramcosta.composedestinations.generated.NavGraphs
@@ -35,6 +36,7 @@ fun TikTekNavHost(
         navGraph = NavGraphs.tikTek,
         navController = navController,
         modifier = modifier,
+        defaultTransitions = DefaultFadingTransitions,
     )
 }
 

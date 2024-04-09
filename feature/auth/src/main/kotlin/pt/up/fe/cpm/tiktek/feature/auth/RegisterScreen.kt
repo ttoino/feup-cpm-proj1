@@ -34,6 +34,8 @@ import com.ramcosta.composedestinations.generated.auth.destinations.LoginRouteDe
 import com.ramcosta.composedestinations.generated.auth.destinations.RegisterFinishRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import kotlinx.datetime.LocalDate
+import pt.up.fe.cpm.tiktek.core.ui.form.DatePicker
 import pt.up.fe.cpm.tiktek.core.ui.form.SeparatorVisualTransformation
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.AuthGraph
 import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
@@ -59,6 +61,7 @@ internal fun RegisterStartRoute(
                 popUpTo(AuthRouteDestination)
             }
         },
+        canContinue = viewModel.canContinue,
     )
 }
 
@@ -83,6 +86,7 @@ internal fun RegisterFinishRoute(
                 popUpTo(AuthRouteDestination)
             }
         },
+        canRegister = viewModel.canRegister,
     )
 }
 
@@ -91,17 +95,19 @@ internal fun RegisterStartScreen(
     uiState: RegisterUiState,
     onUpdateName: (String) -> Unit,
     onUpdateNif: (String) -> Unit,
-    onUpdateBirthdate: (String) -> Unit,
+    onUpdateBirthdate: (LocalDate?) -> Unit,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
     onContinue: () -> Unit,
     onLogin: () -> Unit,
+    canContinue: Boolean,
 ) {
     AuthLayout(
         title = R.string.register_title,
         subtitle = R.string.register_start_subtitle,
         mainAction = R.string.register_continue_action,
         onMainAction = onContinue,
+        mainActionDisabled = !canContinue,
         secondaryAction = R.string.register_login_action,
         onSecondaryAction = onLogin,
     ) {
@@ -142,7 +148,7 @@ internal fun RegisterStartScreen(
                 modifier = Modifier.weight(1f),
             )
 
-            TextField(
+            DatePicker(
                 value = uiState.birthdate,
                 onValueChange = onUpdateBirthdate,
                 label = {
@@ -151,11 +157,6 @@ internal fun RegisterStartScreen(
                 leadingIcon = {
                     Icon(Icons.Default.Today, contentDescription = stringResource(R.string.birthdate))
                 },
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
                 modifier = Modifier.weight(1f),
             )
         }
@@ -207,13 +208,14 @@ internal fun RegisterFinishScreen(
     onUpdateTermsAccepted: (Boolean) -> Unit,
     onRegister: () -> Unit,
     onLogin: () -> Unit,
+    canRegister: Boolean,
 ) {
     AuthLayout(
         title = R.string.register_title,
         subtitle = R.string.register_finish_subtitle,
         mainAction = R.string.register_action,
         onMainAction = onRegister,
-        mainActionDisabled = uiState.isLoading,
+        mainActionDisabled = uiState.isLoading || !canRegister,
         secondaryAction = R.string.register_login_action,
         onSecondaryAction = onLogin,
         errorMessage = uiState.errorMessage,

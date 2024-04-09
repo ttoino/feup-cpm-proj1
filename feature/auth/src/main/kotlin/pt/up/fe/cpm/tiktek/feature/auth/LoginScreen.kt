@@ -44,6 +44,7 @@ internal fun LoginRoute(
                 popUpTo(AuthRouteDestination)
             }
         },
+        canLogin = viewModel.canLogin,
     )
 }
 
@@ -54,13 +55,14 @@ internal fun LoginScreen(
     onUpdatePassword: (String) -> Unit,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
+    canLogin: Boolean,
 ) {
     AuthLayout(
         title = R.string.login_title,
         subtitle = R.string.login_subtitle,
         mainAction = R.string.login_action,
         onMainAction = onLogin,
-        mainActionDisabled = uiState.isLoading,
+        mainActionDisabled = uiState.isLoading || !canLogin,
         secondaryAction = R.string.login_register_action,
         onSecondaryAction = onRegister,
         errorMessage = uiState.errorMessage,
@@ -111,5 +113,6 @@ fun LoginScreenPreview() {
         onUpdatePassword = { },
         onLogin = { },
         onRegister = { },
+        canLogin = true,
     )
 }

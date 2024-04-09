@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,7 +39,8 @@ internal fun AuthLayout(
                 Modifier
                     .padding(it)
                     .padding(24.dp)
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -61,7 +64,9 @@ internal fun AuthLayout(
                 content()
             }
 
-            Column {
+            Column(
+                modifier = Modifier.padding(top = 16.dp),
+            ) {
                 if (errorMessage != null) {
                     Text(
                         errorMessage,
