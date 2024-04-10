@@ -14,8 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,10 +23,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -49,6 +48,7 @@ import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.VouchersDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -175,7 +175,7 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navigator.navigateUp() }, // TODO APAGAR TUDO OQ TA NO CARRINHO
                     modifier =
                         Modifier
                             .weight(1f)
@@ -188,7 +188,11 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                 }
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navigator.navigate(
+                            com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaBuyDialogDestination(orderId = ""),
+                        )
+                    }, // TODO PROCESSO DE COMPRA
                     modifier =
                         Modifier
                             .weight(1f)
@@ -244,40 +248,6 @@ internal fun ItemCard(
                     fontSize = 15.sp,
                 )
             }
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 15.dp),
-                ) {
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.size(48.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Remove,
-                            contentDescription = "Minus",
-                            tint = Color(0xFFA348DC),
-                        )
-                    }
-                    InputChip(
-                        onClick = { },
-                        label = { Text("$itemQuantity") },
-                        selected = true,
-                    )
-
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.size(48.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Plus",
-                            tint = Color(0xFFA348DC),
-                        )
-                    }
-                }
-            }
             AsyncImage(
                 model = itemLinkImg,
                 contentDescription = "Food Image",
@@ -288,4 +258,69 @@ internal fun ItemCard(
             )
         }
     }
+}
+
+@Destination<CafeteriaGraph>(style = DestinationStyle.Dialog::class)
+@Composable
+fun CafeteriaBuyDialog(
+    orderId: String,
+    navigator: DestinationsNavigator,
+) {
+    CafeteriaBuyDialogContent(
+        orderId,
+        foodItems =
+            arrayOf(
+                Food("Apple", 5),
+                Food("Banana", 3),
+                Food("Orange", 2),
+            ),
+        navigator,
+    )
+}
+
+data class Food(val name: String, val quantity: Int)
+
+@Composable
+fun CafeteriaBuyDialogContent(
+    orderId: String,
+    foodItems: Array<Food>,
+    navigator: DestinationsNavigator,
+) {
+    AlertDialog(
+        title = {
+            Text(text = "Confirmar Compra")
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                for (food in foodItems) {
+                    if (food.quantity > 0) {
+                        Text(text = "- ${food.quantity} ${food.name}")
+                    }
+                }
+            }
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Confirmar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
 }

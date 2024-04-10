@@ -277,7 +277,7 @@ fun CafeteriaItemDialogContent(
 ) {
     AlertDialog(
         title = {
-            Text(text = "Compra na Cafeteria")
+            Text(text = "Compra de $itemName")
         },
         text = {
             Column(
@@ -285,7 +285,7 @@ fun CafeteriaItemDialogContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Escolha a quantidade de $itemName a comprar",
+                    text = "Escolha a quantidade de ${itemName.lowercase()} a comprar.",
                 )
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -318,7 +318,7 @@ fun CafeteriaItemDialogContent(
                             tint = Color(0xFFA348DC),
                         )
                     }
-                } 
+                }
             }
         },
         onDismissRequest = {
