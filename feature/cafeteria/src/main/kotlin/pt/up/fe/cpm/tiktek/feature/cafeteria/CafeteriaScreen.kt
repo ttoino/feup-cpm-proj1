@@ -12,16 +12,22 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,8 +48,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaItemDialogDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -114,7 +122,7 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                 Text(
                     text = "Aberto",
                     fontSize = 15.sp,
-                    color = Color(0xFF557C3F),
+                    color = Color(0xff9cd4a0),
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Box(
@@ -123,7 +131,7 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                 ) {
                     Text(
                         text = "Horário: 9h00 - 23h30",
-                        color = Color(0xffb2f98a),
+                        color = Color(0xff9cd4a0),
                     )
                 }
             }
@@ -141,24 +149,28 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                     itemLinkImg = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
                     itemPrice = 0.67,
                     modifier = Modifier.weight(1f),
+                    navigator,
                 )
                 ItemCafeteria(
                     itemName = "Pipoca",
                     itemLinkImg = "https://i.pinimg.com/564x/b8/98/f5/b898f57f93e6ef44d43940c22c92564c.jpg",
                     itemPrice = 1.23,
                     modifier = Modifier.weight(1f),
+                    navigator,
                 )
                 ItemCafeteria(
                     itemName = "Sanduíche",
                     itemLinkImg = "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
                     itemPrice = 2.55,
                     modifier = Modifier.weight(1f),
+                    navigator,
                 )
                 ItemCafeteria(
                     itemName = "Refrigerante",
                     itemLinkImg = "https://i.pinimg.com/564x/0d/99/d9/0d99d9474c57590b2f0814fbcbc3f138.jpg",
                     itemPrice = 0.90,
                     modifier = Modifier.weight(1f),
+                    navigator,
                 )
             }
         }
@@ -171,6 +183,7 @@ internal fun ItemCafeteria(
     itemLinkImg: String,
     itemPrice: Double,
     modifier: Modifier,
+    navigator: DestinationsNavigator,
 ) {
     Card(
         colors =
@@ -231,7 +244,7 @@ internal fun ItemCafeteria(
             )
 
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { navigator.navigate(CafeteriaItemDialogDestination(itemName)) },
                 modifier =
                     Modifier
                         .padding(
@@ -243,4 +256,91 @@ internal fun ItemCafeteria(
             }
         }
     }
+}
+
+@Destination<CafeteriaGraph>(style = DestinationStyle.Dialog::class)
+@Composable
+fun CafeteriaItemDialog(
+    itemId: String,
+    navigator: DestinationsNavigator,
+) {
+    CafeteriaItemDialogContent(
+        itemId,
+        navigator,
+    )
+}
+
+@Composable
+fun CafeteriaItemDialogContent(
+    itemName: String,
+    navigator: DestinationsNavigator,
+) {
+    AlertDialog(
+        title = {
+            Text(text = "Compra na Cafeteria")
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "Escolha a quantidade de $itemName a comprar",
+                )
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 15.dp),
+                ) {
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Minus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                    InputChip(
+                        onClick = { },
+                        label = { Text("2") }, // TODO MUDAR QUANTIDADE
+                        selected = true,
+                    )
+
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Plus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                } 
+            }
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Confirmar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
 }

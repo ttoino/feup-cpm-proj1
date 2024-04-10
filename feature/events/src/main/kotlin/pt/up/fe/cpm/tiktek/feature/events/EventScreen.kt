@@ -7,20 +7,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
@@ -214,7 +219,9 @@ fun EventDialogConfirmationContent(
         },
         text = {
             Text(
-                text = "Tens a certeza que queres comprar $ticketQuantity bilhete(s) para \"$eventName\" no dia $eventDate às $eventTime?\nEsta ação é irreversível. ",
+                text =
+                    "Tens a certeza que queres comprar $ticketQuantity bilhete(s) para \"$eventName\" no dia $eventDate às $eventTime?\n" +
+                        "Esta ação é irreversível. ",
             )
         },
         onDismissRequest = {
@@ -252,7 +259,44 @@ fun EventDialogContent(
             Text(text = "Compra de Bilhetes")
         },
         text = {
-            Text(text = "Quantos bilhetes quer comprar para \"$eventName\" ?")
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = "Quantos bilhetes quer comprar para \"$eventName\" ?")
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 15.dp),
+                ) {
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Minus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                    InputChip(
+                        onClick = { },
+                        label = { Text("2") }, // TODO MUDAR QUANTIDADE
+                        selected = true,
+                    )
+
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Plus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                }
+            }
         },
         onDismissRequest = {
             navigator.navigateUp()
