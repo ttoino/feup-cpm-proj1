@@ -300,6 +300,8 @@ fun CafeteriaBuyDialogContent(
                     }
                 }
             }
+            Text("Price")
+            Text("10.95€") // TODO MUDAR ISTO PARA DADOS REAIS
         },
         onDismissRequest = {
             navigator.navigateUp()
