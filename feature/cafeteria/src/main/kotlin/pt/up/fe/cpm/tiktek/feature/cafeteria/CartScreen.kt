@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -248,6 +252,40 @@ internal fun ItemCard(
                     fontSize = 15.sp,
                 )
             }
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 15.dp),
+                ) {
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Minus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                    InputChip(
+                        onClick = { },
+                        label = { Text("$itemQuantity") },
+                        selected = true,
+                    )
+
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Plus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                }
+            }
             AsyncImage(
                 model = itemLinkImg,
                 contentDescription = "Food Image",
@@ -294,14 +332,52 @@ fun CafeteriaBuyDialogContent(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
+                Text(
+                    text = "Produtos na lista",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp,
+                )
+
                 for (food in foodItems) {
                     if (food.quantity > 0) {
                         Text(text = "- ${food.quantity} ${food.name}")
                     }
                 }
+
+                Spacer(
+                    modifier = Modifier.width(16.dp),
+                )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFF807C7C))
+
+                Spacer(
+                    modifier = Modifier.width(16.dp),
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = "Preço",
+                        fontWeight = FontWeight.Bold,
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                        fontSize = 20.sp,
+                    )
+
+                    Text(
+                        text = "10.9€",
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                        fontSize = 17.sp,
+                        textAlign = TextAlign.End,
+                    ) // TODO MUDAR ISTO
+                }
             }
-            Text("Price")
-            Text("10.95€") // TODO MUDAR ISTO PARA DADOS REAIS
         },
         onDismissRequest = {
             navigator.navigateUp()
