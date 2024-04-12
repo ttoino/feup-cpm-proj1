@@ -1,5 +1,8 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
+import android.content.Context
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.ConfirmationNumber
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,17 +28,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @Composable
-fun MainScreen() {
+fun MainScreen(checkCameraPermission: (Context) -> Unit) {
     val sdf = SimpleDateFormat("HH:mm")
     var currentDateAndTime by remember { mutableStateOf(sdf.format(Date())) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -85,10 +93,10 @@ fun MainScreen() {
                 modifier = Modifier.height(150.dp),
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { checkCameraPermission(context) },
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.AddShoppingCart,
+                    imageVector = Icons.Outlined.QrCodeScanner,
                     contentDescription = "Validar carrinho de compras",
                     modifier = Modifier.size(18.dp),
                 )

@@ -17,7 +17,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("a
 private val KEY_TOKEN = stringPreferencesKey("token")
 
 @Singleton
-class DataStoreAuthenticationTokenDataStore
+class DataStoreAuthenticationTokenDataSource
     @Inject
     constructor(
         @ApplicationContext
