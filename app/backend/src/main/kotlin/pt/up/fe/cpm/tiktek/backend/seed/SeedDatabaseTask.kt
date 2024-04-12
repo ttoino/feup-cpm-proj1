@@ -4,8 +4,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import kotlinx.coroutines.runBlocking
 import pt.up.fe.cpm.tiktek.backend.di.database
-import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
-import pt.up.fe.cpm.tiktek.core.model.Event
 
 fun Application.seedDatabase() =
     runBlocking {
@@ -14,7 +12,7 @@ fun Application.seedDatabase() =
 
             database.cafeteriaItem.createAll(
                 List(10) {
-                    faker.randomProvider.randomClassInstance<CafeteriaItem>()
+                    faker.cafeteriaItem()
                 },
             )
         }
@@ -23,8 +21,8 @@ fun Application.seedDatabase() =
             log.info("Seeding database with events")
 
             database.event.createAll(
-                List(1000) {
-                    faker.randomProvider.randomClassInstance<Event>()
+                List(200) {
+                    faker.event()
                 },
             )
         }

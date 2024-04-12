@@ -18,70 +18,58 @@ fun Faker.paragraph() = List(random.nextInt(1, 5)) { sentence() }.joinToString("
 
 fun Faker.text() = List(random.nextInt(1, 5)) { paragraph() }.joinToString("\n")
 
+fun Faker.month() = random.randomValue(Month.entries)
+
+fun Faker.date() = month().let { LocalDate(random.nextInt(2024, 2025), it, random.nextInt(1, it.length(false))) }
+
+fun Faker.time() = LocalTime(random.nextInt(0, 23), 0, 0, 0)
+
+fun Faker.cafeteriaItem() =
+    random.randomValue(
+        listOf(
+            food.unique::dish,
+            { coffee.unique.variety() + " coffee" },
+            { tea.unique.type() + " tea" },
+            dessert.unique::variety,
+            { beer.unique.style() + " beer" },
+        ),
+    )().let { name ->
+        CafeteriaItem(
+            id = name.slugify(),
+            name = name,
+            price = random.nextInt(1000),
+            imageUrl = imageUrl(),
+        )
+    }
+
+fun Faker.event() =
+    random.randomValue(
+        listOf(
+            show.unique::adultMusical,
+            show.unique::kidsMusical,
+            show.unique::play,
+            movie.unique::title,
+            music.unique::bands,
+        ),
+    )().let { name ->
+        Event(
+            id = name.slugify(),
+            name = name,
+            description = text(),
+            date = date(),
+            startTime = time(),
+            endTime = time(),
+            location = address.streetAddress(),
+            locationDetails = address.streetAddress(),
+            price = random.nextInt(10000),
+            imageUrl = imageUrl(),
+        )
+    }
+
 internal val faker =
     faker {
         fakerConfig {
             locale = "pt-PT"
-        }
-    }.also { faker ->
-        faker.randomProvider.configure {
-            typeGenerator<Month> {
-                faker.random.randomValue(Month.entries)
-            }
-
-            typeGenerator<LocalDate> {
-                val month = faker.randomProvider.randomClassInstance<Month>()
-                LocalDate(faker.random.nextInt(2024, 2026), month, faker.random.nextInt(1, month.length(false)))
-            }
-
-            typeGenerator<LocalTime> {
-                LocalTime(faker.random.nextInt(0, 23), 0, 0, 0)
-            }
-
-            typeGenerator<CafeteriaItem> {
-                val name =
-                    faker.random.randomValue(
-                        listOf(
-                            faker.food.dish(),
-                            faker.coffee.variety() + " coffee",
-                            faker.tea.type() + " tea",
-                            faker.dessert.variety(),
-                            faker.beer.style(),
-                        ),
-                    )
-
-                CafeteriaItem(
-                    id = name.slugify(),
-                    name = name,
-                    price = faker.random.nextInt(1000),
-                    imageUrl = faker.imageUrl(),
-                )
-            }
-
-            typeGenerator<Event> {
-                val name =
-                    faker.random.randomValue(
-                        listOf(
-                            faker.show.adultMusical(),
-                            faker.show.kidsMusical(),
-                            faker.show.play(),
-                            faker.movie.title(),
-                            faker.music.bands(),
-                        ),
-                    )
-
-                Event(
-                    id = name.slugify(),
-                    name = name,
-                    description = faker.text(),
-                    date = faker.randomProvider.randomClassInstance(),
-                    startTime = faker.randomProvider.randomClassInstance(),
-                    endTime = faker.randomProvider.randomClassInstance(),
-                    location = faker.address.streetAddress(),
-                    locationDetails = faker.address.streetAddress(),
-                    price = faker.random.nextInt(10000),
-                    imageUrl = faker.imageUrl(),
-                )
-            }
+            randomSeed = 42
         }
     }

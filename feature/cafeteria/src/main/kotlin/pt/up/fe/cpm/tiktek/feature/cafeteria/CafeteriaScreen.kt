@@ -1,6 +1,5 @@
 package pt.up.fe.cpm.tiktek.feature.cafeteria
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +35,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,13 +46,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaItemDialogDestination
-import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartDestination
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -59,15 +62,26 @@ import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun CafeteriaRoute(navigator: DestinationsNavigator) {
-    // TODO: Get data
+internal fun CafeteriaRoute(
+    navigator: DestinationsNavigator,
+    viewModel: CafeteriaViewModel = hiltViewModel(),
+) {
+    val cafeteriaItems by viewModel.cafeteriaItems.collectAsState(emptyList())
 
-    CafeteriaScreen(navigator)
+    CafeteriaScreen(
+        navigator,
+        cafeteriaItems = cafeteriaItems,
+        onCart = { navigator.navigate(CartRouteDestination) },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
+internal fun CafeteriaScreen(
+    navigator: DestinationsNavigator,
+    cafeteriaItems: List<CafeteriaItem> = emptyList(),
+    onCart: () -> Unit,
+) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -80,13 +94,8 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                     Row {
                         Spacer(modifier = Modifier.width(16.dp))
                         TextButton(
-                            onClick = { navigator.navigate(CartDestination()) },
-                            modifier =
-                                Modifier
-                                    .padding(8.dp)
-                                    .clickable {
-                                        // Handle click here if needed
-                                    },
+                            onClick = onCart,
+                            modifier = Modifier.padding(8.dp),
                         ) {
                             Text("Ver carrinho")
                         }
@@ -144,34 +153,15 @@ internal fun CafeteriaScreen(navigator: DestinationsNavigator) {
                 verticalArrangement = Arrangement.spacedBy(32.dp),
                 maxItemsInEachRow = 2,
             ) {
-                ItemCafeteria(
-                    itemName = "Café",
-                    itemLinkImg = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
-                    itemPrice = 0.67,
-                    modifier = Modifier.weight(1f),
-                    navigator,
-                )
-                ItemCafeteria(
-                    itemName = "Pipoca",
-                    itemLinkImg = "https://i.pinimg.com/564x/b8/98/f5/b898f57f93e6ef44d43940c22c92564c.jpg",
-                    itemPrice = 1.23,
-                    modifier = Modifier.weight(1f),
-                    navigator,
-                )
-                ItemCafeteria(
-                    itemName = "Sanduíche",
-                    itemLinkImg = "https://i.pinimg.com/564x/ae/ee/c1/aeeec154c1058118a57e6b83d08bdd32.jpg",
-                    itemPrice = 2.55,
-                    modifier = Modifier.weight(1f),
-                    navigator,
-                )
-                ItemCafeteria(
-                    itemName = "Refrigerante",
-                    itemLinkImg = "https://i.pinimg.com/564x/0d/99/d9/0d99d9474c57590b2f0814fbcbc3f138.jpg",
-                    itemPrice = 0.90,
-                    modifier = Modifier.weight(1f),
-                    navigator,
-                )
+                cafeteriaItems.forEach { cafeteriaItem ->
+                    ItemCafeteria(
+                        itemName = cafeteriaItem.name,
+                        itemLinkImg = cafeteriaItem.imageUrl,
+                        itemPrice = cafeteriaItem.price / 100.0,
+                        modifier = Modifier.weight(1f),
+                        navigator,
+                    )
+                }
             }
         }
     }

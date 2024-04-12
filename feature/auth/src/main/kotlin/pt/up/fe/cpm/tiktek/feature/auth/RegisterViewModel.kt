@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.toLocalDate
+import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import javax.inject.Inject
 
 data class RegisterUiState(
     val name: String = "",
     val nif: String = "",
-    val birthdate: String = "",
+    val birthdate: LocalDate? = null,
     val email: String = "",
     val password: String = "",
     val nameCc: String = "",
@@ -22,7 +22,6 @@ data class RegisterUiState(
     val expirationDateCc: String = "",
     val cvcCc: String = "",
     val termsAccepted: Boolean = false,
-    val secondStage: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )
@@ -36,6 +35,23 @@ class RegisterViewModel
         var uiState by mutableStateOf(RegisterUiState())
             private set
 
+        val canContinue: Boolean
+            get() =
+                uiState.name.isNotBlank() &&
+                    uiState.nif.length == 9 &&
+                    uiState.birthdate != null &&
+                    uiState.email.isNotBlank() &&
+                    uiState.password.isNotBlank()
+
+        val canRegister: Boolean
+            get() =
+                canContinue &&
+                    uiState.nameCc.isNotBlank() &&
+                    uiState.numberCc.length == 16 &&
+                    uiState.expirationDateCc.length == 4 &&
+                    uiState.cvcCc.length == 3 &&
+                    uiState.termsAccepted
+
         fun updateName(name: String) {
             uiState = uiState.copy(name = name)
         }
@@ -44,7 +60,7 @@ class RegisterViewModel
             uiState = uiState.copy(nif = nif.filter { it.isDigit() }.take(9))
         }
 
-        fun updateBirthdate(birthdate: String) {
+        fun updateBirthdate(birthdate: LocalDate?) {
             uiState = uiState.copy(birthdate = birthdate)
         }
 
@@ -84,7 +100,7 @@ class RegisterViewModel
                     userRepository.register(
                         name = uiState.name,
                         nif = uiState.nif,
-                        birthdate = uiState.birthdate.toLocalDate(),
+                        birthdate = uiState.birthdate!!,
                         email = uiState.email,
                         password = uiState.password,
                         nameCc = uiState.nameCc,

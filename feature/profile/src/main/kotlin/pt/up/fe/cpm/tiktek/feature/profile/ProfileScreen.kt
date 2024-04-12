@@ -66,9 +66,7 @@ import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun ProfileRoute(
-    viewModel: ProfileViewModel = hiltViewModel()
-) {
+internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
     ProfileScreen(
         onLogout = viewModel::logout,
     )
@@ -86,9 +84,7 @@ fun DrawCircle() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun ProfileScreen(
-    onLogout: () -> Unit,
-) {
+internal fun ProfileScreen(onLogout: () -> Unit) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
