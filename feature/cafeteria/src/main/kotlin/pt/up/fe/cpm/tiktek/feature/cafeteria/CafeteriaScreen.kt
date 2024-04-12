@@ -285,7 +285,7 @@ fun CafeteriaItemDialogContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Escolha a quantidade de ${itemName.lowercase()} a comprar.",
+                    text = "Escolha a quantidade de ${itemName.lowercase()} desejada.",
                 )
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -330,7 +330,7 @@ fun CafeteriaItemDialogContent(
                     navigator.navigateUp()
                 },
             ) {
-                Text("Confirmar")
+                Text("Colocar no Carrinho")
             }
         },
         dismissButton = {
