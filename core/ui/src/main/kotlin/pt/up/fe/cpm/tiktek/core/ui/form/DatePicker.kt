@@ -46,7 +46,6 @@ fun DatePicker(
             modifier.focusRequester(focusRequester).onFocusChanged {
                 if (it.isFocused) {
                     dialogOpen = true
-                    focusRequester.freeFocus()
                 }
             },
         readOnly = true,
