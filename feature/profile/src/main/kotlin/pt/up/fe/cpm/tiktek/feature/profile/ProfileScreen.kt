@@ -6,14 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.outlined.AddCard
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Save
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -55,24 +57,34 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
     ProfileScreen(
         nameState = viewModel.name.state,
         onUpdateName = viewModel.name::update,
+        onShowNameError = viewModel.name::showError,
         nifState = viewModel.nif.state,
         onUpdateNif = viewModel.nif::update,
+        onShowNifError = viewModel.nif::showError,
         birthdateState = viewModel.birthdate.state,
         onUpdateBirthdate = viewModel.birthdate::update,
+        onShowBirthdateError = viewModel.birthdate::showError,
         emailState = viewModel.email.state,
         onUpdateEmail = viewModel.email::update,
+        onShowEmailError = viewModel.email::showError,
         oldPasswordState = viewModel.oldPassword.state,
         onUpdateOldPassword = viewModel.oldPassword::update,
+        onShowOldPasswordError = viewModel.oldPassword::showError,
         newPasswordState = viewModel.newPassword.state,
         onUpdateNewPassword = viewModel.newPassword::update,
+        onShowNewPasswordError = viewModel.oldPassword::showError,
         nameCcState = viewModel.nameCc.state,
         onUpdateNameCc = viewModel.nameCc::update,
+        onShowNameCcError = viewModel.nameCc::showError,
         numberCcState = viewModel.numberCc.state,
         onUpdateNumberCc = viewModel.numberCc::update,
+        onShowNumberCcError = viewModel.numberCc::showError,
         expirationDateCcState = viewModel.expirationDateCc.state,
         onUpdateExpirationDateCc = viewModel.expirationDateCc::update,
+        onShowExpirationDateCcError = viewModel.expirationDateCc::showError,
         cvcCcState = viewModel.cvcCc.state,
         onUpdateCvcCc = viewModel.cvcCc::update,
+        onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
     )
 }
@@ -82,24 +94,34 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
 internal fun ProfileScreen(
     nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
+    onShowNameError: () -> Unit,
     nifState: FormFieldState<String>,
     onUpdateNif: (String) -> Unit,
+    onShowNifError: () -> Unit,
     birthdateState: FormFieldState<LocalDate?>,
     onUpdateBirthdate: (LocalDate?) -> Unit,
+    onShowBirthdateError: () -> Unit,
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
     oldPasswordState: FormFieldState<String>,
     onUpdateOldPassword: (String) -> Unit,
+    onShowOldPasswordError: () -> Unit,
     newPasswordState: FormFieldState<String>,
     onUpdateNewPassword: (String) -> Unit,
+    onShowNewPasswordError: () -> Unit,
     nameCcState: FormFieldState<String>,
     onUpdateNameCc: (String) -> Unit,
+    onShowNameCcError: () -> Unit,
     numberCcState: FormFieldState<String>,
     onUpdateNumberCc: (String) -> Unit,
+    onShowNumberCcError: () -> Unit,
     expirationDateCcState: FormFieldState<String>,
     onUpdateExpirationDateCc: (String) -> Unit,
+    onShowExpirationDateCcError: () -> Unit,
     cvcCcState: FormFieldState<String>,
     onUpdateCvcCc: (String) -> Unit,
+    onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -109,11 +131,11 @@ internal fun ProfileScreen(
         topBar = {
             TopAppBar(
                 scrollBehavior = scrollBehaviour,
-                title = { Text("Perfil") },
+                title = { Text(stringResource(R.string.profile_title)) },
                 actions = {
                     Row {
                         TextButton(onClick = onLogout) {
-                            Text("Logout")
+                            Text(stringResource(R.string.logout_action))
                         }
                     }
                 },
@@ -133,13 +155,13 @@ internal fun ProfileScreen(
                 // profile picture
                 AsyncImage(
                     model = "https://i.pinimg.com/736x/b1/cb/57/b1cb57bcb04183c6aaf293210a6ba8a8.jpg",
-                    contentDescription = "avatar",
+                    contentDescription = stringResource(R.string.profile_picture),
                     alignment = Alignment.Center,
                     contentScale = ContentScale.Crop,
                     modifier =
                         Modifier
                             .size(128.dp)
-                            .clip(MaterialTheme.shapes.extraLarge),
+                            .clip(CircleShape),
                 )
                 SmallFloatingActionButton(
                     onClick = { },
@@ -147,90 +169,103 @@ internal fun ProfileScreen(
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     modifier = Modifier.align(Alignment.BottomEnd),
                 ) {
-                    Icon(Icons.Filled.Edit, "Edit profile picture")
+                    Icon(Icons.Filled.Edit, stringResource(R.string.profile_picture_action))
                 }
             }
 
             Text(
-                text = "Editar Informação Pessoal",
+                text = stringResource(R.string.personal_information_title),
                 style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
             )
             PersonalInformationForm(
                 nameState,
                 onUpdateName,
+                onShowNameError,
                 nifState,
                 onUpdateNif,
+                onShowNifError,
                 birthdateState,
                 onUpdateBirthdate,
+                onShowBirthdateError,
                 emailState,
                 onUpdateEmail,
+                onShowEmailError,
             )
             Button(
                 onClick = { /*TODO*/ },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Save,
-                    contentDescription = "Guardar mudanças",
+                    contentDescription = stringResource(R.string.personal_information_action),
                     modifier = Modifier.size(18.dp),
                 )
                 Spacer(
                     modifier = Modifier.width(8.dp),
                 )
-                Text(text = "Guardar mudanças")
+                Text(text = stringResource(R.string.personal_information_action))
             }
 
             // ----------------------------------------------
             Text(
-                text = "Editar palavra-passe",
+                text = stringResource(R.string.password_title),
                 style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
             )
             UpdatePasswordForm(
                 oldPasswordState,
                 onUpdateOldPassword,
+                onShowOldPasswordError,
                 newPasswordState,
                 onUpdateNewPassword,
+                onShowNewPasswordError,
             )
             Button(
                 onClick = { },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Key,
-                    contentDescription = "Mudar palavra-passe",
+                    contentDescription = stringResource(R.string.password_action),
                     modifier = Modifier.size(18.dp),
                 )
                 Spacer(
                     modifier = Modifier.width(8.dp),
                 )
-                Text(text = "Mudar palavra-passe")
+                Text(text = stringResource(R.string.password_action))
             }
 
             // ----------------------------------------------
             Text(
-                text = "Editar cartão de crédito",
+                text = stringResource(R.string.payment_information_title),
                 style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
             )
             PaymentInformationForm(
                 nameCcState,
                 onUpdateNameCc,
+                onShowNameCcError,
                 numberCcState,
                 onUpdateNumberCc,
+                onShowNumberCcError,
                 expirationDateCcState,
                 onUpdateExpirationDateCc,
+                onShowExpirationDateCcError,
                 cvcCcState,
                 onUpdateCvcCc,
+                onShowCvcCcError,
             )
             Button(
                 onClick = { },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AddCard,
-                    contentDescription = "Editar cartão de crédito",
+                    contentDescription = stringResource(R.string.payment_information_action),
                     modifier = Modifier.size(18.dp),
                 )
                 Spacer(
                     modifier = Modifier.width(8.dp),
                 )
-                Text(text = "Editar cartão de crédito")
+                Text(text = stringResource(R.string.payment_information_action))
             }
         }
     }

@@ -22,6 +22,24 @@ class ProfileViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
+        init {
+            viewModelScope.launch {
+                userRepository.getUser().collect {
+                    if (it == null) return@collect
+
+                    name.update(it.name)
+                    nif.update(it.nif)
+                    birthdate.update(it.birthdate)
+                    email.update(it.email)
+
+                    nameCc.update(it.nameCc)
+                    numberCc.update(it.numberCc)
+                    expirationDateCc.update(it.expirationDateCc)
+                    cvcCc.update(it.cvvCc)
+                }
+            }
+        }
+
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
         val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }

@@ -24,6 +24,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             dependencies {
                 add("implementation", project(":core:app"))
 
+                add("implementation", lib("timber"))
                 add("implementation", lib("androidx.activity.compose"))
                 add("implementation", lib("androidx.core.ktx"))
                 add("implementation", lib("androidx.hilt.navigation.compose"))

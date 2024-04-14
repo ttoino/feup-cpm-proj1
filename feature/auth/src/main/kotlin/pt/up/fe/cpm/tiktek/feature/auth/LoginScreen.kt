@@ -26,8 +26,10 @@ internal fun LoginRoute(
         uiState = viewModel.uiState,
         emailState = viewModel.email.state,
         onUpdateEmail = viewModel.email::update,
+        onShowEmailError = viewModel.email::showError,
         passwordState = viewModel.password.state,
         onUpdatePassword = viewModel.password::update,
+        onShowPasswordError = viewModel.password::showError,
         onLogin = viewModel::login,
         onRegister = {
             navigator.navigate(RegisterStartRouteDestination) {
@@ -43,8 +45,10 @@ internal fun LoginScreen(
     uiState: LoginUiState,
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
     passwordState: FormFieldState<String>,
     onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
     canLogin: Boolean,
@@ -62,8 +66,10 @@ internal fun LoginScreen(
         LoginForm(
             emailState,
             onUpdateEmail,
+            onShowEmailError,
             passwordState,
             onUpdatePassword,
+            onShowPasswordError,
         )
     }
 }
@@ -75,8 +81,10 @@ fun LoginScreenPreview() {
         uiState = LoginUiState(),
         emailState = FormFieldState(""),
         onUpdateEmail = { },
+        onShowEmailError = {},
         passwordState = FormFieldState(""),
         onUpdatePassword = { },
+        onShowPasswordError = {},
         onLogin = { },
         onRegister = { },
         canLogin = true,

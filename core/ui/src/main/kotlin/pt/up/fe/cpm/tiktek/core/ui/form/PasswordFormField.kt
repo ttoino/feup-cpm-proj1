@@ -35,6 +35,7 @@ fun PasswordFormField(
     helperText: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
+    onLoseFocus: () -> Unit = {},
 ) {
     var showPassword by remember { mutableStateOf(false) }
 
@@ -67,5 +68,6 @@ fun PasswordFormField(
                     }
                 }
             },
+        onLoseFocus = onLoseFocus,
     )
 }

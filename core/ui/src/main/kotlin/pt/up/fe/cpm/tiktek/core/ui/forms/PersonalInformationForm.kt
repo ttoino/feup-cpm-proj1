@@ -22,17 +22,22 @@ import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.R
 import pt.up.fe.cpm.tiktek.core.ui.form.DatePicker
 import pt.up.fe.cpm.tiktek.core.ui.form.FormField
+import pt.up.fe.cpm.tiktek.core.ui.form.SeparatorVisualTransformation
 
 @Composable
 fun PersonalInformationForm(
     nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
+    onShowNameError: () -> Unit,
     nifState: FormFieldState<String>,
     onUpdateNif: (String) -> Unit,
+    onShowNifError: () -> Unit,
     birthdateState: FormFieldState<LocalDate?>,
     onUpdateBirthdate: (LocalDate?) -> Unit,
+    onShowBirthdateError: () -> Unit,
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
     lastImeAction: ImeAction = ImeAction.Done,
 ) {
     Column(
@@ -41,6 +46,7 @@ fun PersonalInformationForm(
         FormField(
             state = nameState,
             onValueChange = onUpdateName,
+            onLoseFocus = onShowNameError,
             label = stringResource(R.string.name),
             leadingIcon = {
                 Icon(Icons.Default.Person, contentDescription = stringResource(R.string.name))
@@ -60,6 +66,7 @@ fun PersonalInformationForm(
             FormField(
                 state = nifState,
                 onValueChange = onUpdateNif,
+                onLoseFocus = onShowNifError,
                 label = stringResource(R.string.nif),
                 leadingIcon = {
                     Icon(Icons.Default.Pin, contentDescription = stringResource(R.string.nif))
@@ -69,12 +76,14 @@ fun PersonalInformationForm(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next,
                     ),
+                visualTransformation = SeparatorVisualTransformation(3, maxSize = 9),
                 modifier = Modifier.weight(1f),
             )
 
             DatePicker(
                 state = birthdateState,
                 onValueChange = onUpdateBirthdate,
+                onLoseFocus = onShowBirthdateError,
                 label = stringResource(R.string.birthdate),
                 leadingIcon = {
                     Icon(Icons.Default.Today, contentDescription = stringResource(R.string.birthdate))
@@ -86,6 +95,7 @@ fun PersonalInformationForm(
         EmailField(
             emailState,
             onUpdateEmail,
+            onShowEmailError,
             imeAction = lastImeAction,
             modifier = Modifier.fillMaxWidth(),
         )

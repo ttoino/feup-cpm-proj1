@@ -13,5 +13,4 @@ dependencies {
 
     implementation(libs.akkurate)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.timber)
 }

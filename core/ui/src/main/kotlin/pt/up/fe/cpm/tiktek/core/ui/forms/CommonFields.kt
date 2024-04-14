@@ -20,12 +20,14 @@ import pt.up.fe.cpm.tiktek.core.ui.form.PasswordFormField
 internal fun EmailField(
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Default,
 ) {
     FormField(
         state = emailState,
         onValueChange = onUpdateEmail,
+        onLoseFocus = onShowEmailError,
         label = stringResource(R.string.email),
         leadingIcon = {
             Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email))
@@ -43,6 +45,7 @@ internal fun EmailField(
 internal fun PasswordField(
     passwordState: FormFieldState<String>,
     onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
     modifier: Modifier = Modifier,
     @StringRes label: Int = R.string.password,
     imeAction: ImeAction = ImeAction.Default,
@@ -50,6 +53,7 @@ internal fun PasswordField(
     PasswordFormField(
         state = passwordState,
         onValueChange = onUpdatePassword,
+        onLoseFocus = onShowPasswordError,
         label = stringResource(label),
         leadingIcon = {
             Icon(Icons.Default.Key, contentDescription = stringResource(label))

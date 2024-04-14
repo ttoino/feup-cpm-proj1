@@ -10,13 +10,16 @@ import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 fun LoginForm(
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
     passwordState: FormFieldState<String>,
     onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
     lastImeAction: ImeAction = ImeAction.Done,
 ) {
     EmailField(
         emailState,
         onUpdateEmail,
+        onShowEmailError,
         imeAction = ImeAction.Next,
         modifier = Modifier.fillMaxWidth(),
     )
@@ -24,6 +27,7 @@ fun LoginForm(
     PasswordField(
         passwordState,
         onUpdatePassword,
+        onShowPasswordError,
         imeAction = lastImeAction,
         modifier = Modifier.fillMaxWidth(),
     )

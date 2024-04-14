@@ -32,7 +32,7 @@ class SeparatorVisualTransformation(
                 object : OffsetMapping {
                     override fun originalToTransformed(offset: Int): Int = offset + (offset - 1) / chunk
 
-                    override fun transformedToOriginal(offset: Int): Int = offset - (offset - 1) / chunk
+                    override fun transformedToOriginal(offset: Int): Int = offset - offset / (chunk + 1)
                 },
         )
 

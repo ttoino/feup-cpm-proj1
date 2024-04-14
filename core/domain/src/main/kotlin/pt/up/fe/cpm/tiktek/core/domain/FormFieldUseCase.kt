@@ -12,17 +12,23 @@ class FormFieldUseCase<T>(
     private val validator: Validator.Runner<T>,
     private val mapFn: (T) -> T = { it },
 ) {
-    var state by mutableStateOf(FormFieldState(initialValue))
+    var state by mutableStateOf(FormFieldState(initialValue, getError(initialValue)))
         private set
 
     fun update(value: T) {
         val v = mapFn(value)
-        val error =
-            when (val result = validator(v)) {
-                is ValidationResult.Success -> ""
-                is ValidationResult.Failure -> result.violations.joinToString()
-            }
+        val error = getError(v)
 
-        state = state.copy(value = v, error = error, showError = error != "")
+        state = state.copy(value = v, error = error)
     }
+
+    fun showError() {
+        state = state.copy(showError = true)
+    }
+
+    private fun getError(value: T) =
+        when (val result = validator(value)) {
+            is ValidationResult.Success -> ""
+            is ValidationResult.Failure -> result.violations.firstOrNull()?.message ?: ""
+        }
 }
