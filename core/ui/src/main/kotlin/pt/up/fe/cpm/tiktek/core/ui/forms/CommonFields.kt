@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.R
 import pt.up.fe.cpm.tiktek.core.ui.form.FormField
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.form.PasswordFormField
 
 @Composable

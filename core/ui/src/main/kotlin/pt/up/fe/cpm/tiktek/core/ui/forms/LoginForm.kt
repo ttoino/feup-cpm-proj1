@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 
 @Composable
 fun LoginForm(

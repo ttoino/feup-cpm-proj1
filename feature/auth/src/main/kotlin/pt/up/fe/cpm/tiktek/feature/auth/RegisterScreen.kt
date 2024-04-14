@@ -18,7 +18,7 @@ import com.ramcosta.composedestinations.generated.auth.destinations.RegisterFini
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.datetime.LocalDate
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PasswordForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm

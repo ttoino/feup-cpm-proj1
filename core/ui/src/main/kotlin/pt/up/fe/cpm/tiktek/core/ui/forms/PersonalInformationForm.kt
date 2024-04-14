@@ -18,10 +18,10 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.R
 import pt.up.fe.cpm.tiktek.core.ui.form.DatePicker
 import pt.up.fe.cpm.tiktek.core.ui.form.FormField
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.form.SeparatorVisualTransformation
 
 @Composable

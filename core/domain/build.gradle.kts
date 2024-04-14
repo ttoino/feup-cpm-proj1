@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.model)
+    implementation(projects.core.ui)
 
     implementation(libs.akkurate)
     implementation(libs.kotlinx.datetime)

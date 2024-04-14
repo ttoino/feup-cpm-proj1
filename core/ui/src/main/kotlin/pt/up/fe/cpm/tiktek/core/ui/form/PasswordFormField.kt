@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 
 @Composable
 fun PasswordFormField(

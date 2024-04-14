@@ -28,7 +28,7 @@ inline fun <reified T : Any> RequestValidationConfig.validator(validator: Valida
                     result.violations.map {
                         println(it.path)
                         val path = it.path.joinToString(".")
-                        if (path.isNotBlank()) "$path -> ${it.message}" else it.message
+                        if (path.isNotBlank()) "$path,${it.message}" else it.message
                     },
                 )
         }

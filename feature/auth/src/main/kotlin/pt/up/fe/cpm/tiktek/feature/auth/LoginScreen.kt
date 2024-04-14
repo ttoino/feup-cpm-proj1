@@ -9,7 +9,7 @@ import com.ramcosta.composedestinations.generated.auth.destinations.AuthRouteDes
 import com.ramcosta.composedestinations.generated.auth.destinations.RegisterStartRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.LoginForm
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.AuthGraph
 import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout

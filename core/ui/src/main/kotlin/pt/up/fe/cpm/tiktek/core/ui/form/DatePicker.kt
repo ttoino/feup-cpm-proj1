@@ -19,7 +19,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import androidx.compose.material3.DatePicker as MaterialDatePicker
 
 @OptIn(ExperimentalMaterial3Api::class)

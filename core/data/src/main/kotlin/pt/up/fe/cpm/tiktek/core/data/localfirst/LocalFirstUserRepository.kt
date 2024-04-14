@@ -20,9 +20,11 @@ class LocalFirstUserRepository
 
         override fun getUser(): Flow<User?> =
             authenticationTokenDataSource.token().map {
-                when (it) {
-                    null -> null
-                    else -> networkDataSource.getProfile(it)
+                try {
+                    it?.let { networkDataSource.getProfile(it) }
+                } catch (e: Throwable) {
+                    Timber.w(e)
+                    null
                 }
             }
 

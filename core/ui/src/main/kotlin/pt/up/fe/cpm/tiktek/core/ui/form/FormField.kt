@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.core.ui.form
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
@@ -11,8 +12,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
+
+data class FormFieldState<out T>(
+    val value: T,
+    @StringRes val error: Int? = null,
+    val showError: Boolean = false,
+) {
+    val valid get() = error == null
+
+    fun <R> map(fn: (T) -> R): FormFieldState<R> =
+        FormFieldState(
+            fn(value),
+            error,
+            showError,
+        )
+}
 
 @Composable
 fun FormField(
@@ -40,7 +56,7 @@ fun FormField(
             if (isError) {
                 (
                     {
-                        Text(state.error)
+                        Text(stringResource(state.error!!))
                     }
                 )
             } else {

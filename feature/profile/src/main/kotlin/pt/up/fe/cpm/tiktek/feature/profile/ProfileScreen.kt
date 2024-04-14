@@ -42,7 +42,7 @@ import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import kotlinx.datetime.LocalDate
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.UpdatePasswordForm

@@ -15,7 +15,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import kotlinx.datetime.LocalTime
-import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import androidx.compose.material3.TimePicker as MaterialTimePicker
 
 @OptIn(ExperimentalMaterial3Api::class)

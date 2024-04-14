@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="violation_birthdate">Tens de ter 13 anos</string>
+    <string name="violation_cvc_cc">Tem de ser um número de 3 dígitos</string>
+    <string name="violation_email">Tem de ser um email válido</string>
+    <string name="violation_expiration_date_cc">Tem de estar no formato mm/aa</string>
+    <string name="violation_nif">Tem de ser um número de 9 dígitos</string>
+    <string name="violation_nif_check">NIF inválido</string>
+    <string name="violation_number_cc">Tem de ser um número de 16 dígitos</string>
+    <string name="violation_number_cc_check">Número de cartão de crédito inválido</string>
+    <string name="violation_password">Tem de ter pelo menos 8 carateres</string>
+    <string name="violation_required">Obrigatório</string>
+    <string name="violation_unknown">Erro desconhecido</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="violation_birthdate">You must be at least 13 years old</string>
+    <string name="violation_cvc_cc">Must be a 3 digit number</string>
+    <string name="violation_email">Must be a valid email</string>
+    <string name="violation_expiration_date_cc">Must be in the format mm/yy</string>
+    <string name="violation_nif">Must be a 9 digit number</string>
+    <string name="violation_nif_check">Not a valid tax number</string>
+    <string name="violation_number_cc">Must be a 16 digit number</string>
+    <string name="violation_number_cc_check">Not a valid credit card number</string>
+    <string name="violation_password">Must be at least 8 characters</string>
+    <string name="violation_required">Required</string>
+    <string name="violation_unknown">Unknown error</string>
+</resources>
