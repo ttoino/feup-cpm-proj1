@@ -34,6 +34,7 @@ include(
     ":core:app",
     ":core:data",
     ":core:database",
+    ":core:domain",
     ":core:local",
     ":core:model",
     ":core:network",

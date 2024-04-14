@@ -11,7 +11,6 @@ import com.ramcosta.composedestinations.generated.auth.AuthNavGraphs
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.getBackStackEntry
 import com.ramcosta.composedestinations.navigation.navGraph
-import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.feature.auth.RegisterViewModel
 
 @Composable

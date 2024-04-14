@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.core.database)
     implementation(projects.core.model)
 
+    implementation(libs.akkurate)
     implementation(libs.bcrypt)
     implementation(libs.faker)
     implementation(libs.kotlinx.datetime)

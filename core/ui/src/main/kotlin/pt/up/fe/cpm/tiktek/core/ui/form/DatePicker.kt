@@ -4,7 +4,6 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,36 +19,42 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
+import pt.up.fe.cpm.tiktek.core.model.FormFieldState
 import androidx.compose.material3.DatePicker as MaterialDatePicker
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePicker(
-    value: LocalDate?,
+    state: FormFieldState<LocalDate?>,
     onValueChange: (LocalDate?) -> Unit,
+    label: String,
     modifier: Modifier = Modifier,
-    label: @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    helperText: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     val datePickerState =
         rememberDatePickerState(
-            value?.atStartOfDayIn(TimeZone.UTC)?.toEpochMilliseconds(),
+            state.value?.atStartOfDayIn(TimeZone.UTC)?.toEpochMilliseconds(),
         )
     var dialogOpen by remember { mutableStateOf(false) }
     val focusRequester = FocusRequester()
 
-    TextField(
-        value?.toString() ?: "",
+    FormField(
+        state.map { it?.toString() ?: "" },
         onValueChange = {},
+        label = label,
         modifier =
             modifier.focusRequester(focusRequester).onFocusChanged {
-                if (it.isFocused) {
+                if (it.isFocused && !readOnly && enabled) {
                     dialogOpen = true
                 }
             },
         readOnly = true,
-        label = label,
+        enabled = enabled,
+        helperText = helperText,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
     )

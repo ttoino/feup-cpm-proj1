@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="name">Nome</string>
-    <string name="name_cc">Nome no cartão</string>
-    <string name="email">Email</string>
-    <string name="nif">NIF</string>
-    <string name="birthdate">Nascimento</string>
-    <string name="password">Password</string>
-    <string name="number_cc">Número do cartão</string>
-    <string name="expiry_cc">Validade</string>
-    <string name="cvc_cc">CVC</string>
     <string name="login_title">Login</string>
     <string name="login_subtitle">É tão bom ver-te de novo!</string>
     <string name="login_action">Entrar</string>

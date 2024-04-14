@@ -7,21 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
+import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
+import pt.up.fe.cpm.tiktek.core.model.validation.birthdateValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.cvcCcValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.emailValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.expirationDateCcValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.nameValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.nifValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.numberCcValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.passwordValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.termsAcceptedValidator
 import javax.inject.Inject
 
 data class RegisterUiState(
-    val name: String = "",
-    val nif: String = "",
-    val birthdate: LocalDate? = null,
-    val email: String = "",
-    val password: String = "",
-    val nameCc: String = "",
-    val numberCc: String = "",
-    val expirationDateCc: String = "",
-    val cvcCc: String = "",
-    val termsAccepted: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )
@@ -32,65 +31,36 @@ class RegisterViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
+        val name = FormFieldUseCase("", nameValidator)
+        val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }
+        val birthdate = FormFieldUseCase(null, birthdateValidator)
+        val email = FormFieldUseCase("", emailValidator)
+        val password = FormFieldUseCase("", passwordValidator)
+        val nameCc = FormFieldUseCase("", nameValidator)
+        val numberCc = FormFieldUseCase("", numberCcValidator) { it.filter { it.isDigit() }.take(16) }
+        val expirationDateCc = FormFieldUseCase("", expirationDateCcValidator) { it.filter { it.isDigit() }.take(4) }
+        val cvcCc = FormFieldUseCase("", cvcCcValidator) { it.filter { it.isDigit() }.take(3) }
+        val termsAccepted = FormFieldUseCase(false, termsAcceptedValidator)
+
         var uiState by mutableStateOf(RegisterUiState())
             private set
 
         val canContinue: Boolean
             get() =
-                uiState.name.isNotBlank() &&
-                    uiState.nif.length == 9 &&
-                    uiState.birthdate != null &&
-                    uiState.email.isNotBlank() &&
-                    uiState.password.isNotBlank()
+                name.state.valid &&
+                    nif.state.valid &&
+                    birthdate.state.valid &&
+                    email.state.valid &&
+                    password.state.valid
 
         val canRegister: Boolean
             get() =
                 canContinue &&
-                    uiState.nameCc.isNotBlank() &&
-                    uiState.numberCc.length == 16 &&
-                    uiState.expirationDateCc.length == 4 &&
-                    uiState.cvcCc.length == 3 &&
-                    uiState.termsAccepted
-
-        fun updateName(name: String) {
-            uiState = uiState.copy(name = name)
-        }
-
-        fun updateNif(nif: String) {
-            uiState = uiState.copy(nif = nif.filter { it.isDigit() }.take(9))
-        }
-
-        fun updateBirthdate(birthdate: LocalDate?) {
-            uiState = uiState.copy(birthdate = birthdate)
-        }
-
-        fun updateEmail(email: String) {
-            uiState = uiState.copy(email = email)
-        }
-
-        fun updatePassword(password: String) {
-            uiState = uiState.copy(password = password)
-        }
-
-        fun updateNameCc(nameCc: String) {
-            uiState = uiState.copy(nameCc = nameCc)
-        }
-
-        fun updateNumberCc(numberCc: String) {
-            uiState = uiState.copy(numberCc = numberCc.filter { it.isDigit() }.take(16))
-        }
-
-        fun updateExpirationDateCc(expirationDateCc: String) {
-            uiState = uiState.copy(expirationDateCc = expirationDateCc.filter { it.isDigit() }.take(4))
-        }
-
-        fun updateCvcCc(cvvCc: String) {
-            uiState = uiState.copy(cvcCc = cvvCc.filter { it.isDigit() }.take(3))
-        }
-
-        fun updateTermsAccepted(termsAccepted: Boolean) {
-            uiState = uiState.copy(termsAccepted = termsAccepted)
-        }
+                    nameCc.state.valid &&
+                    numberCc.state.valid &&
+                    expirationDateCc.state.valid &&
+                    cvcCc.state.valid &&
+                    termsAccepted.state.valid
 
         fun register() =
             viewModelScope.launch {
@@ -98,15 +68,15 @@ class RegisterViewModel
 
                 val result =
                     userRepository.register(
-                        name = uiState.name,
-                        nif = uiState.nif,
-                        birthdate = uiState.birthdate!!,
-                        email = uiState.email,
-                        password = uiState.password,
-                        nameCc = uiState.nameCc,
-                        numberCc = uiState.numberCc,
-                        expirationDateCc = uiState.expirationDateCc.take(2) + "/" + uiState.expirationDateCc.takeLast(2),
-                        cvvCc = uiState.cvcCc,
+                        name = name.state.value,
+                        nif = nif.state.value,
+                        birthdate = birthdate.state.value!!,
+                        email = email.state.value,
+                        password = password.state.value,
+                        nameCc = nameCc.state.value,
+                        numberCc = numberCc.state.value,
+                        expirationDateCc = expirationDateCc.state.value,
+                        cvvCc = cvcCc.state.value,
                     )
 
                 if (!result) {

@@ -1,6 +1,5 @@
 package pt.up.fe.cpm.tiktek.feature.events
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -46,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -122,7 +119,7 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
             }
             Text(
                 text = "Recomendados",
-                style = TextStyle(fontSize = 20.sp),
+                style = MaterialTheme.typography.headlineSmall,
             )
             Row(
                 modifier =
@@ -163,7 +160,7 @@ internal fun EventsScreen(navigator: DestinationsNavigator) {
             }
             Text(
                 text = "Hoje",
-                style = TextStyle(fontSize = 20.sp),
+                style = MaterialTheme.typography.headlineSmall,
             )
             Column(
                 modifier =

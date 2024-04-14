@@ -1,8 +1,10 @@
 package pt.up.fe.cpm.tiktek.core.model
 
+import dev.nesk.akkurate.annotations.Validate
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
+@Validate
 @Serializable
 data class User(
     val name: String,
@@ -28,6 +30,7 @@ data class User(
         )
 }
 
+@Validate
 @Serializable
 data class UserWithPassword(
     val name: String,

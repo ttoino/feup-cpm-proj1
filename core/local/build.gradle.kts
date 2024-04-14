@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.convention.android.library)
     alias(libs.plugins.convention.hilt)
+//    alias(libs.plugins.androidx.room)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -12,4 +13,9 @@ dependencies {
     implementation(projects.core.model)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.kotlinx.datetime)
+
+    ksp(libs.androidx.room.compiler)
 }
