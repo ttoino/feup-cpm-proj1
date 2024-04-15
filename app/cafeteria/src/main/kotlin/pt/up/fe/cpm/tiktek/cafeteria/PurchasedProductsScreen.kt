@@ -151,7 +151,8 @@ private fun PurchasedProduct(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "$totalPrice.00€", // TODO: Change to a function that formats the money
+                    // TODO: Change to a function that formats the money
+                    text = "$totalPrice.00€",
                     fontSize = 15.sp,
                 )
             }
@@ -195,7 +196,8 @@ private fun Voucher(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "Quantidade utilizada: $voucherQuantity", // TODO: Change to a function that formats the money
+                    // TODO: Change to a function that formats the money
+                    text = "Quantidade utilizada: $voucherQuantity",
                     fontSize = 15.sp,
                 )
             }

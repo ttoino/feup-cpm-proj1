@@ -78,7 +78,9 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
                 modifier = Modifier.height(30.dp),
             )
             Text(
-                text = "Pode encontrar o QR-code do seu carrinho na página do carrinho quando clicar no botão “Efetuar Compra” na aplicação TikTek",
+                text =
+                    "Pode encontrar o QR-code do seu carrinho na página do carrinho quando clicar " +
+                        "no botão “Efetuar Compra” na aplicação TikTek",
                 textAlign = TextAlign.Center,
                 fontSize = 15.sp,
                 color = MaterialTheme.colorScheme.outline,
