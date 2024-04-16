@@ -11,16 +11,22 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,8 +50,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaItemDialogDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
@@ -61,6 +69,7 @@ internal fun CafeteriaRoute(
     val cafeteriaItems by viewModel.cafeteriaItems.collectAsState(emptyList())
 
     CafeteriaScreen(
+        navigator,
         cafeteriaItems = cafeteriaItems,
         onCart = { navigator.navigate(CartRouteDestination) },
     )
@@ -69,6 +78,7 @@ internal fun CafeteriaRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun CafeteriaScreen(
+    navigator: DestinationsNavigator,
     cafeteriaItems: List<CafeteriaItem> = emptyList(),
     onCart: () -> Unit,
 ) {
@@ -121,7 +131,7 @@ internal fun CafeteriaScreen(
                 Text(
                     text = "Aberto",
                     fontSize = 15.sp,
-                    color = Color(0xffb2f98a),
+                    color = Color(0xff9cd4a0),
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Box(
@@ -130,7 +140,7 @@ internal fun CafeteriaScreen(
                 ) {
                     Text(
                         text = "Horário: 9h00 - 23h30",
-                        color = Color(0xffb2f98a),
+                        color = Color(0xff9cd4a0),
                     )
                 }
             }
@@ -149,6 +159,7 @@ internal fun CafeteriaScreen(
                         itemLinkImg = cafeteriaItem.imageUrl,
                         itemPrice = cafeteriaItem.price / 100.0,
                         modifier = Modifier.weight(1f),
+                        navigator,
                     )
                 }
             }
@@ -162,6 +173,7 @@ internal fun ItemCafeteria(
     itemLinkImg: String,
     itemPrice: Double,
     modifier: Modifier,
+    navigator: DestinationsNavigator,
 ) {
     Card(
         colors =
@@ -187,7 +199,7 @@ internal fun ItemCafeteria(
         }
         Text(
             text = itemName,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
             modifier =
                 Modifier
                     .padding(
@@ -222,7 +234,7 @@ internal fun ItemCafeteria(
             )
 
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { navigator.navigate(CafeteriaItemDialogDestination(itemName)) },
                 modifier =
                     Modifier
                         .padding(
@@ -234,4 +246,91 @@ internal fun ItemCafeteria(
             }
         }
     }
+}
+
+@Destination<CafeteriaGraph>(style = DestinationStyle.Dialog::class)
+@Composable
+fun CafeteriaItemDialog(
+    itemId: String,
+    navigator: DestinationsNavigator,
+) {
+    CafeteriaItemDialogContent(
+        itemId,
+        navigator,
+    )
+}
+
+@Composable
+fun CafeteriaItemDialogContent(
+    itemName: String,
+    navigator: DestinationsNavigator,
+) {
+    AlertDialog(
+        title = {
+            Text(text = "Compra de $itemName")
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "Escolha a quantidade de ${itemName.lowercase()} desejada.",
+                )
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 15.dp),
+                ) {
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = "Minus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                    InputChip(
+                        onClick = { },
+                        label = { Text("2") }, // TODO MUDAR QUANTIDADE
+                        selected = true,
+                    )
+
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Plus",
+                            tint = Color(0xFFA348DC),
+                        )
+                    }
+                }
+            }
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Colocar no Carrinho")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
 }
