@@ -24,3 +24,12 @@ data class RegisterRequest(
     val expirationDateCc: String,
     val cvvCc: String,
 )
+
+@Validate
+@Serializable
+data class PartialRegisterRequest(
+    val name: String,
+    val nif: String,
+    val birthdate: LocalDate,
+    val email: String,
+)

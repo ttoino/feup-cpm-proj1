@@ -8,7 +8,9 @@ import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.Order
+import pt.up.fe.cpm.tiktek.core.model.PartialRegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.User
@@ -28,59 +30,64 @@ private interface TikTekApi {
     @POST("login")
     suspend fun login(
         @Body body: LoginRequest,
-    ): AuthResponse
+    ): NetworkResult<AuthResponse>
 
     @POST("register")
     suspend fun register(
         @Body body: RegisterRequest,
-    ): AuthResponse
+    ): NetworkResult<AuthResponse>
+
+    @POST("partial-register")
+    suspend fun partialRegister(
+        @Body body: PartialRegisterRequest,
+    ): NetworkResult<Unit>
 
     // Cafeteria
     @GET("cafeteria")
     suspend fun getCafeteriaItems(
         @Header("Authorization") authorization: String,
-    ): List<CafeteriaItem>
+    ): NetworkResult<List<CafeteriaItem>>
 
     // Events
     @GET("events")
     suspend fun getEvents(
         @Header("Authorization") authorization: String,
-    ): List<Event>
+    ): NetworkResult<List<Event>>
 
     // Orders
     @GET("orders")
     suspend fun getOrders(
         @Header("Authorization") authorization: String,
-    ): List<Order>
+    ): NetworkResult<List<Order>>
 
     // Profile
     @GET("profile")
     suspend fun getProfile(
         @Header("Authorization") authorization: String,
-    ): User
+    ): NetworkResult<User>
 
     @PUT("profile")
     suspend fun updateProfile(
         @Header("Authorization") authorization: String,
         @Body body: User,
-    ): User
+    ): NetworkResult<User>
 
     @DELETE("profile")
     suspend fun deleteProfile(
         @Header("Authorization") authorization: String,
-    ): Boolean
+    ): NetworkResult<Boolean>
 
     // Tickets
     @GET("tickets")
     suspend fun getTickets(
         @Header("Authorization") authorization: String,
-    ): List<Ticket>
+    ): NetworkResult<List<Ticket>>
 
     // Vouchers
     @GET("vouchers")
     suspend fun getVouchers(
         @Header("Authorization") authorization: String,
-    ): List<Voucher>
+    ): NetworkResult<List<Voucher>>
 }
 
 private val String.auth
@@ -88,13 +95,15 @@ private val String.auth
 
 class RetrofitNetworkDataSource
     @Inject
-    constructor(
+    internal constructor(
         json: Json,
+        adapterFactory: ResultCallAdapterFactory,
     ) : NetworkDataSource {
         private val api =
             Retrofit.Builder()
                 .baseUrl("http://localhost:8080")
                 .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
+                .addCallAdapterFactory(adapterFactory)
                 .build()
                 .create(TikTekApi::class.java)
 
@@ -114,7 +123,7 @@ class RetrofitNetworkDataSource
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
-        ): AuthResponse =
+        ): NetworkResult<AuthResponse> =
             api.register(
                 RegisterRequest(
                     name,
@@ -129,17 +138,32 @@ class RetrofitNetworkDataSource
                 ),
             )
 
+        override suspend fun partialRegister(
+            name: String,
+            nif: String,
+            birthdate: LocalDate,
+            email: String,
+        ): NetworkResult<Unit> =
+            api.partialRegister(
+                PartialRegisterRequest(
+                    name,
+                    nif,
+                    birthdate,
+                    email,
+                ),
+            )
+
         // Cafeteria
-        override suspend fun getCafeteriaItems(token: String): List<CafeteriaItem> = api.getCafeteriaItems(token.auth)
+        override suspend fun getCafeteriaItems(token: String): NetworkResult<List<CafeteriaItem>> = api.getCafeteriaItems(token.auth)
 
         // Events
-        override suspend fun getEvents(token: String): List<Event> = api.getEvents(token.auth)
+        override suspend fun getEvents(token: String): NetworkResult<List<Event>> = api.getEvents(token.auth)
 
         // Orders
-        override suspend fun getOrders(token: String): List<Order> = api.getOrders(token.auth)
+        override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)
 
         // Profile
-        override suspend fun getProfile(token: String): User = api.getProfile(token.auth)
+        override suspend fun getProfile(token: String): NetworkResult<User> = api.getProfile(token.auth)
 
         override suspend fun updateProfile(
             token: String,
@@ -151,7 +175,7 @@ class RetrofitNetworkDataSource
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
-        ): User =
+        ): NetworkResult<User> =
             api.updateProfile(
                 token.auth,
                 User(
@@ -166,11 +190,11 @@ class RetrofitNetworkDataSource
                 ),
             )
 
-        override suspend fun deleteProfile(token: String): Boolean = api.deleteProfile(token.auth)
+        override suspend fun deleteProfile(token: String): NetworkResult<Boolean> = api.deleteProfile(token.auth)
 
         // Tickets
-        override suspend fun getTickets(token: String): List<Ticket> = api.getTickets(token.auth)
+        override suspend fun getTickets(token: String): NetworkResult<List<Ticket>> = api.getTickets(token.auth)
 
         // Vouchers
-        override suspend fun getVouchers(token: String): List<Voucher> = api.getVouchers(token.auth)
+        override suspend fun getVouchers(token: String): NetworkResult<List<Voucher>> = api.getVouchers(token.auth)
     }

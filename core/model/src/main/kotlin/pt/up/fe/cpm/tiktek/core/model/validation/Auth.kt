@@ -1,9 +1,9 @@
 package pt.up.fe.cpm.tiktek.core.model.validation
 
-import dev.nesk.akkurate.Validator
 import dev.nesk.akkurate.constraints.builders.isTrue
 import dev.nesk.akkurate.validateWith
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
+import pt.up.fe.cpm.tiktek.core.model.PartialRegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.validation.accessors.birthdate
 import pt.up.fe.cpm.tiktek.core.model.validation.accessors.cvvCc
@@ -37,4 +37,12 @@ val registerRequestValidator =
         numberCc.validateWith(numberCcValidator)
         expirationDateCc.validateWith(expirationDateCcValidator)
         cvvCc.validateWith(cvcCcValidator)
+    }
+
+val partialRegisterRequestValidator =
+    Validator<PartialRegisterRequest> {
+        name.validateWith(nameValidator)
+        nif.validateWith(nifValidator)
+        birthdate.validateWith(birthdateValidator)
+        email.validateWith(emailValidator)
     }

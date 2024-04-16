@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.feature.auth
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
+import pt.up.fe.cpm.tiktek.core.domain.NetworkErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.UnknownErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.ViolationUseCase
+import pt.up.fe.cpm.tiktek.core.model.ErrorResponse
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.validation.birthdateValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.cvcCcValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.emailValidator
@@ -22,7 +28,7 @@ import javax.inject.Inject
 
 data class RegisterUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    @StringRes val errorMessage: Int? = null,
 )
 
 @HiltViewModel
@@ -62,11 +68,52 @@ class RegisterViewModel
                     cvcCc.state.valid &&
                     termsAccepted.state.valid
 
+        private fun handleResult(result: NetworkResult<Unit>) =
+            when (result) {
+                is NetworkResult.Success -> Unit
+                is NetworkResult.Failure -> uiState = uiState.copy(errorMessage = NetworkErrorUseCase())
+                is NetworkResult.Error ->
+                    when (val error = result.error) {
+                        is ErrorResponse.Unknown -> uiState = uiState.copy(errorMessage = UnknownErrorUseCase())
+                        is ErrorResponse.GeneralViolation -> uiState = uiState.copy(errorMessage = ViolationUseCase(error.violation))
+                        is ErrorResponse.FieldValidation ->
+                            error.violations.forEach { (k, v) ->
+                                when (k) {
+                                    "name" -> name.updateError(ViolationUseCase(v))
+                                    "nif" -> nif.updateError(ViolationUseCase(v))
+                                    "birthdate" -> birthdate.updateError(ViolationUseCase(v))
+                                    "email" -> email.updateError(ViolationUseCase(v))
+                                    "password" -> password.updateError(ViolationUseCase(v))
+                                    "nameCc" -> nameCc.updateError(ViolationUseCase(v))
+                                    "numberCc" -> numberCc.updateError(ViolationUseCase(v))
+                                    "expirationDateCc" -> expirationDateCc.updateError(ViolationUseCase(v))
+                                    "cvcCc" -> cvcCc.updateError(ViolationUseCase(v))
+                                }
+                            }
+                    }
+            }
+
+        fun partialRegister() =
+            viewModelScope.launch {
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                handleResult(
+                    userRepository.partialRegister(
+                        name = name.state.value,
+                        nif = nif.state.value,
+                        birthdate = birthdate.state.value!!,
+                        email = email.state.value,
+                    ),
+                )
+
+                uiState = uiState.copy(isLoading = false)
+            }
+
         fun register() =
             viewModelScope.launch {
-                uiState = uiState.copy(isLoading = true)
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-                val result =
+                handleResult(
                     userRepository.register(
                         name = name.state.value,
                         nif = nif.state.value,
@@ -77,11 +124,8 @@ class RegisterViewModel
                         numberCc = numberCc.state.value,
                         expirationDateCc = expirationDateCc.state.value,
                         cvvCc = cvcCc.state.value,
-                    )
-
-                if (!result) {
-                    uiState = uiState.copy(errorMessage = "Failed to register")
-                }
+                    ),
+                )
 
                 uiState = uiState.copy(isLoading = false)
             }

@@ -10,5 +10,8 @@
     <string name="violation_number_cc_check">Número de cartão de crédito inválido</string>
     <string name="violation_password">Tem de ter pelo menos 8 carateres</string>
     <string name="violation_required">Obrigatório</string>
-    <string name="violation_unknown">Erro desconhecido</string>
+    <string name="error_unknown">Erro desconhecido</string>
+    <string name="validation_email_already_exists">Este email já tem conta registada</string>
+    <string name="violation_login">Conta com esses dados não encontrada</string>
+    <string name="error_network">Conexão falhou. Tens ligação à internet?</string>
 </resources>

@@ -10,5 +10,8 @@
     <string name="violation_number_cc_check">Not a valid credit card number</string>
     <string name="violation_password">Must be at least 8 characters</string>
     <string name="violation_required">Required</string>
-    <string name="violation_unknown">Unknown error</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="validation_email_already_exists">This email already has a registered account</string>
+    <string name="violation_login">Account with these credentials not found</string>
+    <string name="error_network">Connection failed. Are you online?</string>
 </resources>

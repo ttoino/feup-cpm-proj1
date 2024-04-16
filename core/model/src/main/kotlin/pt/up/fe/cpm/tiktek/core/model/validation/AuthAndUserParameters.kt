@@ -1,6 +1,5 @@
 package pt.up.fe.cpm.tiktek.core.model.validation
 
-import dev.nesk.akkurate.Validator
 import dev.nesk.akkurate.constraints.builders.hasLengthEqualTo
 import dev.nesk.akkurate.constraints.builders.hasLengthGreaterThanOrEqualTo
 import dev.nesk.akkurate.constraints.builders.isMatching
@@ -8,7 +7,6 @@ import dev.nesk.akkurate.constraints.builders.isNotBlank
 import dev.nesk.akkurate.constraints.builders.isNotNull
 import dev.nesk.akkurate.constraints.constrain
 import dev.nesk.akkurate.constraints.constrainIfNotNull
-import dev.nesk.akkurate.constraints.otherwise
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone

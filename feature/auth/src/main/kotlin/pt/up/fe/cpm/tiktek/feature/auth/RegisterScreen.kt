@@ -49,7 +49,13 @@ internal fun RegisterStartRoute(
         passwordState = viewModel.password.state,
         onUpdatePassword = viewModel.password::update,
         onShowPasswordError = viewModel.password::showError,
-        onContinue = { navigator.navigate(RegisterFinishRouteDestination) },
+        onContinue = {
+            viewModel.partialRegister().invokeOnCompletion {
+                if (viewModel.uiState.errorMessage == null && viewModel.canContinue) {
+                    navigator.navigate(RegisterFinishRouteDestination)
+                }
+            }
+        },
         onLogin = {
             navigator.navigate(LoginRouteDestination) {
                 popUpTo(AuthRouteDestination)

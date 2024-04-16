@@ -1,6 +1,5 @@
 package pt.up.fe.cpm.tiktek.core.model.validation
 
-import dev.nesk.akkurate.Validator
 import dev.nesk.akkurate.validateWith
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.model.UserWithPassword

@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
-import timber.log.Timber
 import javax.inject.Inject
 
 class LocalFirstUserRepository
@@ -20,26 +20,18 @@ class LocalFirstUserRepository
 
         override fun getUser(): Flow<User?> =
             authenticationTokenDataSource.token().map {
-                try {
-                    it?.let { networkDataSource.getProfile(it) }
-                } catch (e: Throwable) {
-                    Timber.w(e)
-                    null
-                }
+                it?.let { networkDataSource.getProfile(it).getOrNull() }
             }
 
         override suspend fun login(
             email: String,
             password: String,
-        ): Boolean {
-            try {
-                val response = networkDataSource.login(email, password)
-                authenticationTokenDataSource.setToken(response.token)
-                return true
-            } catch (e: Exception) {
-                Timber.w(e)
-                return false
-            }
+        ): NetworkResult<Unit> {
+            val result = networkDataSource.login(email, password)
+
+            if (result is NetworkResult.Success)authenticationTokenDataSource.setToken(result.value.token)
+
+            return result.map { }
         }
 
         override suspend fun register(
@@ -52,18 +44,20 @@ class LocalFirstUserRepository
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
-        ): Boolean {
-            try {
-                val response = networkDataSource.register(name, nif, birthdate, email, password, nameCc, numberCc, expirationDateCc, cvvCc)
-                authenticationTokenDataSource.setToken(response.token)
-                return true
-            } catch (e: Exception) {
-                Timber.w(e)
-                return false
-            }
+        ): NetworkResult<Unit> {
+            val result = networkDataSource.register(name, nif, birthdate, email, password, nameCc, numberCc, expirationDateCc, cvvCc)
+
+            if (result is NetworkResult.Success)authenticationTokenDataSource.setToken(result.value.token)
+
+            return result.map { }
         }
 
-        override suspend fun logout() {
-            authenticationTokenDataSource.setToken(null)
-        }
+        override suspend fun partialRegister(
+            name: String,
+            nif: String,
+            birthdate: LocalDate,
+            email: String,
+        ): NetworkResult<Unit> = networkDataSource.partialRegister(name, nif, birthdate, email)
+
+        override suspend fun logout() = authenticationTokenDataSource.setToken(null)
     }

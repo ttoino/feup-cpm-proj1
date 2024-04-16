@@ -6,7 +6,6 @@ import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
-import timber.log.Timber
 import javax.inject.Inject
 
 class RemoteCafeteriaRepository
@@ -15,15 +14,8 @@ class RemoteCafeteriaRepository
     CafeteriaRepository {
         override fun getCafeteriaItems(): Flow<List<CafeteriaItem>> =
             userRepository.getToken().map {
-                when (it) {
-                    null -> emptyList()
-                    else ->
-                        try {
-                            networkDataSource.getCafeteriaItems(it)
-                        } catch (e: Exception) {
-                            Timber.w(e)
-                            emptyList()
-                        }
-                }
+                it?.let {
+                    networkDataSource.getCafeteriaItems(it).getOrNull()
+                } ?: emptyList()
             }
     }

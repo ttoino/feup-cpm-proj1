@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
+import pt.up.fe.cpm.tiktek.core.network.retrofit.ResultCallAdapterFactory
 import pt.up.fe.cpm.tiktek.core.network.retrofit.RetrofitNetworkDataSource
 import javax.inject.Singleton
 
@@ -20,6 +21,9 @@ internal abstract class NetworkModule {
             Json {
                 ignoreUnknownKeys = true
             }
+
+        @Provides
+        fun providesResultCallAdapter(json: Json) = ResultCallAdapterFactory(json)
     }
 
     @Binds
