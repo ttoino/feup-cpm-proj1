@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.feature.profile
+package pt.up.fe.cpm.tiktek.feature.cafeteria
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -173,7 +173,8 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Button(
-                    onClick = { navigator.navigateUp() }, // TODO APAGAR TUDO OQ TA NO CARRINHO
+                    // TODO APAGAR TUDO OQ TA NO CARRINHO
+                    onClick = { navigator.navigateUp() },
                     modifier =
                         Modifier
                             .weight(1f)
@@ -186,11 +187,12 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                 }
 
                 Button(
+                    // TODO PROCESSO DE COMPRA
                     onClick = {
                         navigator.navigate(
                             com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaBuyDialogDestination(orderId = ""),
                         )
-                    }, // TODO PROCESSO DE COMPRA
+                    },
                     modifier =
                         Modifier
                             .weight(1f)

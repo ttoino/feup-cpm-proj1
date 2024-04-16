@@ -14,7 +14,6 @@ import pt.up.fe.cpm.tiktek.core.app.ScreenActivity
 
 @AndroidEntryPoint
 class MainActivity : ScreenActivity() {
-
     var textResult = mutableStateOf("")
 
     val barCodeLauncher =
@@ -26,6 +25,7 @@ class MainActivity : ScreenActivity() {
                 textResult.value = result.contents
             }
         }
+
     fun showCamera() {
         val options = ScanOptions()
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
@@ -60,6 +60,7 @@ class MainActivity : ScreenActivity() {
             requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
         }
     }
+
     @Composable
     override fun Screen() = MainScreen(::checkCameraPermission)
 }

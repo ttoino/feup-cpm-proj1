@@ -281,7 +281,8 @@ fun EventDialogContent(
                     }
                     InputChip(
                         onClick = { },
-                        label = { Text("2") }, // TODO MUDAR QUANTIDADE
+                        // TODO MUDAR QUANTIDADE
+                        label = { Text("2") },
                         selected = true,
                     )
 
