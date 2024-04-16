@@ -199,7 +199,7 @@ internal fun ItemCafeteria(
         }
         Text(
             text = itemName,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
             modifier =
                 Modifier
                     .padding(
