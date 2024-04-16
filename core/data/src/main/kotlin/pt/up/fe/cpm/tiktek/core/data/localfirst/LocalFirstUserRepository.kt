@@ -29,10 +29,11 @@ class LocalFirstUserRepository
             }
 
         private suspend fun handleToken(token: String) {
-            authenticationTokenDataSource.setToken(token)
             networkDataSource.getProfile(token).getOrNull()?.let {
                 localDataSource.insert(token, it)
             }
+            // This needs to be last, because it causes a navigation that kills this repository instance
+            authenticationTokenDataSource.setToken(token)
         }
 
         override suspend fun login(
