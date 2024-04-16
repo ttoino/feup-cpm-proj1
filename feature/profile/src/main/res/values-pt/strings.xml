@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_picture">Foto de perfil</string>
+    <string name="profile_picture_action">Editar foto de perfil</string>
+    <string name="personal_information_title">Informação pessoal</string>
+    <string name="personal_information_action">Atualizar informação pessoal</string>
+    <string name="password_title">Password</string>
+    <string name="password_action">Atualizar password</string>
+    <string name="payment_information_title">Informação de pagamento</string>
+    <string name="payment_information_action">Atualizar informação de pagamento</string>
+    <string name="logout_action">Sair</string>
+    <string name="profile_title">Perfil</string>
+</resources>

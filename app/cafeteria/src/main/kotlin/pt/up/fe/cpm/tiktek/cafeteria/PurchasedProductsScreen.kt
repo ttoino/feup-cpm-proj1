@@ -8,16 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddTask
-import androidx.compose.material.icons.outlined.ConfirmationNumber
 import androidx.compose.material.icons.outlined.TaskAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -31,15 +26,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,13 +56,13 @@ fun PurchasedProductsScreen(purchase: JSONObject) {
     ) {
         LazyColumn(
             modifier = Modifier.padding(it).fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
                 Text(
                     text = "Número de pedido: $orderNumber",
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
             }
 
@@ -87,7 +79,7 @@ fun PurchasedProductsScreen(purchase: JSONObject) {
                 Text(
                     text = "Vouchers utilizados",
                     fontSize = 25.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
             }
 
@@ -102,9 +94,10 @@ fun PurchasedProductsScreen(purchase: JSONObject) {
             item {
                 Button(
                     onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.TaskAlt,
@@ -126,23 +119,23 @@ private fun PurchasedProduct(
     cafetariaItem: String,
     quantity: Int,
     totalPrice: Int,
-    ) {
+) {
     Card(
         border =
-        BorderStroke(
-            2.dp,
-            MaterialTheme.colorScheme.outlineVariant,
-        ),
-        colors =
-        CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        modifier =
-        Modifier
-            .padding(5.dp)
-            .clickable(
-                onClick = { },
+            BorderStroke(
+                2.dp,
+                MaterialTheme.colorScheme.outlineVariant,
             ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
+        modifier =
+            Modifier
+                .padding(5.dp)
+                .clickable(
+                    onClick = { },
+                ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -158,7 +151,8 @@ private fun PurchasedProduct(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "$totalPrice.00€", // TODO: Change to a function that formats the money
+                    // TODO: Change to a function that formats the money
+                    text = "$totalPrice.00€",
                     fontSize = 15.sp,
                 )
             }
@@ -173,20 +167,20 @@ private fun Voucher(
 ) {
     Card(
         border =
-        BorderStroke(
-            2.dp,
-            MaterialTheme.colorScheme.outlineVariant,
-        ),
-        colors =
-        CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        modifier =
-        Modifier
-            .padding(5.dp)
-            .clickable(
-                onClick = { },
+            BorderStroke(
+                2.dp,
+                MaterialTheme.colorScheme.outlineVariant,
             ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
+        modifier =
+            Modifier
+                .padding(5.dp)
+                .clickable(
+                    onClick = { },
+                ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -202,7 +196,8 @@ private fun Voucher(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "Quantidade utilizada: $voucherQuantity", // TODO: Change to a function that formats the money
+                    // TODO: Change to a function that formats the money
+                    text = "Quantidade utilizada: $voucherQuantity",
                     fontSize = 15.sp,
                 )
             }

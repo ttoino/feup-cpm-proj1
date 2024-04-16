@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name</string>
+    <string name="name_cc">Name on card</string>
+    <string name="email">Email</string>
+    <string name="nif">Tax number</string>
+    <string name="birthdate">Birthdate</string>
+    <string name="password">Password</string>
+    <string name="password_old">Current password</string>
+    <string name="password_new">Updated password</string>
+    <string name="number_cc">Card number</string>
+    <string name="expiry_cc">Expiry</string>
+    <string name="cvc_cc">CVC</string>
+</resources>

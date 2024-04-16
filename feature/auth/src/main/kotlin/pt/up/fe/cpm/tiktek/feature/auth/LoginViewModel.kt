@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.feature.auth
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,13 +9,19 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
+import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
+import pt.up.fe.cpm.tiktek.core.domain.NetworkErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.UnknownErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.ViolationUseCase
+import pt.up.fe.cpm.tiktek.core.model.ErrorResponse
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
+import pt.up.fe.cpm.tiktek.core.model.validation.emailValidator
+import pt.up.fe.cpm.tiktek.core.model.validation.passwordValidator
 import javax.inject.Inject
 
 data class LoginUiState(
-    val email: String = "",
-    val password: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    @StringRes val errorMessage: Int? = null,
 )
 
 @HiltViewModel
@@ -23,30 +30,36 @@ class LoginViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
+        val email = FormFieldUseCase("", emailValidator)
+        val password = FormFieldUseCase("", passwordValidator)
+
         var uiState by mutableStateOf(LoginUiState())
             private set
 
         val canLogin: Boolean
-            get() =
-                uiState.email.isNotBlank() &&
-                    uiState.password.isNotBlank()
-
-        fun updateEmail(email: String) {
-            uiState = uiState.copy(email = email)
-        }
-
-        fun updatePassword(password: String) {
-            uiState = uiState.copy(password = password)
-        }
+            get() = email.state.valid && password.state.valid
 
         fun login() =
             viewModelScope.launch {
-                uiState = uiState.copy(isLoading = true)
+                if (!canLogin) return@launch
 
-                val result = userRepository.login(uiState.email, uiState.password)
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-                if (!result) {
-                    uiState = uiState.copy(errorMessage = "Login failed")
+                when (val result = userRepository.login(email.state.value, password.state.value)) {
+                    is NetworkResult.Success -> Unit
+                    is NetworkResult.Failure -> uiState = uiState.copy(errorMessage = NetworkErrorUseCase())
+                    is NetworkResult.Error ->
+                        when (val error = result.error) {
+                            is ErrorResponse.Unknown -> uiState = uiState.copy(errorMessage = UnknownErrorUseCase())
+                            is ErrorResponse.GeneralViolation -> uiState = uiState.copy(errorMessage = ViolationUseCase(error.violation))
+                            is ErrorResponse.FieldValidation ->
+                                error.violations.forEach { (k, v) ->
+                                    when (k) {
+                                        "email" -> email.updateError(ViolationUseCase(v))
+                                        "password" -> password.updateError(ViolationUseCase(v))
+                                    }
+                                }
+                        }
                 }
 
                 uiState = uiState.copy(isLoading = false)

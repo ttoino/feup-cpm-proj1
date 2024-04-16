@@ -18,6 +18,11 @@ class ExposedUserDAO
     constructor(
         private val db: ExposedDatabaseConnection,
     ) : UserDAO {
+        override suspend fun existsByEmail(email: String): Boolean =
+            db.query {
+                !Users.selectAll().where { Users.email eq email }.empty()
+            }
+
         override suspend fun getByEmail(email: String): UserWithPassword? =
             db.query {
                 Users.selectAll().where { Users.email eq email }.map { it.toUserWithPassword() }.firstOrNull()

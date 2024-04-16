@@ -11,7 +11,6 @@ import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.response.respond
 import pt.up.fe.cpm.tiktek.backend.di.database
-import pt.up.fe.cpm.tiktek.backend.isEmailAddress
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 
 lateinit var secret: String
@@ -24,7 +23,8 @@ fun Application.jwtModule() {
             verifier(JWT.require(Algorithm.HMAC512(secret)).build())
 
             validate { credential ->
-                if (credential.payload.getClaim("email").asString().isEmailAddress()) {
+                val email = credential.payload.getClaim("email").asString()
+                if (application.database.user.existsByEmail(email)) {
                     JWTPrincipal(credential.payload)
                 } else {
                     null

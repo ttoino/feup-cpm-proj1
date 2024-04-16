@@ -72,7 +72,7 @@ fun MainScreen() {
                 fontSize = 20.sp,
             )
             Spacer(
-                    modifier = Modifier.height(30.dp),
+                modifier = Modifier.height(30.dp),
             )
             Text(
                 text = "Pode encontrar o QR-code do seu bilhete clicando no seu bilhete na aba “Meus Bilhetes” da aplicação TikTek",

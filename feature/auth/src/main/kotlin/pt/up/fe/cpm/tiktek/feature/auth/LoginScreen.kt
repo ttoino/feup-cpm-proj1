@@ -1,28 +1,16 @@
 package pt.up.fe.cpm.tiktek.feature.auth
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Key
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.auth.destinations.AuthRouteDestination
 import com.ramcosta.composedestinations.generated.auth.destinations.RegisterStartRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.forms.LoginForm
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.AuthGraph
 import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
 
@@ -36,8 +24,12 @@ internal fun LoginRoute(
 ) {
     LoginScreen(
         uiState = viewModel.uiState,
-        onUpdateEmail = viewModel::updateEmail,
-        onUpdatePassword = viewModel::updatePassword,
+        emailState = viewModel.email.state,
+        onUpdateEmail = viewModel.email::update,
+        onShowEmailError = viewModel.email::showError,
+        passwordState = viewModel.password.state,
+        onUpdatePassword = viewModel.password::update,
+        onShowPasswordError = viewModel.password::showError,
         onLogin = viewModel::login,
         onRegister = {
             navigator.navigate(RegisterStartRouteDestination) {
@@ -51,8 +43,12 @@ internal fun LoginRoute(
 @Composable
 internal fun LoginScreen(
     uiState: LoginUiState,
+    emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
+    passwordState: FormFieldState<String>,
     onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
     canLogin: Boolean,
@@ -67,39 +63,13 @@ internal fun LoginScreen(
         onSecondaryAction = onRegister,
         errorMessage = uiState.errorMessage,
     ) {
-        TextField(
-            value = uiState.email,
-            onValueChange = onUpdateEmail,
-            label = {
-                Text(stringResource(R.string.email))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        TextField(
-            value = uiState.password,
-            onValueChange = onUpdatePassword,
-            label = {
-                Text(stringResource(R.string.password))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Key, contentDescription = stringResource(R.string.password))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
+        LoginForm(
+            emailState,
+            onUpdateEmail,
+            onShowEmailError,
+            passwordState,
+            onUpdatePassword,
+            onShowPasswordError,
         )
     }
 }
@@ -109,8 +79,12 @@ internal fun LoginScreen(
 fun LoginScreenPreview() {
     LoginScreen(
         uiState = LoginUiState(),
+        emailState = FormFieldState(""),
         onUpdateEmail = { },
+        onShowEmailError = {},
+        passwordState = FormFieldState(""),
         onUpdatePassword = { },
+        onShowPasswordError = {},
         onLogin = { },
         onRegister = { },
         canLogin = true,

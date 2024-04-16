@@ -13,5 +13,4 @@ dependencies {
     implementation(projects.core.network)
 
     implementation(libs.kotlinx.datetime)
-    implementation(libs.timber)
 }

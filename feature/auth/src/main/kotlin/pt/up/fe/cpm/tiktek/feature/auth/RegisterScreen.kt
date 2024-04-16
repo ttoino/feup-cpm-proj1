@@ -2,31 +2,14 @@ package pt.up.fe.cpm.tiktek.feature.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Pin
-import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.auth.destinations.AuthRouteDestination
@@ -35,8 +18,10 @@ import com.ramcosta.composedestinations.generated.auth.destinations.RegisterFini
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.datetime.LocalDate
-import pt.up.fe.cpm.tiktek.core.ui.form.DatePicker
-import pt.up.fe.cpm.tiktek.core.ui.form.SeparatorVisualTransformation
+import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
+import pt.up.fe.cpm.tiktek.core.ui.forms.PasswordForm
+import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
+import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.AuthGraph
 import pt.up.fe.cpm.tiktek.feature.auth.ui.AuthLayout
 
@@ -49,13 +34,28 @@ internal fun RegisterStartRoute(
     viewModel: RegisterViewModel,
 ) {
     RegisterStartScreen(
-        uiState = viewModel.uiState,
-        onUpdateName = viewModel::updateName,
-        onUpdateNif = viewModel::updateNif,
-        onUpdateBirthdate = viewModel::updateBirthdate,
-        onUpdateEmail = viewModel::updateEmail,
-        onUpdatePassword = viewModel::updatePassword,
-        onContinue = { navigator.navigate(RegisterFinishRouteDestination) },
+        nameState = viewModel.name.state,
+        onUpdateName = viewModel.name::update,
+        onShowNameError = viewModel.name::showError,
+        nifState = viewModel.nif.state,
+        onUpdateNif = viewModel.nif::update,
+        onShowNifError = viewModel.nif::showError,
+        birthdateState = viewModel.birthdate.state,
+        onUpdateBirthdate = viewModel.birthdate::update,
+        onShowBirthdateError = viewModel.birthdate::showError,
+        emailState = viewModel.email.state,
+        onUpdateEmail = viewModel.email::update,
+        onShowEmailError = viewModel.email::showError,
+        passwordState = viewModel.password.state,
+        onUpdatePassword = viewModel.password::update,
+        onShowPasswordError = viewModel.password::showError,
+        onContinue = {
+            viewModel.partialRegister().invokeOnCompletion {
+                if (viewModel.uiState.errorMessage == null && viewModel.canContinue) {
+                    navigator.navigate(RegisterFinishRouteDestination)
+                }
+            }
+        },
         onLogin = {
             navigator.navigate(LoginRouteDestination) {
                 popUpTo(AuthRouteDestination)
@@ -75,11 +75,20 @@ internal fun RegisterFinishRoute(
 ) {
     RegisterFinishScreen(
         uiState = viewModel.uiState,
-        onUpdateNameCc = viewModel::updateNameCc,
-        onUpdateNumberCc = viewModel::updateNumberCc,
-        onUpdateExpirationDateCc = viewModel::updateExpirationDateCc,
-        onUpdateCvcCc = viewModel::updateCvcCc,
-        onUpdateTermsAccepted = viewModel::updateTermsAccepted,
+        nameCcState = viewModel.nameCc.state,
+        onUpdateNameCc = viewModel.nameCc::update,
+        onShowNameCcError = viewModel.nameCc::showError,
+        numberCcState = viewModel.numberCc.state,
+        onUpdateNumberCc = viewModel.numberCc::update,
+        onShowNumberCcError = viewModel.numberCc::showError,
+        expirationDateCcState = viewModel.expirationDateCc.state,
+        onUpdateExpirationDateCc = viewModel.expirationDateCc::update,
+        onShowExpirationDateCcError = viewModel.expirationDateCc::showError,
+        cvcCcState = viewModel.cvcCc.state,
+        onUpdateCvcCc = viewModel.cvcCc::update,
+        onShowCvcCcError = viewModel.cvcCc::showError,
+        termsAcceptedState = viewModel.termsAccepted.state,
+        onUpdateTermsAccepted = viewModel.termsAccepted::update,
         onRegister = viewModel::register,
         onLogin = {
             navigator.navigate(LoginRouteDestination) {
@@ -92,12 +101,21 @@ internal fun RegisterFinishRoute(
 
 @Composable
 internal fun RegisterStartScreen(
-    uiState: RegisterUiState,
+    nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
+    onShowNameError: () -> Unit,
+    nifState: FormFieldState<String>,
     onUpdateNif: (String) -> Unit,
+    onShowNifError: () -> Unit,
+    birthdateState: FormFieldState<LocalDate?>,
     onUpdateBirthdate: (LocalDate?) -> Unit,
+    onShowBirthdateError: () -> Unit,
+    emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
+    onShowEmailError: () -> Unit,
+    passwordState: FormFieldState<String>,
     onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
     onContinue: () -> Unit,
     onLogin: () -> Unit,
     canContinue: Boolean,
@@ -111,89 +129,26 @@ internal fun RegisterStartScreen(
         secondaryAction = R.string.register_login_action,
         onSecondaryAction = onLogin,
     ) {
-        TextField(
-            value = uiState.name,
-            onValueChange = onUpdateName,
-            label = {
-                Text(stringResource(R.string.name))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Person, contentDescription = stringResource(R.string.name))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                ),
-            modifier = Modifier.fillMaxWidth(),
+        PersonalInformationForm(
+            nameState,
+            onUpdateName,
+            onShowNameError,
+            nifState,
+            onUpdateNif,
+            onShowNifError,
+            birthdateState,
+            onUpdateBirthdate,
+            onShowBirthdateError,
+            emailState,
+            onUpdateEmail,
+            onShowEmailError,
+            lastImeAction = ImeAction.Next,
         )
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextField(
-                value = uiState.nif,
-                onValueChange = onUpdateNif,
-                label = {
-                    Text(stringResource(R.string.nif))
-                },
-                leadingIcon = {
-                    Icon(Icons.Default.Pin, contentDescription = stringResource(R.string.nif))
-                },
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
-                modifier = Modifier.weight(1f),
-            )
-
-            DatePicker(
-                value = uiState.birthdate,
-                onValueChange = onUpdateBirthdate,
-                label = {
-                    Text(stringResource(R.string.birthdate))
-                },
-                leadingIcon = {
-                    Icon(Icons.Default.Today, contentDescription = stringResource(R.string.birthdate))
-                },
-                modifier = Modifier.weight(1f),
-            )
-        }
-
-        TextField(
-            value = uiState.email,
-            onValueChange = onUpdateEmail,
-            label = {
-                Text(stringResource(R.string.email))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        TextField(
-            value = uiState.password,
-            onValueChange = onUpdatePassword,
-            label = {
-                Text(stringResource(R.string.password))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Key, contentDescription = stringResource(R.string.password))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
+        PasswordForm(
+            passwordState,
+            onUpdatePassword,
+            onShowPasswordError,
         )
     }
 }
@@ -201,10 +156,19 @@ internal fun RegisterStartScreen(
 @Composable
 internal fun RegisterFinishScreen(
     uiState: RegisterUiState,
+    nameCcState: FormFieldState<String>,
     onUpdateNameCc: (String) -> Unit,
+    onShowNameCcError: () -> Unit,
+    numberCcState: FormFieldState<String>,
     onUpdateNumberCc: (String) -> Unit,
+    onShowNumberCcError: () -> Unit,
+    expirationDateCcState: FormFieldState<String>,
     onUpdateExpirationDateCc: (String) -> Unit,
+    onShowExpirationDateCcError: () -> Unit,
+    cvcCcState: FormFieldState<String>,
     onUpdateCvcCc: (String) -> Unit,
+    onShowCvcCcError: () -> Unit,
+    termsAcceptedState: FormFieldState<Boolean>,
     onUpdateTermsAccepted: (Boolean) -> Unit,
     onRegister: () -> Unit,
     onLogin: () -> Unit,
@@ -220,79 +184,20 @@ internal fun RegisterFinishScreen(
         onSecondaryAction = onLogin,
         errorMessage = uiState.errorMessage,
     ) {
-        TextField(
-            value = uiState.nameCc,
-            onValueChange = onUpdateNameCc,
-            label = {
-                Text(stringResource(R.string.name_cc))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Person, contentDescription = stringResource(R.string.name_cc))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                ),
-            modifier = Modifier.fillMaxWidth(),
+        PaymentInformationForm(
+            nameCcState,
+            onUpdateNameCc,
+            onShowNameCcError,
+            numberCcState,
+            onUpdateNumberCc,
+            onShowNumberCcError,
+            expirationDateCcState,
+            onUpdateExpirationDateCc,
+            onShowExpirationDateCcError,
+            cvcCcState,
+            onUpdateCvcCc,
+            onShowCvcCcError,
         )
-
-        TextField(
-            value = uiState.numberCc,
-            onValueChange = onUpdateNumberCc,
-            label = {
-                Text(stringResource(R.string.number_cc))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.CreditCard, contentDescription = stringResource(R.string.number_cc))
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-            visualTransformation = SeparatorVisualTransformation(4, maxSize = 16),
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextField(
-                value = uiState.expirationDateCc,
-                onValueChange = onUpdateExpirationDateCc,
-                label = {
-                    Text(stringResource(R.string.expiry_cc))
-                },
-                leadingIcon = {
-                    Icon(Icons.Default.DateRange, contentDescription = stringResource(R.string.expiry_cc))
-                },
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
-                visualTransformation = SeparatorVisualTransformation(2, '/', 4),
-                modifier = Modifier.weight(1f),
-            )
-
-            TextField(
-                value = uiState.cvcCc,
-                onValueChange = onUpdateCvcCc,
-                label = {
-                    Text(stringResource(R.string.cvc_cc))
-                },
-                leadingIcon = {
-                    Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.cvc_cc))
-                },
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done,
-                    ),
-                modifier = Modifier.weight(1f),
-            )
-        }
 
         Text(
             stringResource(R.string.data_collection_advisory),
@@ -305,7 +210,7 @@ internal fun RegisterFinishScreen(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Checkbox(
-                checked = uiState.termsAccepted,
+                checked = termsAcceptedState.value,
                 onCheckedChange = onUpdateTermsAccepted,
             )
 

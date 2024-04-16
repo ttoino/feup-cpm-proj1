@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,7 +31,7 @@ internal fun AuthLayout(
     mainActionDisabled: Boolean = false,
     @StringRes secondaryAction: Int,
     onSecondaryAction: () -> Unit,
-    errorMessage: String? = null,
+    @StringRes errorMessage: Int? = null,
     content: @Composable () -> Unit,
 ) {
     Scaffold {
@@ -69,9 +70,11 @@ internal fun AuthLayout(
             ) {
                 if (errorMessage != null) {
                     Text(
-                        errorMessage,
+                        stringResource(errorMessage),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
 

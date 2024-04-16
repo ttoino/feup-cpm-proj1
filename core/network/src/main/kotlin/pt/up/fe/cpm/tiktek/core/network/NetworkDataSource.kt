@@ -4,6 +4,7 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.Order
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.User
@@ -14,7 +15,7 @@ interface NetworkDataSource {
     suspend fun login(
         email: String,
         password: String,
-    ): AuthResponse
+    ): NetworkResult<AuthResponse>
 
     suspend fun register(
         name: String,
@@ -26,19 +27,26 @@ interface NetworkDataSource {
         numberCc: String,
         expirationDateCc: String,
         cvvCc: String,
-    ): AuthResponse
+    ): NetworkResult<AuthResponse>
+
+    suspend fun partialRegister(
+        name: String,
+        nif: String,
+        birthdate: LocalDate,
+        email: String,
+    ): NetworkResult<Unit>
 
     // Cafeteria
-    suspend fun getCafeteriaItems(token: String): List<CafeteriaItem>
+    suspend fun getCafeteriaItems(token: String): NetworkResult<List<CafeteriaItem>>
 
     // Events
-    suspend fun getEvents(token: String): List<Event>
+    suspend fun getEvents(token: String): NetworkResult<List<Event>>
 
     // Orders
-    suspend fun getOrders(token: String): List<Order>
+    suspend fun getOrders(token: String): NetworkResult<List<Order>>
 
     // Profile
-    suspend fun getProfile(token: String): User
+    suspend fun getProfile(token: String): NetworkResult<User>
 
     suspend fun updateProfile(
         token: String,
@@ -50,13 +58,13 @@ interface NetworkDataSource {
         numberCc: String,
         expirationDateCc: String,
         cvvCc: String,
-    ): User
+    ): NetworkResult<User>
 
-    suspend fun deleteProfile(token: String): Boolean
+    suspend fun deleteProfile(token: String): NetworkResult<Boolean>
 
     // Tickets
-    suspend fun getTickets(token: String): List<Ticket>
+    suspend fun getTickets(token: String): NetworkResult<List<Ticket>>
 
     // Vouchers
-    suspend fun getVouchers(token: String): List<Voucher>
+    suspend fun getVouchers(token: String): NetworkResult<List<Voucher>>
 }
