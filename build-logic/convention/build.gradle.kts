@@ -5,7 +5,9 @@ plugins {
 group = "pt.up.fe.cpm.tiktek.buildlogic"
 
 dependencies {
+    compileOnly(libs.android.ddmlib)
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.tools.repository)
     compileOnly(libs.kotlin.gradlePlugin)
 }
 

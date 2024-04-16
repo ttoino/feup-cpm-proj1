@@ -1,8 +1,11 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.gradle.internal.plugins.AppPlugin
+import com.android.build.gradle.internal.tasks.factory.registerTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getPlugin
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -20,6 +23,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
                 defaultConfig.targetSdk = compileSdk
             }
+
+            val config = plugins.getPlugin(AppPlugin::class).variantManager.globalTaskCreationConfig
+            val action = PortForwardTask.CreationAction(config)
+            tasks.registerTask(action, null, null, null)
+            tasks.findByName("preBuild")?.dependsOn(action.name)
 
             dependencies {
                 add("implementation", project(":core:app"))

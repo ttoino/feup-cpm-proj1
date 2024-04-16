@@ -16,9 +16,8 @@ class RemoteEventsRepository
     ) : EventsRepository {
         override fun getEvents(): Flow<List<Event>> =
             userRepository.getToken().map {
-                when (it) {
-                    null -> emptyList()
-                    else -> networkDataSource.getEvents(it)
-                }
+                it?.let {
+                    networkDataSource.getEvents(it).getOrNull()
+                } ?: emptyList()
             }
     }

@@ -42,7 +42,9 @@ minSdk = "24"
 akkurate = { group = "dev.nesk.akkurate", name = "akkurate-core", version.ref = "akkurate" }
 akkurate-ksp = { group = "dev.nesk.akkurate", name = "akkurate-ksp-plugin", version.ref = "akkurate" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+android-ddmlib = { group = "com.android.tools.ddms", name = "ddmlib", version.ref = "androidTools" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+android-tools-repository = { group = "com.android.tools", name = "repository", version.ref = "androidTools" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }

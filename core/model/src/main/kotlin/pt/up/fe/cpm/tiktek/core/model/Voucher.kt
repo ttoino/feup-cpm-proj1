@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.core.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,6 +10,7 @@ sealed class Voucher {
     abstract val orderId: String?
 
     @Serializable
+    @SerialName("discount")
     data class Discount(
         override val id: String,
         val discount: Int,
@@ -17,6 +19,7 @@ sealed class Voucher {
     ) : Voucher()
 
     @Serializable
+    @SerialName("free")
     data class Free(
         override val id: String,
         val itemId: String,
