@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.tickets
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,9 +33,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 @Composable
-fun MainScreen() {
+fun MainScreen(checkCameraPermission: (Context) -> Unit) {
     val sdf = SimpleDateFormat("HH:mm")
     var currentDateAndTime by remember { mutableStateOf(sdf.format(Date())) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -61,7 +64,7 @@ fun MainScreen() {
             )
             Text(
                 text = "Terminal Bilheteria Eventos",
-                fontSize = 30.sp,
+                fontSize = 27.sp,
             )
             Spacer(
                 modifier = Modifier.height(30.dp),
@@ -84,7 +87,7 @@ fun MainScreen() {
                 modifier = Modifier.height(150.dp),
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { checkCameraPermission(context) },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ConfirmationNumber,
