@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
+import pt.up.fe.cpm.tiktek.core.local.LocalUsersDataSource
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
@@ -14,14 +15,25 @@ class LocalFirstUserRepository
     @Inject
     constructor(
         private val networkDataSource: NetworkDataSource,
+        private val localDataSource: LocalUsersDataSource,
         private val authenticationTokenDataSource: LocalAuthenticationTokenDataSource,
     ) : UserRepository {
         override fun getToken(): Flow<String?> = authenticationTokenDataSource.token()
 
         override fun getUser(): Flow<User?> =
             authenticationTokenDataSource.token().map {
-                it?.let { networkDataSource.getProfile(it).getOrNull() }
+                it?.let {
+                    localDataSource.getUserByToken(it)
+                        ?: networkDataSource.getProfile(it).getOrNull()
+                }
             }
+
+        private suspend fun handleToken(token: String) {
+            authenticationTokenDataSource.setToken(token)
+            networkDataSource.getProfile(token).getOrNull()?.let {
+                localDataSource.insert(token, it)
+            }
+        }
 
         override suspend fun login(
             email: String,
@@ -29,7 +41,7 @@ class LocalFirstUserRepository
         ): NetworkResult<Unit> {
             val result = networkDataSource.login(email, password)
 
-            if (result is NetworkResult.Success)authenticationTokenDataSource.setToken(result.value.token)
+            result.getOrNull()?.let { handleToken(it.token) }
 
             return result.map { }
         }
@@ -45,9 +57,20 @@ class LocalFirstUserRepository
             expirationDateCc: String,
             cvvCc: String,
         ): NetworkResult<Unit> {
-            val result = networkDataSource.register(name, nif, birthdate, email, password, nameCc, numberCc, expirationDateCc, cvvCc)
+            val result =
+                networkDataSource.register(
+                    name,
+                    nif,
+                    birthdate,
+                    email,
+                    password,
+                    nameCc,
+                    numberCc,
+                    expirationDateCc,
+                    cvvCc,
+                )
 
-            if (result is NetworkResult.Success)authenticationTokenDataSource.setToken(result.value.token)
+            result.getOrNull()?.let { handleToken(it.token) }
 
             return result.map { }
         }
@@ -59,5 +82,8 @@ class LocalFirstUserRepository
             email: String,
         ): NetworkResult<Unit> = networkDataSource.partialRegister(name, nif, birthdate, email)
 
-        override suspend fun logout() = authenticationTokenDataSource.setToken(null)
+        override suspend fun logout() {
+            authenticationTokenDataSource.setToken(null)
+            localDataSource.deleteAll()
+        }
     }
