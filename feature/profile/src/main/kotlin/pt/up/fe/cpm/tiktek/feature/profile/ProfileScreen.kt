@@ -37,13 +37,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import com.ramcosta.composedestinations.generated.profile.destinations.ProfileEditDialogDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import kotlinx.datetime.LocalDate
@@ -58,10 +58,7 @@ import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun ProfileRoute(
-    navigator: DestinationsNavigator,
-    viewModel: ProfileViewModel = hiltViewModel(),
-) {
+internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
     ProfileScreen(
         nameState = viewModel.name.state,
         onUpdateName = viewModel.name::update,
@@ -94,15 +91,14 @@ internal fun ProfileRoute(
         onUpdateCvcCc = viewModel.cvcCc::update,
         onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
-        onUpdatePersonalInformation = {
-            navigator.navigate(ProfileEditDialogDestination(DialogType.PERSONAL))
-        },
+        onUpdatePersonalInformation = viewModel::updatePersonalInformation,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun ProfileScreen(
+//    navigator: DestinationsNavigator,
     nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
     onShowNameError: () -> Unit,
@@ -205,9 +201,7 @@ internal fun ProfileScreen(
                 onShowEmailError,
             )
             Button(
-                onClick = {
-                    onUpdatePersonalInformation()
-                },
+                onClick = { onUpdatePersonalInformation() },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Save,
@@ -289,42 +283,19 @@ enum class DialogType { PERSONAL, PASSWORD, PAYMENT }
 
 @Destination<ProfileGraph>(style = DestinationStyle.Dialog::class)
 @Composable
-fun ProfileEditDialog(
-    navigator: DestinationsNavigator,
-    dialogType: DialogType,
-    viewModel: ProfileViewModel = hiltViewModel(),
-) {
-    ProfileEditDialogContent(
-        navigator,
-        dialogType,
-        when (dialogType) {
-            DialogType.PERSONAL -> (
-                {
-                    viewModel.updatePersonalInformation()
-                }
-            )
-            DialogType.PASSWORD -> (
-                {
-                    viewModel.updatePassword()
-                }
-            )
-            DialogType.PAYMENT -> (
-                {
-                    viewModel.updatePersonalInformation()
-                }
-            )
-        },
-    )
+fun ProfileEditDialog(navigator: DestinationsNavigator) {
+/*    ProfileEditDialogContent(
+        navigator
+    )*/
 }
 
 @Composable
 fun ProfileEditDialogContent(
     navigator: DestinationsNavigator,
     dialogType: DialogType,
-    onProfileEdit: () -> Unit,
-    /*  passwordState: FormFieldState<String>,
-      onUpdatePassword: (String) -> Unit,
-      onShowPasswordError: () -> Unit,*/
+    passwordState: FormFieldState<String>,
+    onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
 ) {
     AlertDialog(
         title = {
@@ -337,6 +308,7 @@ fun ProfileEditDialogContent(
         text = {
             Text(
                 text = "Insira a sua palavra-passe para confirmar as alterações.",
+                fontWeight = FontWeight.Bold,
                 fontSize = 17.sp,
             )
         },
@@ -346,7 +318,7 @@ fun ProfileEditDialogContent(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onProfileEdit()
+                    navigator.navigateUp()
                 },
             ) {
                 Text("Confirmar")
