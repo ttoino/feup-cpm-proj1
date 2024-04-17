@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,7 +38,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -119,7 +119,7 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
 
             // ------------- fim dos items --------------------
 
-            HorizontalDivider(thickness = 5.dp, color = Color(0xff4F378B))
+            HorizontalDivider(thickness = 5.dp, color = MaterialTheme.colorScheme.primaryContainer)
             // Botão Adicionar Voucher
             Box(
                 modifier =
@@ -181,7 +181,11 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                             .padding(horizontal = 8.dp)
                             .padding(vertical = 20.dp)
                             .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFEDB8CC)),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            MaterialTheme.colorScheme.error,
+                            MaterialTheme.colorScheme.onError,
+                        ),
                 ) {
                     Text(text = "Cancelar")
                 }
@@ -199,7 +203,7 @@ internal fun CartScreen(navigator: DestinationsNavigator) {
                             .padding(horizontal = 8.dp)
                             .padding(vertical = 20.dp)
                             .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFD0BCFF)),
+//                    colors = ButtonDefaults.buttonColors(Color(0xFFD0BCFF)),
                 ) {
                     Text(text = "Efetuar compra")
                 }
@@ -257,11 +261,11 @@ internal fun ItemCard(
                     IconButton(
                         onClick = { },
                         modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Remove,
                             contentDescription = "Minus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                     InputChip(
@@ -273,11 +277,11 @@ internal fun ItemCard(
                     IconButton(
                         onClick = { },
                         modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Plus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                 }
@@ -343,7 +347,7 @@ fun CafeteriaBuyDialogContent(
                 Spacer(
                     modifier = Modifier.width(16.dp),
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFF807C7C))
+                HorizontalDivider()
 
                 Spacer(
                     modifier = Modifier.width(16.dp),

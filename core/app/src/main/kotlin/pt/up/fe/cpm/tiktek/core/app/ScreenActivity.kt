@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import pt.up.fe.cpm.tiktek.core.ui.TikTekTheme
+import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 
 abstract class ScreenActivity : ComponentActivity() {
     @Composable

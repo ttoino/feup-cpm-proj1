@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,7 +39,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -55,6 +54,7 @@ import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartRou
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
+import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 
 @Destination<CafeteriaGraph>(
@@ -127,22 +127,24 @@ internal fun CafeteriaScreen(
 
             // __________________________________Time open ________________________________________
 
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
                 Text(
                     text = "Aberto",
-                    fontSize = 15.sp,
-                    color = Color(0xff9cd4a0),
+                    color = TikTekTheme.extendedColorScheme.success,
                 )
-                Spacer(modifier = Modifier.width(16.dp))
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomEnd,
-                ) {
-                    Text(
-                        text = "Horário: 9h00 - 23h30",
-                        color = Color(0xff9cd4a0),
-                    )
-                }
+                Spacer(
+                    modifier =
+                        Modifier
+                            .width(16.dp)
+                            .weight(1f),
+                )
+                Text(
+                    text = "Horário: 9h00 - 23h30",
+                    color = TikTekTheme.extendedColorScheme.success,
+                    textAlign = TextAlign.End,
+                )
             }
             Text(
                 text = "Menu",
@@ -284,12 +286,11 @@ fun CafeteriaItemDialogContent(
                 ) {
                     IconButton(
                         onClick = { },
-                        modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Remove,
                             contentDescription = "Minus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                     InputChip(
@@ -301,12 +302,11 @@ fun CafeteriaItemDialogContent(
 
                     IconButton(
                         onClick = { },
-                        modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Plus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                 }

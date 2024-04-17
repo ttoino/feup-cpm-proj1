@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
@@ -272,11 +272,11 @@ fun EventDialogContent(
                     IconButton(
                         onClick = { },
                         modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Remove,
                             contentDescription = "Minus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                     InputChip(
@@ -289,11 +289,11 @@ fun EventDialogContent(
                     IconButton(
                         onClick = { },
                         modifier = Modifier.size(48.dp),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Plus",
-                            tint = Color(0xFFA348DC),
                         )
                     }
                 }
