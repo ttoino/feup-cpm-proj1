@@ -6,26 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.DefaultFadingTransitions
-import com.ramcosta.composedestinations.annotation.ExternalNavGraph
-import com.ramcosta.composedestinations.annotation.NavHostGraph
-import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
 import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
+import com.ramcosta.composedestinations.generated.navgraphs.MainNavGraph
+import com.ramcosta.composedestinations.generated.navgraphs.TikTekNavGraph
 import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
 import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
-import com.ramcosta.composedestinations.utils.startDestination
-
-@NavHostGraph
-annotation class TikTekGraph {
-//    @ExternalNavGraph<AuthNavGraph>(start = true)
-    @ExternalNavGraph<EventsNavGraph>(start = true)
-    @ExternalNavGraph<TicketsNavGraph>
-    @ExternalNavGraph<CafeteriaNavGraph>
-    @ExternalNavGraph<ProfileNavGraph>
-    companion object Includes
-}
+import pt.up.fe.cpm.tiktek.feature.auth.navigation.authDependencies
 
 @Composable
 fun TikTekNavHost(
@@ -33,10 +23,13 @@ fun TikTekNavHost(
     modifier: Modifier,
 ) {
     DestinationsNavHost(
-        navGraph = NavGraphs.tikTek,
+        navGraph = TikTekNavGraph,
         navController = navController,
         modifier = modifier,
         defaultTransitions = DefaultFadingTransitions,
+        dependenciesContainerBuilder = {
+            authDependencies()
+        },
     )
 }
 
@@ -50,8 +43,10 @@ fun NavController.navigateToScreen(screen: Screen) {
         }
 
     navigate(route) {
-        popUpTo(graph.startDestinationId) {
-//            saveState = true
+        anim {
+        }
+        popUpTo(MainNavGraph) {
+            saveState = true
             inclusive = true
         }
         launchSingleTop = true
@@ -59,12 +54,15 @@ fun NavController.navigateToScreen(screen: Screen) {
     }
 }
 
-val NavController.currentScreen
-    @Composable get() =
-        when (currentDestinationAsState().value?.startDestination) {
-            EventsNavGraph.startDestination -> Screen.EVENTS
-            TicketsNavGraph.startDestination -> Screen.TICKETS
-            CafeteriaNavGraph.startDestination -> Screen.CAFETERIA
-            ProfileNavGraph.startDestination -> Screen.PROFILE
+val NavController.currentScreen: Screen?
+    @Composable get() {
+        val destination = currentDestinationAsState().value ?: return null
+
+        return when {
+            EventsNavGraph.destinations.contains(destination) -> Screen.EVENTS
+            TicketsNavGraph.destinations.contains(destination) -> Screen.TICKETS
+            CafeteriaNavGraph.destinations.contains(destination) -> Screen.CAFETERIA
+            ProfileNavGraph.destinations.contains(destination) -> Screen.PROFILE
             else -> null
         }
+    }
