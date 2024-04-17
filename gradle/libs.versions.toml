@@ -12,6 +12,7 @@ androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.7"
 androidxPaging = "3.2.1"
 androidxRoom = "2.6.1"
+androidxSplashscreen = "1.0.1"
 androidxTestCore = "1.5.0"
 androidxTestEspresso = "3.5.1"
 androidxTestExt = "1.1.5"
@@ -31,12 +32,14 @@ ksp = "1.9.23-1.0.19"
 ktlint = "12.1.0"
 ktor = "2.3.9"
 logback = "1.5.3"
+material = "1.11.0"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 timber = "5.0.1"
 
 sdk = "34"
 minSdk = "24"
+animationGraphicsAndroid = "1.6.5"
 
 [libraries]
 akkurate = { group = "dev.nesk.akkurate", name = "akkurate-core", version.ref = "akkurate" }
@@ -46,6 +49,7 @@ android-ddmlib = { group = "com.android.tools.ddms", name = "ddmlib", version.re
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 android-tools-repository = { group = "com.android.tools", name = "repository", version.ref = "androidTools" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics-android" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -69,6 +73,7 @@ androidx-room = { group = "androidx.room", name = "room-ktx", version.ref = "and
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxSplashscreen" }
 androidx-test-core  = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxTestEspresso" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt" }
@@ -106,9 +111,11 @@ ktor-server-request-validation = { group = "io.ktor", name = "ktor-server-reques
 ktor-server-status-pages = { group = "io.ktor", name = "ktor-server-status-pages", version.ref = "ktor" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+androidx-animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "animationGraphicsAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

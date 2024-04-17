@@ -1,13 +1,7 @@
 package pt.up.fe.cpm.tiktek
 
-import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import pt.up.fe.cpm.tiktek.core.app.BaseApp
 
 @HiltAndroidApp
-class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        Timber.plant(Timber.DebugTree())
-    }
-}
+class App : BaseApp()

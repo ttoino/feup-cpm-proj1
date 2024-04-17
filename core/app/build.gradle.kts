@@ -11,4 +11,6 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(libs.androidx.activity.compose)
+    api(libs.androidx.splashscreen)
+    implementation(libs.material)
 }

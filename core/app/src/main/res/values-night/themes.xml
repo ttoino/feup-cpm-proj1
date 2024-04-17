@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TikTek" parent="Theme.Material3.DynamicColors.DayNight">
-        <item name="windowActionBar">false</item>
-        <item name="dynamicColorThemeOverlay">@style/ThemeOverlay.Material3.DynamicColors.DayNight</item>
-    </style>
-
     <style name="Theme.TikTek.Starting" parent="Theme.SplashScreen.IconBackground">
-        <item name="colorPrimary">@color/material_dynamic_primary40</item>
+        <item name="colorPrimary">@color/material_dynamic_primary80</item>
         <item name="windowSplashScreenIconBackgroundColor">?attr/windowSplashScreenBackground</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_animated</item>
         <item name="windowSplashScreenAnimationDuration">1500</item>

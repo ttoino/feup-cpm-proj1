@@ -16,28 +16,32 @@ import pt.up.fe.cpm.tiktek.navigation.currentScreen
 import pt.up.fe.cpm.tiktek.navigation.navigateToScreen
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
-    val loggedIn by viewModel.loggedIn.collectAsState(false)
+    val loggedIn by viewModel.loggedIn.collectAsState(null)
 
-    if (loggedIn) {
-        Scaffold(
-            bottomBar = {
-                BottomBar(
-                    navController.currentScreen,
-                    navController::navigateToScreen,
+    splashScreen.setKeepOnScreenCondition { loggedIn == null }
+
+    loggedIn?.let {
+        if (it) {
+            Scaffold(
+                bottomBar = {
+                    BottomBar(
+                        navController.currentScreen,
+                        navController::navigateToScreen,
+                    )
+                },
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            ) {
+                TikTekNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(it),
                 )
-            },
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        ) {
-            TikTekNavHost(
+            }
+        } else {
+            AuthNavHost(
                 navController = navController,
-                modifier = Modifier.padding(it),
             )
         }
-    } else {
-        AuthNavHost(
-            navController = navController,
-        )
     }
 }

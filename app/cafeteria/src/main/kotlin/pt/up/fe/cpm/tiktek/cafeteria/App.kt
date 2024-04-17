@@ -1,7 +1,7 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
-import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import pt.up.fe.cpm.tiktek.core.app.BaseApp
 
 @HiltAndroidApp
-class App : Application()
+class App : BaseApp()
