@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.backend.profile
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
@@ -14,7 +15,9 @@ import io.ktor.server.routing.routing
 import pt.up.fe.cpm.tiktek.backend.auth.user
 import pt.up.fe.cpm.tiktek.backend.auth.userEmail
 import pt.up.fe.cpm.tiktek.backend.di.database
-import pt.up.fe.cpm.tiktek.core.model.User
+import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
+
+val verifier: BCrypt.Verifyer = BCrypt.verifyer()
 
 fun Application.profileModule() {
     routing {
@@ -27,10 +30,18 @@ fun Application.profileModule() {
 
             put("/profile") {
                 val currentUser = call.user() ?: return@put call.respond(HttpStatusCode.Forbidden)
-                val newUser = call.receive<User>()
+                val newUser = call.receive<UserWithPassword>()
+
+               /* if (!verifier.verify(
+                        newUser.password.toCharArray(),
+                        currentUser.password,
+                    ).verified
+                ) {
+                    throw RequestViolationException(newUser, Violation.LOGIN, HttpStatusCode.Forbidden)
+                }*/
 
                 val updatedUser =
-                    application.database.user.update(newUser.withPassword(currentUser.password))
+                    application.database.user.update(newUser.copy(password = currentUser.password))
 
                 call.respond(updatedUser.withoutPassword())
             }

@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.AddCard
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,11 +37,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
@@ -86,12 +91,14 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         onUpdateCvcCc = viewModel.cvcCc::update,
         onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
+        onUpdatePersonalInformation = viewModel::updatePersonalInformation,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun ProfileScreen(
+//    navigator: DestinationsNavigator,
     nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
     onShowNameError: () -> Unit,
@@ -123,6 +130,7 @@ internal fun ProfileScreen(
     onUpdateCvcCc: (String) -> Unit,
     onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
+    onUpdatePersonalInformation: () -> Unit,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -193,7 +201,7 @@ internal fun ProfileScreen(
                 onShowEmailError,
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { onUpdatePersonalInformation() },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Save,
@@ -269,4 +277,61 @@ internal fun ProfileScreen(
             }
         }
     }
+}
+
+enum class DialogType { PERSONAL, PASSWORD, PAYMENT }
+
+@Destination<ProfileGraph>(style = DestinationStyle.Dialog::class)
+@Composable
+fun ProfileEditDialog(navigator: DestinationsNavigator) {
+/*    ProfileEditDialogContent(
+        navigator
+    )*/
+}
+
+@Composable
+fun ProfileEditDialogContent(
+    navigator: DestinationsNavigator,
+    dialogType: DialogType,
+    passwordState: FormFieldState<String>,
+    onUpdatePassword: (String) -> Unit,
+    onShowPasswordError: () -> Unit,
+) {
+    AlertDialog(
+        title = {
+            when (dialogType) {
+                DialogType.PERSONAL -> Text(text = "Editar Informação Pessoal")
+                DialogType.PASSWORD -> Text(text = "Editar Password")
+                DialogType.PAYMENT -> Text(text = "Editar Informação de Pagamento")
+            }
+        },
+        text = {
+            Text(
+                text = "Insira a sua palavra-passe para confirmar as alterações.",
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp,
+            )
+        },
+        onDismissRequest = {
+            navigator.navigateUp()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Confirmar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    navigator.navigateUp()
+                },
+            ) {
+                Text("Cancelar")
+            }
+        },
+    )
 }

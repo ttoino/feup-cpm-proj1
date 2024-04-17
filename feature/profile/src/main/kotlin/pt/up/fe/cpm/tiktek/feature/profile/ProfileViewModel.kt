@@ -1,11 +1,20 @@
 package pt.up.fe.cpm.tiktek.feature.profile
 
+import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
+import pt.up.fe.cpm.tiktek.core.domain.NetworkErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.UnknownErrorUseCase
+import pt.up.fe.cpm.tiktek.core.domain.ViolationUseCase
+import pt.up.fe.cpm.tiktek.core.model.ErrorResponse
+import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.validation.birthdateValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.cvcCcValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.emailValidator
@@ -15,6 +24,11 @@ import pt.up.fe.cpm.tiktek.core.model.validation.nifValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.numberCcValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.passwordValidator
 import javax.inject.Inject
+
+data class ProfileUiState(
+    val isLoading: Boolean = false,
+    @StringRes val errorMessage: Int? = null,
+)
 
 @HiltViewModel
 class ProfileViewModel
@@ -40,21 +54,67 @@ class ProfileViewModel
             }
         }
 
+        var uiState by mutableStateOf(ProfileUiState())
+            private set
+
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
         val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }
         val birthdate = FormFieldUseCase(null, birthdateValidator)
         val email = FormFieldUseCase("", emailValidator)
+        val password = FormFieldUseCase("", passwordValidator)
 
-        val canSavePersonalInformation get() =
-            name.state.valid &&
-                nif.state.valid &&
-                birthdate.state.valid &&
-                email.state.valid
+        val canSavePersonalInformation
+            get() =
+                name.state.valid &&
+                    nif.state.valid &&
+                    birthdate.state.valid &&
+                    email.state.valid
 
         fun updatePersonalInformation() =
             viewModelScope.launch {
-                // TODO
+                if (!canSavePersonalInformation) return@launch
+
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                when (
+                    val result =
+                        userRepository.editPersonalInfo(
+                            name.state.value,
+                            nif.state.value,
+                            birthdate.state.value!!,
+                            email.state.value,
+                            password.state.value,
+                        )
+                ) {
+                    is NetworkResult.Success -> Unit
+                    is NetworkResult.Failure ->
+                        uiState =
+                            uiState.copy(errorMessage = NetworkErrorUseCase())
+
+                    is NetworkResult.Error ->
+                        when (val error = result.error) {
+                            is ErrorResponse.Unknown ->
+                                uiState =
+                                    uiState.copy(errorMessage = UnknownErrorUseCase())
+
+                            is ErrorResponse.GeneralViolation ->
+                                uiState =
+                                    uiState.copy(errorMessage = ViolationUseCase(error.violation))
+
+                            is ErrorResponse.FieldValidation ->
+                                error.violations.forEach { (k, v) ->
+                                    when (k) {
+                                        "name" -> name.updateError(ViolationUseCase(v))
+                                        "nif" -> nif.updateError(ViolationUseCase(v))
+                                        "birthdate" -> birthdate.updateError(ViolationUseCase(v))
+                                        "email" -> email.updateError(ViolationUseCase(v))
+                                        "password" -> password.updateError(ViolationUseCase(v))
+                                    }
+                                }
+                        }
+                }
+                uiState = uiState.copy(isLoading = false)
             }
 
         // Password

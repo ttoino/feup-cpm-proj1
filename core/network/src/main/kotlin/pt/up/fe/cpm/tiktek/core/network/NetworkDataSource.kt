@@ -58,6 +58,7 @@ interface NetworkDataSource {
         numberCc: String,
         expirationDateCc: String,
         cvvCc: String,
+        password: String,
     ): NetworkResult<User>
 
     suspend fun deleteProfile(token: String): NetworkResult<Boolean>

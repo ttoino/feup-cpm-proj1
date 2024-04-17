@@ -1,6 +1,7 @@
 package pt.up.fe.cpm.tiktek.core.data.localfirst
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
@@ -86,5 +87,50 @@ class LocalFirstUserRepository
         override suspend fun logout() {
             authenticationTokenDataSource.setToken(null)
             localDataSource.deleteAll()
+        }
+
+        override suspend fun editPersonalInfo(
+            name: String,
+            nif: String,
+            birthdate: LocalDate,
+            email: String,
+            password: String,
+        ): NetworkResult<Unit> {
+            val token = getToken().first() ?: return NetworkResult.Failure
+            val user = getUser().first() ?: return NetworkResult.Failure
+
+            val result =
+                networkDataSource.updateProfile(
+                    token,
+                    name,
+                    nif,
+                    birthdate,
+                    email,
+                    nameCc = user.nameCc,
+                    numberCc = user.numberCc,
+                    expirationDateCc = user.expirationDateCc,
+                    cvvCc = user.cvvCc,
+                    password,
+                )
+
+            result.getOrNull()?.let {
+                localDataSource.insert(token, it)
+            }
+
+            return result.map {
+            }
+        }
+
+        override suspend fun editPassword(password: String): NetworkResult<Unit> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun editCreditCard(
+            nameCc: String,
+            numberCc: String,
+            expirationDateCc: String,
+            cvvCc: String,
+        ): NetworkResult<Unit> {
+            TODO("Not yet implemented")
         }
     }

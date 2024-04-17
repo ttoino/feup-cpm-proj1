@@ -35,4 +35,21 @@ interface UserRepository {
     ): NetworkResult<Unit>
 
     suspend fun logout()
+
+    suspend fun editPersonalInfo(
+        name: String,
+        nif: String,
+        birthdate: LocalDate,
+        email: String,
+        password: String,
+    ): NetworkResult<Unit>
+
+    suspend fun editPassword(password: String): NetworkResult<Unit>
+
+    suspend fun editCreditCard(
+        nameCc: String,
+        numberCc: String,
+        expirationDateCc: String,
+        cvvCc: String,
+    ): NetworkResult<Unit>
 }
