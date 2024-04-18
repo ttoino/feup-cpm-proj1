@@ -122,7 +122,29 @@ class LocalFirstUserRepository
         }
 
         override suspend fun editPassword(password: String): NetworkResult<Unit> {
-            TODO("Not yet implemented")
+            val token = getToken().first() ?: return NetworkResult.Failure
+            val user = getUser().first() ?: return NetworkResult.Failure
+
+            val result =
+                networkDataSource.updateProfile(
+                    token,
+                    name = user.name,
+                    nif = user.nif,
+                    birthdate = user.birthdate,
+                    email = user.email,
+                    nameCc = user.nameCc,
+                    numberCc = user.numberCc,
+                    expirationDateCc = user.expirationDateCc,
+                    cvvCc = user.cvvCc,
+                    password,
+                )
+
+            result.getOrNull()?.let {
+                localDataSource.insert(token, it)
+            }
+
+            return result.map {
+            }
         }
 
         override suspend fun editCreditCard(

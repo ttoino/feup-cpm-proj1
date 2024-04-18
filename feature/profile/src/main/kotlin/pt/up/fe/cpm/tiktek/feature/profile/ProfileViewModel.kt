@@ -135,7 +135,45 @@ class ProfileViewModel
 
         fun updatePassword() =
             viewModelScope.launch {
-                // TODO
+                viewModelScope.launch {
+                    if (!canUpdatePassword) return@launch
+
+                    uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                    val result =
+                        userRepository.editPassword(
+                            password.state.value,
+                        )
+
+                    when (result) {
+                        is NetworkResult.Success -> successCreditCard.value = true
+                        is NetworkResult.Failure -> {
+                            uiState =
+                                uiState.copy(errorMessage = NetworkErrorUseCase())
+                        }
+
+                        is NetworkResult.Error -> {
+                            when (val error = result.error) {
+                                is ErrorResponse.Unknown ->
+                                    uiState =
+                                        uiState.copy(errorMessage = UnknownErrorUseCase())
+
+                                is ErrorResponse.GeneralViolation ->
+                                    uiState =
+                                        uiState.copy(errorMessage = ViolationUseCase(error.violation))
+
+                                is ErrorResponse.FieldValidation -> {
+                                    error.violations.forEach { (k, v) ->
+                                        when (k) {
+                                            "password" -> password.updateError(ViolationUseCase(v))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    uiState = uiState.copy(isLoading = false)
+                } 
             }
 
         // Payment information
@@ -153,7 +191,7 @@ class ProfileViewModel
 
         fun updatePaymentInformation() =
             viewModelScope.launch {
-                if (!canSavePersonalInformation) return@launch
+                if (!canUpdatePaymentInformation) return@launch
 
                 uiState = uiState.copy(isLoading = true, errorMessage = null)
 
