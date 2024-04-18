@@ -25,17 +25,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +51,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
@@ -133,6 +139,9 @@ internal fun ProfileScreen(
     onUpdatePersonalInformation: () -> Unit,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
@@ -149,6 +158,9 @@ internal fun ProfileScreen(
                 },
             )
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -161,6 +173,7 @@ internal fun ProfileScreen(
         ) {
             Box {
                 // profile picture
+
                 AsyncImage(
                     model = "https://i.pinimg.com/736x/b1/cb/57/b1cb57bcb04183c6aaf293210a6ba8a8.jpg",
                     contentDescription = stringResource(R.string.profile_picture),
@@ -201,7 +214,13 @@ internal fun ProfileScreen(
                 onShowEmailError,
             )
             Button(
-                onClick = { onUpdatePersonalInformation() },
+                onClick = {
+                    keyboardController?.hide()
+                    onUpdatePersonalInformation()
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Snackbar")
+                    }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Save,
