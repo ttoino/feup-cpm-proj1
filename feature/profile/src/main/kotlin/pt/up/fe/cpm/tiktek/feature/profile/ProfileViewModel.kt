@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
@@ -57,8 +58,7 @@ class ProfileViewModel
         var uiState by mutableStateOf(ProfileUiState())
             private set
 
-        var success by mutableStateOf(false)
-            private set
+        val success = MutableStateFlow(false)
 
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
@@ -74,7 +74,7 @@ class ProfileViewModel
                     birthdate.state.valid &&
                     email.state.valid
 
-        fun updatePersonalInformation() =
+        suspend fun updatePersonalInformation() =
             viewModelScope.launch {
                 if (!canSavePersonalInformation) return@launch
 
@@ -90,7 +90,7 @@ class ProfileViewModel
                     )
 
                 when (result) {
-                    is NetworkResult.Success -> Unit
+                    is NetworkResult.Success -> success.value = true
                     is NetworkResult.Failure -> {
                         uiState =
                             uiState.copy(errorMessage = NetworkErrorUseCase())
@@ -121,7 +121,6 @@ class ProfileViewModel
                     }
                 }
                 uiState = uiState.copy(isLoading = false)
-                success = result is NetworkResult.Success
             }
 
         // Password

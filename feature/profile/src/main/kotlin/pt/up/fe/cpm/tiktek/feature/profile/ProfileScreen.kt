@@ -33,6 +33,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,6 +53,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
@@ -136,14 +139,26 @@ internal fun ProfileScreen(
     onUpdateCvcCc: (String) -> Unit,
     onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
-    onUpdatePersonalInformation: () -> Unit,
+    onUpdatePersonalInformation: suspend () -> Unit,
     viewModel: ProfileViewModel,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
-    val success = viewModel.success
+    val success by viewModel.success.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    remember {
+        viewModel.success.onEach {
+            scope.launch {
+                if (viewModel.success.value) {
+                    snackbarHostState.showSnackbar("Informação mudada com sucesso!")
+                } else {
+                    snackbarHostState.showSnackbar("Um erro ocorreu ao tentar atualizar a informação.")
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
@@ -220,13 +235,8 @@ internal fun ProfileScreen(
                 onClick =
                     {
                         keyboardController?.hide()
-                        val onUpdateResult = success
                         scope.launch {
-                            if (onUpdateResult) {
-                                snackbarHostState.showSnackbar("Informação mudada com sucesso!")
-                            } else {
-                                snackbarHostState.showSnackbar("Um erro ocorreu ao tentar atualizar a informação.")
-                            }
+                            onUpdatePersonalInformation()
                         }
                     },
             ) {
