@@ -57,6 +57,9 @@ class ProfileViewModel
         var uiState by mutableStateOf(ProfileUiState())
             private set
 
+        var success by mutableStateOf(false)
+            private set
+
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
         val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }
@@ -77,22 +80,23 @@ class ProfileViewModel
 
                 uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-                when (
-                    val result =
-                        userRepository.editPersonalInfo(
-                            name.state.value,
-                            nif.state.value,
-                            birthdate.state.value!!,
-                            email.state.value,
-                            password.state.value,
-                        )
-                ) {
+                val result =
+                    userRepository.editPersonalInfo(
+                        name.state.value,
+                        nif.state.value,
+                        birthdate.state.value!!,
+                        email.state.value,
+                        password.state.value,
+                    )
+
+                when (result) {
                     is NetworkResult.Success -> Unit
-                    is NetworkResult.Failure ->
+                    is NetworkResult.Failure -> {
                         uiState =
                             uiState.copy(errorMessage = NetworkErrorUseCase())
+                    }
 
-                    is NetworkResult.Error ->
+                    is NetworkResult.Error -> {
                         when (val error = result.error) {
                             is ErrorResponse.Unknown ->
                                 uiState =
@@ -102,7 +106,7 @@ class ProfileViewModel
                                 uiState =
                                     uiState.copy(errorMessage = ViolationUseCase(error.violation))
 
-                            is ErrorResponse.FieldValidation ->
+                            is ErrorResponse.FieldValidation -> {
                                 error.violations.forEach { (k, v) ->
                                     when (k) {
                                         "name" -> name.updateError(ViolationUseCase(v))
@@ -112,9 +116,12 @@ class ProfileViewModel
                                         "password" -> password.updateError(ViolationUseCase(v))
                                     }
                                 }
+                            }
                         }
+                    }
                 }
                 uiState = uiState.copy(isLoading = false)
+                success = result is NetworkResult.Success
             }
 
         // Password

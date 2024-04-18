@@ -98,13 +98,13 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
         onUpdatePersonalInformation = viewModel::updatePersonalInformation,
+        viewModel,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun ProfileScreen(
-//    navigator: DestinationsNavigator,
     nameState: FormFieldState<String>,
     onUpdateName: (String) -> Unit,
     onShowNameError: () -> Unit,
@@ -137,9 +137,11 @@ internal fun ProfileScreen(
     onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
     onUpdatePersonalInformation: () -> Unit,
+    viewModel: ProfileViewModel,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
+    val success = viewModel.success
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -213,14 +215,20 @@ internal fun ProfileScreen(
                 onUpdateEmail,
                 onShowEmailError,
             )
+
             Button(
-                onClick = {
-                    keyboardController?.hide()
-                    onUpdatePersonalInformation()
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Snackbar")
-                    }
-                },
+                onClick =
+                    {
+                        keyboardController?.hide()
+                        val onUpdateResult = success
+                        scope.launch {
+                            if (onUpdateResult) {
+                                snackbarHostState.showSnackbar("Informação mudada com sucesso!")
+                            } else {
+                                snackbarHostState.showSnackbar("Um erro ocorreu ao tentar atualizar a informação.")
+                            }
+                        }
+                    },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Save,
