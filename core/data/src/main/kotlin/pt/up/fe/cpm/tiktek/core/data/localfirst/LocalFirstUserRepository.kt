@@ -130,7 +130,30 @@ class LocalFirstUserRepository
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
+            password: String,
         ): NetworkResult<Unit> {
-            TODO("Not yet implemented")
+            val token = getToken().first() ?: return NetworkResult.Failure
+            val user = getUser().first() ?: return NetworkResult.Failure
+
+            val result =
+                networkDataSource.updateProfile(
+                    token,
+                    name = user.name,
+                    nif = user.nif,
+                    birthdate = user.birthdate,
+                    email = user.email,
+                    nameCc,
+                    numberCc,
+                    expirationDateCc,
+                    cvvCc,
+                    password,
+                )
+
+            result.getOrNull()?.let {
+                localDataSource.insert(token, it)
+            }
+
+            return result.map {
+            }
         }
     }

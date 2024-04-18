@@ -101,6 +101,8 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
         onUpdatePersonalInformation = viewModel::updatePersonalInformation,
+        onUpdatePasswordInformation = viewModel::updatePassword,
+        onUpdatePaymentInformation = viewModel::updatePaymentInformation,
         viewModel,
     )
 }
@@ -140,18 +142,31 @@ internal fun ProfileScreen(
     onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
     onUpdatePersonalInformation: suspend () -> Unit,
+    onUpdatePasswordInformation: suspend () -> Unit,
+    onUpdatePaymentInformation: suspend () -> Unit,
     viewModel: ProfileViewModel,
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
-    val success by viewModel.success.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(viewModel.success) {
-        viewModel.success.collect { success ->
+    LaunchedEffect(viewModel.successPersonal) {
+        viewModel.successPersonal.collect { success ->
             if (success) {
-                snackbarHostState.showSnackbar("Informação mudada com sucesso!")
+                snackbarHostState.showSnackbar(
+                    message = "Informação pessoal mudada com sucesso!",
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(viewModel.successCreditCard) {
+        viewModel.successCreditCard.collect { success ->
+            if (success) {
+                snackbarHostState.showSnackbar(
+                    message = "Informação bancária mudada com sucesso!",
+                )
             }
         }
     }
@@ -247,7 +262,7 @@ internal fun ProfileScreen(
                 Text(text = stringResource(R.string.personal_information_action))
             }
 
-            // ----------------------------------------------
+            // ---------------------------------------------- PASSWORD CHANGE ------------------------------------------
             Text(
                 text = stringResource(R.string.password_title),
                 style = MaterialTheme.typography.headlineSmall,
@@ -262,7 +277,12 @@ internal fun ProfileScreen(
                 onShowNewPasswordError,
             )
             Button(
-                onClick = { },
+                onClick = {
+                    keyboardController?.hide()
+                    scope.launch {
+                        onUpdatePersonalInformation() // PASSWORD AQUI
+                    }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Key,
@@ -275,7 +295,7 @@ internal fun ProfileScreen(
                 Text(text = stringResource(R.string.password_action))
             }
 
-            // ----------------------------------------------
+            // ---------------------------------------------- CREDIT CARD CHANGE ------------------------------------------
             Text(
                 text = stringResource(R.string.payment_information_title),
                 style = MaterialTheme.typography.headlineSmall,
@@ -296,7 +316,12 @@ internal fun ProfileScreen(
                 onShowCvcCcError,
             )
             Button(
-                onClick = { },
+                onClick = {
+                    keyboardController?.hide()
+                    scope.launch {
+                        onUpdatePaymentInformation()
+                    }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AddCard,

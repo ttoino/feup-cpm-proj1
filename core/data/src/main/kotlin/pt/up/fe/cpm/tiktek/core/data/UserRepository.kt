@@ -51,5 +51,6 @@ interface UserRepository {
         numberCc: String,
         expirationDateCc: String,
         cvvCc: String,
+        password: String,
     ): NetworkResult<Unit>
 }

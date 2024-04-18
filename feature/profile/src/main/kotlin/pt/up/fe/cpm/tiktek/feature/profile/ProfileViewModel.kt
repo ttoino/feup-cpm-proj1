@@ -58,7 +58,9 @@ class ProfileViewModel
         var uiState by mutableStateOf(ProfileUiState())
             private set
 
-        val success = MutableStateFlow(false)
+        val successPersonal = MutableStateFlow(false)
+        val successPassword = MutableStateFlow(false)
+        val successCreditCard = MutableStateFlow(false)
 
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
@@ -90,7 +92,7 @@ class ProfileViewModel
                     )
 
                 when (result) {
-                    is NetworkResult.Success -> success.value = true
+                    is NetworkResult.Success -> successPersonal.value = true
                     is NetworkResult.Failure -> {
                         uiState =
                             uiState.copy(errorMessage = NetworkErrorUseCase())
@@ -137,6 +139,7 @@ class ProfileViewModel
             }
 
         // Payment information
+
         val nameCc = FormFieldUseCase("", nameValidator)
         val numberCc = FormFieldUseCase("", numberCcValidator) { it.filter { it.isDigit() }.take(16) }
         val expirationDateCc = FormFieldUseCase("", expirationDateCcValidator) { it.filter { it.isDigit() }.take(4) }
@@ -150,7 +153,51 @@ class ProfileViewModel
 
         fun updatePaymentInformation() =
             viewModelScope.launch {
-                // TODO
+                if (!canSavePersonalInformation) return@launch
+
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                val result =
+                    userRepository.editCreditCard(
+                        nameCc.state.value,
+                        numberCc.state.value,
+                        expirationDateCc.state.value,
+                        cvcCc.state.value,
+                        password.state.value,
+                    )
+
+                when (result) {
+                    is NetworkResult.Success -> successCreditCard.value = true
+                    is NetworkResult.Failure -> {
+                        uiState =
+                            uiState.copy(errorMessage = NetworkErrorUseCase())
+                    }
+
+                    is NetworkResult.Error -> {
+                        when (val error = result.error) {
+                            is ErrorResponse.Unknown ->
+                                uiState =
+                                    uiState.copy(errorMessage = UnknownErrorUseCase())
+
+                            is ErrorResponse.GeneralViolation ->
+                                uiState =
+                                    uiState.copy(errorMessage = ViolationUseCase(error.violation))
+
+                            is ErrorResponse.FieldValidation -> {
+                                error.violations.forEach { (k, v) ->
+                                    when (k) {
+                                        "nameCc" -> nameCc.updateError(ViolationUseCase(v))
+                                        "numberCc" -> numberCc.updateError(ViolationUseCase(v))
+                                        "expirationDateCc" -> expirationDateCc.updateError(ViolationUseCase(v))
+                                        "cvcCc" -> cvcCc.updateError(ViolationUseCase(v))
+                                        "password" -> password.updateError(ViolationUseCase(v))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                uiState = uiState.copy(isLoading = false)
             }
 
         // Logout
