@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.animations.defaults.DefaultFadingTransitions
 import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
 import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.MainNavGraph
@@ -15,6 +14,7 @@ import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGr
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
+import pt.up.fe.cpm.tiktek.core.ui.transition.ForwardBackwardTransition
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.authDependencies
 
 @Composable
@@ -26,7 +26,7 @@ fun TikTekNavHost(
         navGraph = TikTekNavGraph,
         navController = navController,
         modifier = modifier,
-        defaultTransitions = DefaultFadingTransitions,
+        defaultTransitions = ForwardBackwardTransition,
         dependenciesContainerBuilder = {
             authDependencies()
         },
@@ -43,8 +43,6 @@ fun NavController.navigateToScreen(screen: Screen) {
         }
 
     navigate(route) {
-        anim {
-        }
         popUpTo(MainNavGraph) {
             saveState = true
             inclusive = true

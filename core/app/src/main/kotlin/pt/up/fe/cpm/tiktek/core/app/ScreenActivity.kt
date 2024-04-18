@@ -16,9 +16,9 @@ abstract class ScreenActivity : ComponentActivity() {
     abstract fun Screen()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         splashScreen = installSplashScreen()
+
+        super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
 
