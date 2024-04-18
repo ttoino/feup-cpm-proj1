@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,7 +54,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
@@ -148,14 +148,10 @@ internal fun ProfileScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    remember {
-        viewModel.success.onEach {
-            scope.launch {
-                if (viewModel.success.value) {
-                    snackbarHostState.showSnackbar("Informação mudada com sucesso!")
-                } else {
-                    snackbarHostState.showSnackbar("Um erro ocorreu ao tentar atualizar a informação.")
-                }
+    LaunchedEffect(viewModel.success) {
+        viewModel.success.collect { success ->
+            if (success) {
+                snackbarHostState.showSnackbar("Informação mudada com sucesso!")
             }
         }
     }
