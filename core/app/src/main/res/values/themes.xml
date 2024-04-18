@@ -8,7 +8,9 @@
     <style name="Theme.TikTek.Starting" parent="Theme.SplashScreen.IconBackground">
         <item name="colorPrimary">@color/material_dynamic_primary40</item>
         <item name="windowSplashScreenIconBackgroundColor">?attr/windowSplashScreenBackground</item>
+<!--
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_animated</item>
+-->
         <item name="windowSplashScreenAnimationDuration">1500</item>
         <item name="postSplashScreenTheme">@style/Theme.TikTek</item>
     </style>
