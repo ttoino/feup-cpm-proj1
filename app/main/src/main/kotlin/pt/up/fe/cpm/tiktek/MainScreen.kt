@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +15,7 @@ import com.ramcosta.composedestinations.generated.navgraphs.MainNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.TikTekNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import pt.up.fe.cpm.tiktek.navigation.BottomBar
 import pt.up.fe.cpm.tiktek.navigation.TikTekNavHost
@@ -23,10 +25,12 @@ import pt.up.fe.cpm.tiktek.navigation.navigateToScreen
 @Composable
 fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
-    val loggedIn by viewModel.loggedIn.onEach {
-        navController.navigate(if (it) MainNavGraph else AuthNavGraph) {
-            popUpTo(TikTekNavGraph) {
-                inclusive = true
+    val loggedIn by remember {
+        viewModel.loggedIn.distinctUntilChanged().onEach {
+            navController.navigate(if (it) MainNavGraph else AuthNavGraph) {
+                popUpTo(TikTekNavGraph) {
+                    inclusive = true
+                }
             }
         }
     }.collectAsState(null)

@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="true" android:drawable="@drawable/logo_splash">
-    <target android:animation="@animator/bug_translate" android:name="bug"/>
-
-    <target android:animation="@animator/leg_rotate1" android:name="top_right_leg"/>
-    <target android:animation="@animator/leg_rotate1" android:name="top_left_leg"/>
-    <target android:animation="@animator/leg_rotate2" android:name="middle_right_leg"/>
-    <target android:animation="@animator/leg_rotate2" android:name="middle_left_leg"/>
-    <target android:animation="@animator/leg_rotate1" android:name="bottom_right_leg"/>
-    <target android:animation="@animator/leg_rotate1" android:name="bottom_left_leg"/>
-</animated-vector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/logo_splash"/>
+</layer-list>
