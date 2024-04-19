@@ -31,6 +31,9 @@ fun UpdatePasswordForm(
     newPasswordState: FormFieldState<String>,
     onUpdateNewPassword: (String) -> Unit,
     onShowNewPasswordError: () -> Unit,
+    new2PasswordState: FormFieldState<String>,
+    onUpdateNew2Password: (String) -> Unit,
+    onShowNew2PasswordError: () -> Unit,
     lastImeAction: ImeAction = ImeAction.Done,
 ) {
     PasswordField(
@@ -47,7 +50,16 @@ fun UpdatePasswordForm(
         onUpdateNewPassword,
         onShowNewPasswordError,
         modifier = Modifier.fillMaxWidth(),
-        imeAction = lastImeAction,
+        imeAction = ImeAction.Next,
         label = R.string.password_new,
+    )
+
+    PasswordField(
+        new2PasswordState,
+        onUpdateNew2Password,
+        onShowNew2PasswordError,
+        modifier = Modifier.fillMaxWidth(),
+        imeAction = lastImeAction,
+        label = R.string.password2_new,
     )
 }
