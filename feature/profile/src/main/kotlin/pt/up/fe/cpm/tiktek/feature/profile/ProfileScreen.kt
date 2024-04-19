@@ -51,7 +51,7 @@ import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
-import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
+import pt.up.fe.cpm.tiktek.core.ui.forms.EditPaymentInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.UpdatePasswordForm
 import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
@@ -305,7 +305,7 @@ internal fun ProfileScreen(
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth(),
             )
-            PaymentInformationForm(
+            EditPaymentInformationForm(
                 nameCcState,
                 onUpdateNameCc,
                 onShowNameCcError,
@@ -318,6 +318,9 @@ internal fun ProfileScreen(
                 cvcCcState,
                 onUpdateCvcCc,
                 onShowCvcCcError,
+                oldPasswordState,
+                onUpdateOldPassword,
+                onShowOldPasswordError,
             )
             Button(
                 onClick = {
