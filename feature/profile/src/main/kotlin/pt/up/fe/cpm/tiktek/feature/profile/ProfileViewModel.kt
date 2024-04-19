@@ -128,10 +128,11 @@ class ProfileViewModel
         // Password
         val oldPassword = FormFieldUseCase("", passwordValidator)
         val newPassword = FormFieldUseCase("", passwordValidator)
+        val new2Password = FormFieldUseCase("", passwordValidator)
 
         val canUpdatePassword get() =
             oldPassword.state.valid &&
-                newPassword.state.valid
+                newPassword.state.valid && (newPassword == new2Password)
 
         fun updatePassword() =
             viewModelScope.launch {
@@ -173,7 +174,7 @@ class ProfileViewModel
                         }
                     }
                     uiState = uiState.copy(isLoading = false)
-                } 
+                }
             }
 
         // Payment information

@@ -6,8 +6,9 @@
     <string name="nif">Tax number</string>
     <string name="birthdate">Birthdate</string>
     <string name="password">Password</string>
-    <string name="password_old">Current password</string>
-    <string name="password_new">Updated password</string>
+    <string name="password_old"> Current password</string>
+    <string name="password_new">New password</string>
+    <string name="password2_new">Confirm new password</string>
     <string name="number_cc">Card number</string>
     <string name="expiry_cc">Expiry</string>
     <string name="cvc_cc">CVC</string>

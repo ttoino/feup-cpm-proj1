@@ -80,7 +80,10 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         onShowOldPasswordError = viewModel.oldPassword::showError,
         newPasswordState = viewModel.newPassword.state,
         onUpdateNewPassword = viewModel.newPassword::update,
-        onShowNewPasswordError = viewModel.oldPassword::showError,
+        onShowNewPasswordError = viewModel.new2Password::showError,
+        new2PasswordState = viewModel.new2Password.state,
+        onUpdateNew2Password = viewModel.new2Password::update,
+        onShowNew2PasswordError = viewModel.oldPassword::showError,
         nameCcState = viewModel.nameCc.state,
         onUpdateNameCc = viewModel.nameCc::update,
         onShowNameCcError = viewModel.nameCc::showError,
@@ -122,6 +125,9 @@ internal fun ProfileScreen(
     newPasswordState: FormFieldState<String>,
     onUpdateNewPassword: (String) -> Unit,
     onShowNewPasswordError: () -> Unit,
+    new2PasswordState: FormFieldState<String>,
+    onUpdateNew2Password: (String) -> Unit,
+    onShowNew2PasswordError: () -> Unit,
     nameCcState: FormFieldState<String>,
     onUpdateNameCc: (String) -> Unit,
     onShowNameCcError: () -> Unit,
@@ -279,6 +285,9 @@ internal fun ProfileScreen(
                 newPasswordState,
                 onUpdateNewPassword,
                 onShowNewPasswordError,
+                new2PasswordState,
+                onUpdateNew2Password,
+                onShowNew2PasswordError,
             )
             Button(
                 onClick = {
