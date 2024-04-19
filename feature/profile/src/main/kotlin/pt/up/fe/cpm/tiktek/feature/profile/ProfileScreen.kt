@@ -53,7 +53,6 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm
-import pt.up.fe.cpm.tiktek.core.ui.forms.UpdatePasswordForm
 import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
 
 @Destination<ProfileGraph>(
@@ -75,15 +74,6 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         emailState = viewModel.email.state,
         onUpdateEmail = viewModel.email::update,
         onShowEmailError = viewModel.email::showError,
-        oldPasswordState = viewModel.oldPassword.state,
-        onUpdateOldPassword = viewModel.oldPassword::update,
-        onShowOldPasswordError = viewModel.oldPassword::showError,
-        newPasswordState = viewModel.newPassword.state,
-        onUpdateNewPassword = viewModel.newPassword::update,
-        onShowNewPasswordError = viewModel.new2Password::showError,
-        new2PasswordState = viewModel.new2Password.state,
-        onUpdateNew2Password = viewModel.new2Password::update,
-        onShowNew2PasswordError = viewModel.oldPassword::showError,
         nameCcState = viewModel.nameCc.state,
         onUpdateNameCc = viewModel.nameCc::update,
         onShowNameCcError = viewModel.nameCc::showError,
@@ -98,7 +88,6 @@ internal fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
         onShowCvcCcError = viewModel.cvcCc::showError,
         onLogout = viewModel::logout,
         onUpdatePersonalInformation = viewModel::updatePersonalInformation,
-        onUpdatePasswordInformation = viewModel::updatePassword,
         onUpdatePaymentInformation = viewModel::updatePaymentInformation,
         viewModel,
     )
@@ -119,15 +108,6 @@ internal fun ProfileScreen(
     emailState: FormFieldState<String>,
     onUpdateEmail: (String) -> Unit,
     onShowEmailError: () -> Unit,
-    oldPasswordState: FormFieldState<String>,
-    onUpdateOldPassword: (String) -> Unit,
-    onShowOldPasswordError: () -> Unit,
-    newPasswordState: FormFieldState<String>,
-    onUpdateNewPassword: (String) -> Unit,
-    onShowNewPasswordError: () -> Unit,
-    new2PasswordState: FormFieldState<String>,
-    onUpdateNew2Password: (String) -> Unit,
-    onShowNew2PasswordError: () -> Unit,
     nameCcState: FormFieldState<String>,
     onUpdateNameCc: (String) -> Unit,
     onShowNameCcError: () -> Unit,
@@ -142,7 +122,6 @@ internal fun ProfileScreen(
     onShowCvcCcError: () -> Unit,
     onLogout: () -> Unit,
     onUpdatePersonalInformation: suspend () -> Unit,
-    onUpdatePasswordInformation: suspend () -> Unit,
     onUpdatePaymentInformation: suspend () -> Unit,
     viewModel: ProfileViewModel,
 ) {
@@ -161,15 +140,6 @@ internal fun ProfileScreen(
         }
     }
 
-    LaunchedEffect(viewModel.successPassword) {
-        viewModel.successPassword.collect { success ->
-            if (success) {
-                snackbarHostState.showSnackbar(
-                    message = "Palavra-passe mudada com sucesso!",
-                )
-            }
-        }
-    }
 
     LaunchedEffect(viewModel.successCreditCard) {
         viewModel.successCreditCard.collect { success ->
@@ -272,41 +242,6 @@ internal fun ProfileScreen(
                 Text(text = stringResource(R.string.personal_information_action))
             }
 
-            // ---------------------------------------------- PASSWORD CHANGE ------------------------------------------
-            Text(
-                text = stringResource(R.string.password_title),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            UpdatePasswordForm(
-                oldPasswordState,
-                onUpdateOldPassword,
-                onShowOldPasswordError,
-                newPasswordState,
-                onUpdateNewPassword,
-                onShowNewPasswordError,
-                new2PasswordState,
-                onUpdateNew2Password,
-                onShowNew2PasswordError,
-            )
-            Button(
-                onClick = {
-                    keyboardController?.hide()
-                    scope.launch {
-                        onUpdatePasswordInformation()
-                    }
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Key,
-                    contentDescription = stringResource(R.string.password_action),
-                    modifier = Modifier.size(18.dp),
-                )
-                Spacer(
-                    modifier = Modifier.width(8.dp),
-                )
-                Text(text = stringResource(R.string.password_action))
-            }
 
             // ---------------------------------------------- CREDIT CARD CHANGE ------------------------------------------
             Text(
