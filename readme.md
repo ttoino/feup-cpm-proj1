@@ -15,23 +15,23 @@
 ### Server Database
 
 ### Ticket
- 202007145 
+  
 ### Order
 
 ### Voucher
 
 ## Features
 Pomos prints ou??
-[] Register Account
-[] Login
-[] Place a Cafeteria Order
-[] Buy Tickets
-[] See past tickets acquired
-[] Check cafeteria orders history
-[] Change personal and payment data
-[] Check information about a certain event
-[] Validate orders
-[] Validate event tickets
+- [] Register Account
+- [] Login
+- [] Place a Cafeteria Order
+- [] Buy Tickets
+- [] See past tickets acquired
+- [] Check cafeteria orders history
+- [] Change personal and payment data
+- [] Check information about a certain event
+- [] Validate orders
+- [] Validate event tickets
 
 
 ## Navigation Map
