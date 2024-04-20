@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,10 +40,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
@@ -62,29 +61,40 @@ import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
+internal data class EventArgs(val eventId: String)
+
 @Destination<EventsGraph>(
     visibility = CodeGenVisibility.INTERNAL,
     deepLinks = [
         DeepLink(uriPattern = "tiktek://$FULL_ROUTE_PLACEHOLDER"),
     ],
+    navArgs = EventArgs::class,
     route = "event",
 )
 @Composable
 internal fun EventRoute(
-    eventId: String,
     navigator: DestinationsNavigator,
-    viewModel: EventViewModel = hiltViewModel(),
+    viewModel: EventViewModel, // = hiltViewModel(),
 ) {
     val event by viewModel.event.collectAsStateWithLifecycle()
 
-    event?.let { EventScreen(navigator, it) }
+    event?.let {
+        EventScreen(
+            event = it,
+            onBack = { navigator.navigateUp() },
+            onSearch = {},
+            onAddToCart = { navigator.navigate(EventDialogDestination(it.id)) },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EventScreen(
-    navigator: DestinationsNavigator,
     event: Event,
+    onBack: () -> Unit,
+    onSearch: () -> Unit,
+    onAddToCart: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -95,12 +105,12 @@ internal fun EventScreen(
                 scrollBehavior = scrollBehavior,
                 title = { Text(event.name) },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = onSearch) {
                         Icon(Icons.Default.Search, contentDescription = "Search")
                     }
                 },
@@ -127,14 +137,14 @@ internal fun EventScreen(
                             .clip(MaterialTheme.shapes.medium),
                 )
                 FloatingActionButton(
-                    onClick = { navigator.navigate(EventDialogDestination(event.id)) },
+                    onClick = onAddToCart,
                     modifier =
                         Modifier
                             .align(Alignment.BottomEnd)
                             .padding(horizontal = 8.dp)
                             .relativeOffset(y = 0.5f),
                 ) {
-                    Icon(Icons.Default.AddShoppingCart, contentDescription = "Add to cart")
+                    Icon(Icons.Default.AddShoppingCart, contentDescription = stringResource(R.string.add_to_cart_action))
                 }
             }
 
@@ -200,144 +210,159 @@ private fun InfoRow(
     }
 }
 
-@Destination<EventsGraph>(style = DestinationStyle.Dialog::class)
+@Destination<EventsGraph>(
+    visibility = CodeGenVisibility.INTERNAL,
+    style = DestinationStyle.Dialog::class,
+    navArgs = EventArgs::class,
+)
 @Composable
 fun EventDialog(
-    eventId: String,
     navigator: DestinationsNavigator,
+    viewModel: EventViewModel, // = hiltViewModel(),
 ) {
-    // buscar cenas
-    EventDialogContent(eventName = "O Pato Lindo", navigator, eventId)
-}
+    val event by viewModel.event.collectAsStateWithLifecycle()
 
-@Destination<EventsGraph>(style = DestinationStyle.Dialog::class)
-@Composable
-fun EventConfirmationDialog(
-    eventId: String,
-    navigator: DestinationsNavigator,
-) {
-    EventDialogConfirmationContent(
-        eventName = "O Pato Lindo",
-        eventDate = "23 de março",
-        eventTime = "13:00",
-        ticketQuantity = 3,
-        navigator,
-    )
-}
-
-@Composable
-fun EventDialogConfirmationContent(
-    eventName: String,
-    eventDate: String,
-    eventTime: String,
-    ticketQuantity: Int,
-    navigator: DestinationsNavigator,
-) {
-    AlertDialog(
-        title = {
-            Text(text = "Compra de Bilhetes")
-        },
-        text = {
-            Text(
-                text =
-                    "Tens a certeza que queres comprar $ticketQuantity bilhete(s) para \"$eventName\" no dia $eventDate às $eventTime?\n" +
-                        "Esta ação é irreversível. ",
-            )
-        },
-        onDismissRequest = {
-            navigator.navigateUp()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    navigator.popBackStack(EventDestination, false)
-                },
-            ) {
-                Text("Confirmar")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    navigator.navigateUp()
-                },
-            ) {
-                Text("Cancelar")
-            }
-        },
-    )
+    event?.let {
+        EventDialogContent(
+            event = it,
+            uiState = viewModel.eventDialogUiState,
+            onBack = { navigator.navigateUp() },
+            onContinue = { navigator.navigate(EventConfirmationDialogDestination(it.id)) },
+            onRemove = { viewModel.removeTicket() },
+            onAdd = { viewModel.addTicket() },
+        )
+    }
 }
 
 @Composable
 fun EventDialogContent(
-    eventName: String,
-    navigator: DestinationsNavigator,
-    eventId: String,
+    event: Event,
+    uiState: EventDialogUiState,
+    onBack: () -> Unit,
+    onContinue: () -> Unit,
+    onRemove: () -> Unit,
+    onAdd: () -> Unit,
 ) {
     AlertDialog(
         title = {
-            Text(text = "Compra de Bilhetes")
+            Text(stringResource(R.string.purchase_tickets))
         },
         text = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(text = "Quantos bilhetes quer comprar para \"$eventName\" ?")
+                Text(stringResource(R.string.purchase_tickets_amount_info, event.name))
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 15.dp),
+                    modifier = Modifier.padding(top = 16.dp),
                 ) {
                     IconButton(
-                        onClick = { },
-                        modifier = Modifier.size(48.dp),
+                        onClick = onRemove,
                         colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Remove,
-                            contentDescription = "Minus",
+                            contentDescription = stringResource(R.string.remove_ticket_action),
                         )
                     }
                     InputChip(
                         onClick = { },
-                        // TODO MUDAR QUANTIDADE
-                        label = { Text("2") },
+                        label = { Text(uiState.ticketAmount.toString()) },
                         selected = true,
                     )
 
                     IconButton(
-                        onClick = { },
-                        modifier = Modifier.size(48.dp),
+                        onClick = onAdd,
                         colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Plus",
+                            contentDescription = stringResource(R.string.add_ticket_action),
                         )
                     }
                 }
             }
         },
-        onDismissRequest = {
-            navigator.navigateUp()
-        },
+        onDismissRequest = onBack,
         confirmButton = {
             TextButton(
-                onClick = {
-                    navigator.navigate(EventConfirmationDialogDestination(eventId))
-                },
+                onClick = onContinue,
             ) {
-                Text("Continuar")
+                Text(stringResource(R.string.continue_action))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = {
-                    navigator.navigateUp()
-                },
+                onClick = onBack,
             ) {
-                Text("Cancelar")
+                Text(stringResource(R.string.cancel_action))
+            }
+        },
+    )
+}
+
+@Destination<EventsGraph>(
+    visibility = CodeGenVisibility.INTERNAL,
+    style = DestinationStyle.Dialog::class,
+    navArgs = EventArgs::class,
+)
+@Composable
+fun EventConfirmationDialog(
+    navigator: DestinationsNavigator,
+    viewModel: EventViewModel, // = hiltViewModel(),
+) {
+    val event by viewModel.event.collectAsStateWithLifecycle()
+
+    event?.let {
+        EventDialogConfirmationContent(
+            it,
+            viewModel.eventDialogUiState,
+            onBack = { navigator.navigateUp() },
+            onConfirm = {
+                navigator.popBackStack(EventDestination, false)
+            },
+        )
+    }
+}
+
+@Composable
+fun EventDialogConfirmationContent(
+    event: Event,
+    uiState: EventDialogUiState,
+    onBack: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AlertDialog(
+        title = {
+            Text(stringResource(R.string.purchase_tickets))
+        },
+        text = {
+            Text(
+                pluralStringResource(
+                    R.plurals.purchase_tickets_confirmation_info,
+                    uiState.ticketAmount,
+                    uiState.ticketAmount,
+                    event.name,
+                    event.date.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
+                    event.startTime.toMillisecondOfDay().toLong(),
+                ),
+            )
+        },
+        onDismissRequest = onBack,
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+            ) {
+                Text(stringResource(R.string.confirm_action))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onBack,
+            ) {
+                Text(stringResource(R.string.cancel_action))
             }
         },
     )
