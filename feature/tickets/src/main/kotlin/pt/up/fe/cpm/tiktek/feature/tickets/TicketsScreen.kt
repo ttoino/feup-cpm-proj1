@@ -138,18 +138,8 @@ internal fun TicketsScreen() {
                         Modifier
                             .padding(vertical = 16.dp),
                 ) {
-                    EventTicket(
-                        eventImageLink =
-                            "https://cdn-images.rtp.pt/icm/noticias/images/70/" +
-                                "702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
-                        eventName = "Hamilton Infantil",
-                    )
-                    EventTicket(
-                        eventImageLink =
-                            "https://images-na.ssl-images-amazon.com/images/S/" +
-                                "compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
-                        eventName = "O pequeno mundo de Teresa",
-                    )
+                    // TODO TICKETS ESPETÁCULO
+
                     Box(
                         modifier =
                             Modifier
@@ -181,10 +171,7 @@ internal fun TicketsScreen() {
                         Modifier
                             .padding(vertical = 16.dp),
                 ) {
-                    EventTicket(
-                        eventImageLink = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
-                        eventName = "Café",
-                    )
+                    // TODO TICKETS DE CAFETERIA
                 }
 
                 Box(
