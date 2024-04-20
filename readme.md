@@ -41,11 +41,21 @@ When a user opens the app for the first time, they are directed to the "Initial 
 
 Pages highlighted in pink within the navigation map represent sections accessible via the bottom navigation bar. These sections offer easy access and, since the user is logged in, can be reached with just a single click.
 
+<div align="center">
+ 
 ![navigation-map.png](images-report%2Fnavigation-map.png)
-###### TikTek Navigation Map
+###### Figure 1 - TikTek Navigation Map
+</div>
+
+----------------------
+
+<div align="center">
 
 ![navigation-bar.png](images-report%2Fbottom-navigation-bar.png)
-###### Bottom Navigation Bar
+###### Figure 2 - Bottom Navigation Bar
+</div>
+
+**adicionar das 2 paginas iniciais**
 
 
 
