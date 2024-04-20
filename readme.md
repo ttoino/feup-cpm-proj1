@@ -1,12 +1,12 @@
 # M.EIC 2023/2024 CPM - 1st  Assignment
 
 ## Topics
-[] Architecture
-[] Data Schemas (server database, a ticket, an order, a voucher)
-[] Features
-[] Navigation Map
-[] Performed Scenarios Tests
-[] Screenshot e tutorial como usar
+- [ ] Architecture
+- [ ] Data Schemas (server database, a ticket, an order, a voucher)
+- [ ] Features
+- [ ] Navigation Map
+- [ ] Performed Scenarios Tests
+- [ ] Screenshot e tutorial como usar
 
 ## Architecture
  TODO
@@ -22,16 +22,16 @@
 
 ## Features
 Pomos prints ou??
-- [] Register Account
-- [] Login
-- [] Place a Cafeteria Order
-- [] Buy Tickets
-- [] See past tickets acquired
-- [] Check cafeteria orders history
-- [] Change personal and payment data
-- [] Check information about a certain event
-- [] Validate orders
-- [] Validate event tickets
+- [x] Register Account
+- [x] Login
+- [ ] Place a Cafeteria Order
+- [ ] Buy Tickets
+- [ ] See past tickets acquired
+- [ ] Check cafeteria orders history
+- [x] Change user's personal information and payment data
+- [ ] Check information about a certain event
+- [ ] Validate orders
+- [ ] Validate event tickets
 
 
 ## Navigation Map
