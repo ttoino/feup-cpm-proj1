@@ -34,13 +34,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
@@ -51,6 +56,9 @@ import com.ramcosta.composedestinations.generated.events.destinations.EventDesti
 import com.ramcosta.composedestinations.generated.events.destinations.EventDialogDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
@@ -65,15 +73,18 @@ import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 internal fun EventRoute(
     eventId: String,
     navigator: DestinationsNavigator,
+    viewModel: EventViewModel = hiltViewModel(),
 ) {
-    EventScreen(navigator, eventId)
+    val event by viewModel.event.collectAsStateWithLifecycle()
+
+    event?.let { EventScreen(navigator, it) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EventScreen(
     navigator: DestinationsNavigator,
-    eventId: String,
+    event: Event,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -82,7 +93,7 @@ internal fun EventScreen(
         topBar = {
             TopAppBar(
                 scrollBehavior = scrollBehavior,
-                title = { Text("O Pato Lindo") },
+                title = { Text(event.name) },
                 navigationIcon = {
                     IconButton(onClick = { }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -106,8 +117,9 @@ internal fun EventScreen(
         ) {
             Box {
                 AsyncImage(
-                    model = "https://i.pinimg.com/originals/ee/78/c6/ee78c67c41f6439bb9ce406907c91f3d.jpg",
+                    model = event.imageUrl,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -115,7 +127,7 @@ internal fun EventScreen(
                             .clip(MaterialTheme.shapes.medium),
                 )
                 FloatingActionButton(
-                    onClick = { navigator.navigate(EventDialogDestination(eventId)) },
+                    onClick = { navigator.navigate(EventDialogDestination(event.id)) },
                     modifier =
                         Modifier
                             .align(Alignment.BottomEnd)
@@ -126,24 +138,32 @@ internal fun EventScreen(
                 }
             }
 
-            InfoRow(icon = Icons.Default.Event, primaryText = "Terça, 3 de maio, 2024", secondaryText = "10:00 - 12:00")
+            InfoRow(
+                icon = Icons.Default.Event,
+                primaryText =
+                    stringResource(
+                        R.string.date_value,
+                        event.date.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
+                    ),
+                secondaryText =
+                    stringResource(
+                        R.string.time_range_value,
+                        event.startTime.toMillisecondOfDay().toLong(),
+                        event.endTime.toMillisecondOfDay().toLong(),
+                    ),
+            )
             InfoRow(
                 icon = Icons.Default.LocationOn,
-                primaryText = "Tasca Teatral - Sala B",
-                secondaryText = "Rua do Infante, nº23, Porto, 4444-000",
+                primaryText = event.location,
+                secondaryText = event.locationDetails,
             )
-            InfoRow(icon = Icons.Default.ConfirmationNumber, primaryText = "10€")
+            InfoRow(icon = Icons.Default.ConfirmationNumber, primaryText = stringResource(R.string.price_value, event.price / 100f))
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text(text = "Descrição", style = MaterialTheme.typography.headlineSmall)
-                Text(
-                    "É um pato formoso que dança ao ritmo das ondas do rio, " +
-                        "suas penas reluzem sob o sol matinal, " +
-                        "enquanto ele desliza gracioso pela água. " +
-                        "Em \"O Pato Lindo\", mergulhe em um conto encantador bla bla bla",
-                )
+                Text(text = stringResource(R.string.description), style = MaterialTheme.typography.headlineSmall)
+                Text(event.description)
             }
         }
     }

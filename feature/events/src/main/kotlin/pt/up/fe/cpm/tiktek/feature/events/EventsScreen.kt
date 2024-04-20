@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
@@ -60,7 +61,10 @@ import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun EventsRoute(navigator: DestinationsNavigator) {
+internal fun EventsRoute(
+    navigator: DestinationsNavigator,
+    viewModel: EventsViewModel = hiltViewModel(),
+) {
     // TODO: Get data
     EventsScreen(navigator)
     /*Button(
@@ -271,7 +275,7 @@ private fun RecommendedEvent(
                 .size(width = 150.dp, height = 220.dp)
                 .padding(10.dp)
                 .clickable(
-                    onClick = { navigator.navigate(EventDestination("")) },
+                    onClick = { navigator.navigate(EventDestination("the-fantasticks")) },
                 ),
     ) {
         Box(

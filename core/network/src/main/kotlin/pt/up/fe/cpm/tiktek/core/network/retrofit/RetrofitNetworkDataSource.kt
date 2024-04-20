@@ -24,6 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import javax.inject.Inject
 
 private interface TikTekApi {
@@ -54,6 +55,12 @@ private interface TikTekApi {
     suspend fun getEvents(
         @Header("Authorization") authorization: String,
     ): NetworkResult<List<Event>>
+
+    @GET("event/{id}")
+    suspend fun getEvent(
+        @Header("Authorization") authorization: String,
+        @Path("id") eventId: String,
+    ): NetworkResult<Event>
 
     // Orders
     @GET("orders")
@@ -159,6 +166,11 @@ class RetrofitNetworkDataSource
 
         // Events
         override suspend fun getEvents(token: String): NetworkResult<List<Event>> = api.getEvents(token.auth)
+
+        override suspend fun getEvent(
+            token: String,
+            eventId: String,
+        ): NetworkResult<Event> = api.getEvent(token.auth, eventId)
 
         // Orders
         override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)

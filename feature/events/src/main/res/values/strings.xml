@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="price_value">€%1$.2f</string>
+    <string name="date_value">%1$tA, %1$tB %1$te, %1$tY</string>
+    <string name="time_range_value">%1$tl:%1$tM %1$tp - %2$tl:%2$tM %2$tp</string>
+    <string name="description">Description</string>
+</resources>
