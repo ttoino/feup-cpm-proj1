@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.AddCard
-import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,8 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -34,7 +31,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +49,7 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.ui.form.FormFieldState
 import pt.up.fe.cpm.tiktek.core.ui.forms.PaymentInformationForm
 import pt.up.fe.cpm.tiktek.core.ui.forms.PersonalInformationForm
+import pt.up.fe.cpm.tiktek.core.ui.snackbar
 import pt.up.fe.cpm.tiktek.feature.profile.navigation.ProfileGraph
 
 @Destination<ProfileGraph>(
@@ -127,7 +124,7 @@ internal fun ProfileScreen(
 ) {
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = snackbar
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(viewModel.successPersonal) {
@@ -139,7 +136,6 @@ internal fun ProfileScreen(
             }
         }
     }
-
 
     LaunchedEffect(viewModel.successCreditCard) {
         viewModel.successCreditCard.collect { success ->
@@ -165,9 +161,6 @@ internal fun ProfileScreen(
                     }
                 },
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
         },
     ) {
         Column(
@@ -241,7 +234,6 @@ internal fun ProfileScreen(
                 )
                 Text(text = stringResource(R.string.personal_information_action))
             }
-
 
             // ---------------------------------------------- CREDIT CARD CHANGE ------------------------------------------
             Text(

@@ -1,8 +1,10 @@
 package pt.up.fe.cpm.tiktek.core.database.exposed
 
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
@@ -30,12 +32,27 @@ class ExposedTicketDAO
                 }.firstOrNull()
             }
 
+        override suspend fun getLastSeatByEventId(eventId: String): String? =
+            db.query {
+                Tickets.select(Tickets.seat).where {
+                    Tickets.event eq eventId
+                }.orderBy(Tickets.seat, SortOrder.DESC_NULLS_LAST).map { it[Tickets.seat] }.firstOrNull()
+            }
+
         override suspend fun create(ticket: Ticket): Ticket =
             db.query {
                 Tickets.insert {
                     it.fromTicket(ticket)
                 }
                 ticket
+            }
+
+        override suspend fun createAll(tickets: List<Ticket>): List<Ticket> =
+            db.query {
+                Tickets.batchInsert(tickets) {
+                    fromTicket(it)
+                }
+                tickets
             }
 
         override suspend fun update(ticket: Ticket): Ticket =

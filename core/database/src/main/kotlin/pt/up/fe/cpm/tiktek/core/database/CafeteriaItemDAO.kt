@@ -7,6 +7,8 @@ interface CafeteriaItemDAO {
 
     suspend fun getById(id: String): CafeteriaItem?
 
+    suspend fun getRandom(): CafeteriaItem
+
     suspend fun create(cafeteriaItem: CafeteriaItem): CafeteriaItem
 
     suspend fun createAll(cafeteriaItems: List<CafeteriaItem>): List<CafeteriaItem>

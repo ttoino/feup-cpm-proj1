@@ -9,6 +9,8 @@ interface VoucherDAO {
 
     suspend fun create(voucher: Voucher): Voucher
 
+    suspend fun createAll(vouchers: List<Voucher>): List<Voucher>
+
     suspend fun update(voucher: Voucher): Voucher
 
     suspend fun delete(id: String): Boolean

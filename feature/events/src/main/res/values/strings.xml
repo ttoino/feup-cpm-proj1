@@ -16,6 +16,7 @@
         <item quantity="one">Are you sure you want to buy a ticket for \"%2$s\" on %3$tB %3$te, %3$tY at %4$tl:%4$tM %4$tp?</item>
         <item quantity="other">Are you sure you want to buy %1$d tickets for \"%2$s\" on %3$tB %3$te, %3$tY at %4$tl:%4$tM %4$tp?</item>
     </plurals>
+    <string name="purchase_tickets_success">Purchase successful!</string>
     <string name="add_ticket_action">Add ticket</string>
     <string name="remove_ticket_action">Remove ticket</string>
     <string name="continue_action">Continue</string>

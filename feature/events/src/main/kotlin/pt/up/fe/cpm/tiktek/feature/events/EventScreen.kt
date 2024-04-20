@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,10 +56,13 @@ import com.ramcosta.composedestinations.generated.events.destinations.EventDesti
 import com.ramcosta.composedestinations.generated.events.destinations.EventDialogDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
+import pt.up.fe.cpm.tiktek.core.ui.snackbar
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
 
 internal data class EventArgs(val eventId: String)
@@ -77,6 +81,15 @@ internal fun EventRoute(
     viewModel: EventViewModel, // = hiltViewModel(),
 ) {
     val event by viewModel.event.collectAsStateWithLifecycle()
+    val snackbarHostState = snackbar
+    val snackbarSuccessMessage = stringResource(R.string.purchase_tickets_success)
+
+    LaunchedEffect(viewModel.buyTicketsSuccess) {
+        viewModel.buyTicketsSuccess.filter { it }.collectLatest {
+            navigator.popBackStack(EventDestination, false)
+            snackbarHostState.showSnackbar(snackbarSuccessMessage)
+        }
+    }
 
     event?.let {
         EventScreen(
@@ -320,9 +333,7 @@ fun EventConfirmationDialog(
             it,
             viewModel.eventDialogUiState,
             onBack = { navigator.navigateUp() },
-            onConfirm = {
-                navigator.popBackStack(EventDestination, false)
-            },
+            onConfirm = { viewModel.buyTickets() },
         )
     }
 }
@@ -353,6 +364,7 @@ fun EventDialogConfirmationContent(
         onDismissRequest = onBack,
         confirmButton = {
             TextButton(
+                enabled = !uiState.loading,
                 onClick = onConfirm,
             ) {
                 Text(stringResource(R.string.confirm_action))

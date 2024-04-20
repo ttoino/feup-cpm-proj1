@@ -3,6 +3,7 @@ package pt.up.fe.cpm.tiktek.core.database.exposed
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -31,6 +32,14 @@ class ExposedVoucherDAO
                     it.fromVoucher(voucher)
                 }
                 voucher
+            }
+
+        override suspend fun createAll(vouchers: List<Voucher>): List<Voucher> =
+            db.query {
+                Vouchers.batchInsert(vouchers) {
+                    fromVoucher(it)
+                }
+                vouchers
             }
 
         override suspend fun update(voucher: Voucher): Voucher =

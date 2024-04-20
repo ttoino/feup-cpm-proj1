@@ -12,6 +12,7 @@ ksp {
 
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.core.domain)
     implementation(projects.core.model)
     implementation(projects.core.ui)
 

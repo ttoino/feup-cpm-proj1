@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.core.database.exposed
 
+import org.jetbrains.exposed.sql.Random
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
@@ -26,6 +27,11 @@ class ExposedCafeteriaItemDAO
         override suspend fun getById(id: String): CafeteriaItem? =
             db.query {
                 CafeteriaItems.selectAll().where { CafeteriaItems.id eq id }.map { it.toCafeteriaItem() }.firstOrNull()
+            }
+
+        override suspend fun getRandom(): CafeteriaItem =
+            db.query {
+                CafeteriaItems.selectAll().orderBy(Random()).map { it.toCafeteriaItem() }.first()
             }
 
         override suspend fun create(cafeteriaItem: CafeteriaItem): CafeteriaItem =
