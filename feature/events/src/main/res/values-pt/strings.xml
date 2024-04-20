@@ -3,5 +3,10 @@
     <string name="price_value">€%1$.2f</string>
     <string name="date_value">%1$tA, %1$te de %1$tB, %1$tY</string>
     <string name="time_range_value">%1$tk:%1$tM - %2$tk:%2$tM</string>
+    <string name="date_time_value">%1$te de %1$tB, %1$tY | %2$tk:%2$tM</string>
+    <string name="events">Eventos</string>
+    <string name="search_action">Pesquisar</string>
+    <string name="recommended">Recomendados</string>
+    <string name="today">Today</string>
     <string name="description">Descrição</string>
 </resources>
