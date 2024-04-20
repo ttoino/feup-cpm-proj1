@@ -42,6 +42,6 @@ Pomos prints ou??
 ## How to use
 
 ## Team
-Anete Medina Pereira -  up202008856 
-João António Semedo Pereira - up202007145 
-Mariana Solange Monteiro Rocha - up202004656
+- [Anete Medina Pereira](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202008856)
+- [João António Semedo Pereira](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
+- [Mariana Solange Monteiro Rocha](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)
