@@ -6,9 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.EventsRepository
+import pt.up.fe.cpm.tiktek.core.data.TicketsRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstCafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstEventsRepository
+import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstTicketsRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstUserRepository
 
 @Module
@@ -22,4 +24,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindUserRepository(repo: LocalFirstUserRepository): UserRepository
+
+    @Binds
+    abstract fun bindTicketsRepository(repo: LocalFirstTicketsRepository): TicketsRepository
 }

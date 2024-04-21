@@ -77,6 +77,11 @@ interface NetworkDataSource {
     // Tickets
     suspend fun getTickets(token: String): NetworkResult<List<Ticket>>
 
+    suspend fun getTicket(
+        token: String,
+        ticketId: String,
+    ): NetworkResult<Ticket>
+
     // Vouchers
     suspend fun getVouchers(token: String): NetworkResult<List<Voucher>>
 }
