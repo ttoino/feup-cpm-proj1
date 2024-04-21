@@ -1,6 +1,7 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +29,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import kotlinx.coroutines.delay
+import pt.up.fe.cpm.tiktek.cafeteria.navigation.PurchasedProductsGraph
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@Destination<PurchasedProductsGraph>(
+    start = true,
+    visibility = CodeGenVisibility.INTERNAL,
+)
 @Composable
 fun MainScreen(checkCameraPermission: (Context) -> Unit) {
     val sdf = SimpleDateFormat("HH:mm")
@@ -89,7 +97,10 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
                 modifier = Modifier.height(150.dp),
             )
             Button(
-                onClick = { checkCameraPermission(context) },
+                onClick = {
+                    checkCameraPermission(context)
+                    Log.d("MainScreen", "Button clicked")
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.QrCodeScanner,
