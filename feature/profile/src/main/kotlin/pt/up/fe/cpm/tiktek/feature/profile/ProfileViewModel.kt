@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
@@ -57,6 +58,10 @@ class ProfileViewModel
         var uiState by mutableStateOf(ProfileUiState())
             private set
 
+        val successPersonal = MutableStateFlow(false)
+        val successPassword = MutableStateFlow(false)
+        val successCreditCard = MutableStateFlow(false)
+
         // Personal information
         val name = FormFieldUseCase("", nameValidator)
         val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }
@@ -71,28 +76,29 @@ class ProfileViewModel
                     birthdate.state.valid &&
                     email.state.valid
 
-        fun updatePersonalInformation() =
+        suspend fun updatePersonalInformation() =
             viewModelScope.launch {
                 if (!canSavePersonalInformation) return@launch
 
                 uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-                when (
-                    val result =
-                        userRepository.editPersonalInfo(
-                            name.state.value,
-                            nif.state.value,
-                            birthdate.state.value!!,
-                            email.state.value,
-                            password.state.value,
-                        )
-                ) {
-                    is NetworkResult.Success -> Unit
-                    is NetworkResult.Failure ->
+                val result =
+                    userRepository.editPersonalInfo(
+                        name.state.value,
+                        nif.state.value,
+                        birthdate.state.value!!,
+                        email.state.value,
+                        password.state.value,
+                    )
+
+                when (result) {
+                    is NetworkResult.Success -> successPersonal.value = true
+                    is NetworkResult.Failure -> {
                         uiState =
                             uiState.copy(errorMessage = NetworkErrorUseCase())
+                    }
 
-                    is NetworkResult.Error ->
+                    is NetworkResult.Error -> {
                         when (val error = result.error) {
                             is ErrorResponse.Unknown ->
                                 uiState =
@@ -102,7 +108,7 @@ class ProfileViewModel
                                 uiState =
                                     uiState.copy(errorMessage = ViolationUseCase(error.violation))
 
-                            is ErrorResponse.FieldValidation ->
+                            is ErrorResponse.FieldValidation -> {
                                 error.violations.forEach { (k, v) ->
                                     when (k) {
                                         "name" -> name.updateError(ViolationUseCase(v))
@@ -112,7 +118,9 @@ class ProfileViewModel
                                         "password" -> password.updateError(ViolationUseCase(v))
                                     }
                                 }
+                            }
                         }
+                    }
                 }
                 uiState = uiState.copy(isLoading = false)
             }
@@ -120,17 +128,57 @@ class ProfileViewModel
         // Password
         val oldPassword = FormFieldUseCase("", passwordValidator)
         val newPassword = FormFieldUseCase("", passwordValidator)
+        val new2Password = FormFieldUseCase("", passwordValidator)
 
         val canUpdatePassword get() =
             oldPassword.state.valid &&
-                newPassword.state.valid
+                newPassword.state.valid && (newPassword == new2Password)
 
         fun updatePassword() =
             viewModelScope.launch {
-                // TODO
+                viewModelScope.launch {
+                    if (!canUpdatePassword) return@launch
+
+                    uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                    val result =
+                        userRepository.editPassword(
+                            password.state.value,
+                        )
+
+                    when (result) {
+                        is NetworkResult.Success -> successCreditCard.value = true
+                        is NetworkResult.Failure -> {
+                            uiState =
+                                uiState.copy(errorMessage = NetworkErrorUseCase())
+                        }
+
+                        is NetworkResult.Error -> {
+                            when (val error = result.error) {
+                                is ErrorResponse.Unknown ->
+                                    uiState =
+                                        uiState.copy(errorMessage = UnknownErrorUseCase())
+
+                                is ErrorResponse.GeneralViolation ->
+                                    uiState =
+                                        uiState.copy(errorMessage = ViolationUseCase(error.violation))
+
+                                is ErrorResponse.FieldValidation -> {
+                                    error.violations.forEach { (k, v) ->
+                                        when (k) {
+                                            "password" -> password.updateError(ViolationUseCase(v))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    uiState = uiState.copy(isLoading = false)
+                }
             }
 
         // Payment information
+
         val nameCc = FormFieldUseCase("", nameValidator)
         val numberCc = FormFieldUseCase("", numberCcValidator) { it.filter { it.isDigit() }.take(16) }
         val expirationDateCc = FormFieldUseCase("", expirationDateCcValidator) { it.filter { it.isDigit() }.take(4) }
@@ -144,7 +192,51 @@ class ProfileViewModel
 
         fun updatePaymentInformation() =
             viewModelScope.launch {
-                // TODO
+                if (!canUpdatePaymentInformation) return@launch
+
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+                val result =
+                    userRepository.editCreditCard(
+                        nameCc.state.value,
+                        numberCc.state.value,
+                        expirationDateCc.state.value,
+                        cvcCc.state.value,
+                        password.state.value,
+                    )
+
+                when (result) {
+                    is NetworkResult.Success -> successCreditCard.value = true
+                    is NetworkResult.Failure -> {
+                        uiState =
+                            uiState.copy(errorMessage = NetworkErrorUseCase())
+                    }
+
+                    is NetworkResult.Error -> {
+                        when (val error = result.error) {
+                            is ErrorResponse.Unknown ->
+                                uiState =
+                                    uiState.copy(errorMessage = UnknownErrorUseCase())
+
+                            is ErrorResponse.GeneralViolation ->
+                                uiState =
+                                    uiState.copy(errorMessage = ViolationUseCase(error.violation))
+
+                            is ErrorResponse.FieldValidation -> {
+                                error.violations.forEach { (k, v) ->
+                                    when (k) {
+                                        "nameCc" -> nameCc.updateError(ViolationUseCase(v))
+                                        "numberCc" -> numberCc.updateError(ViolationUseCase(v))
+                                        "expirationDateCc" -> expirationDateCc.updateError(ViolationUseCase(v))
+                                        "cvcCc" -> cvcCc.updateError(ViolationUseCase(v))
+                                        "password" -> password.updateError(ViolationUseCase(v))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                uiState = uiState.copy(isLoading = false)
             }
 
         // Logout

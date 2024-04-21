@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
+import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
@@ -24,6 +25,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import javax.inject.Inject
 
 private interface TikTekApi {
@@ -54,6 +56,19 @@ private interface TikTekApi {
     suspend fun getEvents(
         @Header("Authorization") authorization: String,
     ): NetworkResult<List<Event>>
+
+    @GET("events/{id}")
+    suspend fun getEvent(
+        @Header("Authorization") authorization: String,
+        @Path("id") eventId: String,
+    ): NetworkResult<Event>
+
+    @POST("events/{id}/buy")
+    suspend fun buyTickets(
+        @Header("Authorization") authorization: String,
+        @Path("id") eventId: String,
+        @Body body: BuyTicketRequest,
+    ): NetworkResult<Unit>
 
     // Orders
     @GET("orders")
@@ -159,6 +174,17 @@ class RetrofitNetworkDataSource
 
         // Events
         override suspend fun getEvents(token: String): NetworkResult<List<Event>> = api.getEvents(token.auth)
+
+        override suspend fun getEvent(
+            token: String,
+            eventId: String,
+        ): NetworkResult<Event> = api.getEvent(token.auth, eventId)
+
+        override suspend fun buyTickets(
+            token: String,
+            eventId: String,
+            ticketAmount: Int,
+        ): NetworkResult<Unit> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
 
         // Orders
         override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)

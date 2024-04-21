@@ -11,7 +11,7 @@ import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGrap
 import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
 import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGraph
 
-@NavHostGraph(route = "tiktek")
+@NavHostGraph
 annotation class TikTekGraph {
     @ExternalNavGraph<AuthNavGraph>(start = true)
     companion object Includes

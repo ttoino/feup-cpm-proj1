@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="price_value">€%1$.2f</string>
+    <string name="date_value">%1$tA, %1$te de %1$tB, %1$tY</string>
+    <string name="time_range_value">%1$tk:%1$tM - %2$tk:%2$tM</string>
+    <string name="date_time_value">%1$te de %1$tB, %1$tY | %2$tk:%2$tM</string>
+    <string name="events">Eventos</string>
+    <string name="search_action">Pesquisar</string>
+    <string name="recommended">Recomendados</string>
+    <string name="today">Today</string>
+    <string name="description">Descrição</string>
+    <string name="add_to_cart_action">Adicionar ao carrinho</string>
+    <string name="purchase_tickets">Comprar bilhetes</string>
+    <string name="purchase_tickets_amount_info">Quantos bilhetes quer comprar para \"%1$s\"?</string>
+    <plurals name="purchase_tickets_confirmation_info">
+        <item quantity="one">De certeza que queres comprar um bilhete para \"%2$s\" no dia %3$te de %3$tB, %3$tY às %4$tr:%4$tM?</item>
+        <item quantity="other">De certeza que queres comprar %1$d bilhetes para \"%2$s\" no dia %3$te de %3$tB, %3$tY às %4$tr:%4$tM?</item>
+    </plurals>
+    <string name="purchase_tickets_success">Compra feita com sucesso!</string>
+    <string name="add_ticket_action">Adicionar bilhete</string>
+    <string name="remove_ticket_action">Remover bilhete</string>
+    <string name="continue_action">Continuar</string>
+    <string name="confirm_action">Confirmar</string>
+    <string name="cancel_action">Cancelar</string>
+</resources>

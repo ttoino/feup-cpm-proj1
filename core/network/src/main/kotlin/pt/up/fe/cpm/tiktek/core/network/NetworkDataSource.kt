@@ -42,6 +42,17 @@ interface NetworkDataSource {
     // Events
     suspend fun getEvents(token: String): NetworkResult<List<Event>>
 
+    suspend fun getEvent(
+        token: String,
+        eventId: String,
+    ): NetworkResult<Event>
+
+    suspend fun buyTickets(
+        token: String,
+        eventId: String,
+        ticketAmount: Int,
+    ): NetworkResult<Unit>
+
     // Orders
     suspend fun getOrders(token: String): NetworkResult<List<Order>>
 
