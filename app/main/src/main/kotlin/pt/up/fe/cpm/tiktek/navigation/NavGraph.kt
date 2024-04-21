@@ -18,7 +18,7 @@ annotation class TikTekGraph {
 }
 
 @NavGraph<TikTekGraph>
-internal annotation class MainGraph {
+internal annotation class AuthenticatedGraph {
     @ExternalNavGraph<EventsNavGraph>(start = true)
     @ExternalNavGraph<TicketsNavGraph>
     @ExternalNavGraph<CafeteriaNavGraph>
@@ -27,6 +27,6 @@ internal annotation class MainGraph {
 }
 
 // Dummy destination so it compiles :))
-@Destination<MainGraph>
+@Destination<AuthenticatedGraph>
 @Composable
 fun DUMMY() {}

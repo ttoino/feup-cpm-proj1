@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.cafeteria.navgraphs.CafeteriaNavGraph
 import com.ramcosta.composedestinations.generated.events.navgraphs.EventsNavGraph
-import com.ramcosta.composedestinations.generated.navgraphs.MainNavGraph
+import com.ramcosta.composedestinations.generated.navgraphs.AuthenticatedNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.TikTekNavGraph
 import com.ramcosta.composedestinations.generated.profile.navgraphs.ProfileNavGraph
 import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGraph
@@ -45,7 +45,7 @@ fun NavController.navigateToScreen(screen: Screen) {
         }
 
     navigate(route) {
-        popUpTo(MainNavGraph) {
+        popUpTo(AuthenticatedNavGraph) {
             saveState = true
             inclusive = true
         }
