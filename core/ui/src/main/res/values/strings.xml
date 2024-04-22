@@ -12,4 +12,7 @@
     <string name="number_cc">Card number</string>
     <string name="expiry_cc">Expiry</string>
     <string name="cvc_cc">CVC</string>
+
+    <string name="add_action">Add</string>
+    <string name="remove_action">Remove</string>
 </resources>

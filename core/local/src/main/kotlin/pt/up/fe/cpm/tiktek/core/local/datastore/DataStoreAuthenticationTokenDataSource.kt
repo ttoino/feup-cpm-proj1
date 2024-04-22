@@ -1,8 +1,6 @@
 package pt.up.fe.cpm.tiktek.core.local.datastore
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -12,7 +10,7 @@ import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("authentication")
+private val Context.dataStore by preferencesDataStore("authentication")
 
 private val KEY_TOKEN = stringPreferencesKey("token")
 

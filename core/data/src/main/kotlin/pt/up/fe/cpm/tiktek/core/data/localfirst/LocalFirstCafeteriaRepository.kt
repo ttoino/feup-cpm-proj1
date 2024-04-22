@@ -31,4 +31,6 @@ class LocalFirstCafeteriaRepository
         }
 
         override fun getCafeteriaItems(): Flow<List<CafeteriaItem>> = localDataSource.getCafeteriaItems()
+
+        override fun getCafeteriaItem(id: String): Flow<CafeteriaItem> = localDataSource.getCafeteriaItem(id)
     }

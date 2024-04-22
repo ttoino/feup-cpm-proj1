@@ -58,7 +58,7 @@ class EventViewModel
         fun addTicket() {
             eventDialogUiState =
                 eventDialogUiState.copy(
-                    ticketAmount = eventDialogUiState.ticketAmount + 1,
+                    ticketAmount = minOf(eventDialogUiState.ticketAmount + 1, 4),
                 )
         }
 

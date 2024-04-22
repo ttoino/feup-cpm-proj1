@@ -2,15 +2,17 @@ package pt.up.fe.cpm.tiktek.cafeteria
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import pt.up.fe.cpm.tiktek.core.app.ScreenActivity
 
 @AndroidEntryPoint
@@ -38,9 +40,10 @@ class MainActivity : ScreenActivity() {
       ]
     }
     """
-    val purchase = JSONObject(jsonString)
 
-    var textResult = mutableStateOf("")
+    var scannedQRCodeResult by mutableStateOf("")
+
+    // private val navigator: DestinationsNavigator = DestinationsNavigatorImpl() // não funciona
 
     val barCodeLauncher =
         registerForActivityResult(ScanContract()) {
@@ -48,7 +51,8 @@ class MainActivity : ScreenActivity() {
             if (result.contents == null) {
                 Toast.makeText(this@MainActivity, "Cancelled", Toast.LENGTH_SHORT).show()
             } else {
-                textResult.value = result.contents
+                scannedQRCodeResult = result.contents
+                Log.d("MainActivity", "Scanned result: ${result.contents}")
             }
         }
 
@@ -89,5 +93,6 @@ class MainActivity : ScreenActivity() {
 
     @Composable
     override fun Screen() = MainScreen(::checkCameraPermission)
-    // override fun Screen() = PurchasedProductsScreen(purchase = purchase)
+    // override fun Screen() = PurchasedProductsScreen()
+    // override fun provideDestinationsNavigator(): DestinationsNavigator {return destinationsNavigator}
 }

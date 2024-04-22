@@ -17,8 +17,6 @@
         <item quantity="other">De certeza que queres comprar %1$d bilhetes para \"%2$s\" no dia %3$te de %3$tB, %3$tY às %4$tr:%4$tM?</item>
     </plurals>
     <string name="purchase_tickets_success">Compra feita com sucesso!</string>
-    <string name="add_ticket_action">Adicionar bilhete</string>
-    <string name="remove_ticket_action">Remover bilhete</string>
     <string name="continue_action">Continuar</string>
     <string name="confirm_action">Confirmar</string>
     <string name="cancel_action">Cancelar</string>

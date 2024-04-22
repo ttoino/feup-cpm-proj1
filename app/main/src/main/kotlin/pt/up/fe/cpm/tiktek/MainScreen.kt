@@ -12,7 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.generated.auth.navgraphs.AuthNavGraph
-import com.ramcosta.composedestinations.generated.navgraphs.MainNavGraph
+import com.ramcosta.composedestinations.generated.navgraphs.AuthenticatedNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.TikTekNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -31,7 +31,7 @@ fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 
     LaunchedEffect(loggedIn) {
         Timber.d("Logged in changed")
-        navController.navigate(if (loggedIn ?: return@LaunchedEffect) MainNavGraph else AuthNavGraph) {
+        navController.navigate(if (loggedIn ?: return@LaunchedEffect) AuthenticatedNavGraph else AuthNavGraph) {
             popUpTo(TikTekNavGraph) {
                 inclusive = true
             }
