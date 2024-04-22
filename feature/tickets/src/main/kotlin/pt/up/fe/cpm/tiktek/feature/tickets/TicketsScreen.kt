@@ -48,9 +48,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
@@ -67,15 +69,19 @@ internal fun TicketsRoute(
     viewModel: TicketsViewModel = hiltViewModel(),
 ) {
     val tickets by viewModel.tickets.collectAsStateWithLifecycle()
-
+    val events by viewModel.events.collectAsStateWithLifecycle()
     TicketsScreen(
         tickets = tickets,
+        events = events,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TicketsScreen(tickets: List<Ticket>) {
+internal fun TicketsScreen(
+    tickets: List<Ticket>,
+    events: List<Event>,
+) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var tabItems =
         listOf(
@@ -148,8 +154,9 @@ internal fun TicketsScreen(tickets: List<Ticket>) {
                         Modifier
                             .padding(vertical = 16.dp),
                 ) {
-                    // TODO TICKETS ESPETÁCULO
-
+                    for (ticket in tickets) {
+// TODO
+                    }
                     Box(
                         modifier =
                             Modifier
