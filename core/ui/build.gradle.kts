@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(projects.core.model)
 
+    implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.compose.destinations.core)
 }

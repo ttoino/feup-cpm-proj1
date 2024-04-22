@@ -6,9 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalCafeteriaDataSource
+import pt.up.fe.cpm.tiktek.core.local.LocalCartDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalEventsDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalUsersDataSource
 import pt.up.fe.cpm.tiktek.core.local.datastore.DataStoreAuthenticationTokenDataSource
+import pt.up.fe.cpm.tiktek.core.local.datastore.DataStoreCartDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomCafeteriaDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomEventsDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomUsersDataSource
@@ -21,6 +23,9 @@ abstract class LocalModule {
 
     @Binds
     abstract fun bindLocalCafeteriaDataSource(source: RoomCafeteriaDataSource): LocalCafeteriaDataSource
+
+    @Binds
+    abstract fun bindLocalCartDataSource(source: DataStoreCartDataSource): LocalCartDataSource
 
     @Binds
     abstract fun bindLocalEventsDataSource(source: RoomEventsDataSource): LocalEventsDataSource

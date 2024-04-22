@@ -5,4 +5,6 @@ import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 
 interface CafeteriaRepository : Syncable {
     fun getCafeteriaItems(): Flow<List<CafeteriaItem>>
+
+    fun getCafeteriaItem(id: String): Flow<CafeteriaItem>
 }
