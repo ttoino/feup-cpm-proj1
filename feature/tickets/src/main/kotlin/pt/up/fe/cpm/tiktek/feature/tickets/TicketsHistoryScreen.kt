@@ -39,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -48,11 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import com.ramcosta.composedestinations.generated.tickets.destinations.TicketsHistoryRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -64,16 +61,15 @@ import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
 @Destination<TicketsGraph>(
-    start = true,
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun TicketsRoute(
+internal fun TicketsHistoryRoute(
     navigator: DestinationsNavigator,
     viewModel: TicketsViewModel = hiltViewModel(),
 ) {
     val tickets by viewModel.tickets.collectAsStateWithLifecycle()
-    TicketsScreen(
+    TicketsHistoryScreen(
         tickets = tickets,
         navigator,
     )
@@ -81,7 +77,7 @@ internal fun TicketsRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TicketsScreen(
+internal fun TicketsHistoryScreen(
     tickets: List<TicketWithEvent>,
     navigator: DestinationsNavigator,
 ) {
@@ -109,7 +105,7 @@ internal fun TicketsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = "As minhas compras",
+                        text = "Histórico de compras",
                     )
                 },
             )
@@ -162,7 +158,7 @@ internal fun TicketsScreen(
                                 Clock.System.now().toLocalDateTime(
                                     TimeZone.UTC,
                                 ),
-                            ) >= 0
+                            ) < 0
                         ) {
                             EventTicket(
                                 eventImageLink = ticket.event.imageUrl,
@@ -179,9 +175,7 @@ internal fun TicketsScreen(
                                 .padding(vertical = 50.dp),
                     ) {
                         Button(
-                            onClick = {
-                                navigator.navigate(TicketsHistoryRouteDestination)
-                            },
+                            onClick = { navigator.navigateUp()q },
                             modifier =
                                 Modifier.align(
                                     Alignment.Center,
@@ -189,13 +183,13 @@ internal fun TicketsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.History,
-                                contentDescription = "Ver histórico de compras",
+                                contentDescription = "Ver bilhetes ativos",
                                 modifier = Modifier.size(18.dp),
                             )
                             Spacer(
                                 modifier = Modifier.width(8.dp),
                             )
-                            Text(text = "Consultar histórico de compras")
+                            Text(text = "Ver bilhetes ativos")
                         }
                     }
                 }
@@ -223,25 +217,19 @@ internal fun TicketsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.History,
-                            contentDescription = "Ver histórico de compras",
+                            contentDescription = "Ver pedidos ativos",
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(
                             modifier = Modifier.width(8.dp),
                         )
-                        Text(text = "Consultar histórico de compras")
+                        Text(text = "Ver pedidos ativosf")
                     }
                 }
             }
         }
     }
 }
-
-data class TabItem(
-    val title: String,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector,
-)
 
 @Composable
 private fun EventTicket(
