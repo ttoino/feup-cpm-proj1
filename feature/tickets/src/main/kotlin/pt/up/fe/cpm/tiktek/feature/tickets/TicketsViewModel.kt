@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.EventsRepository
 import pt.up.fe.cpm.tiktek.core.data.TicketsRepository
-import pt.up.fe.cpm.tiktek.core.model.Event
-import pt.up.fe.cpm.tiktek.core.model.Ticket
+import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,26 +19,25 @@ class TicketsViewModel
         private val ticketsRepository: TicketsRepository,
         private val eventsRepository: EventsRepository,
     ) : ViewModel() {
+        val tickets =
+            combine(
+                ticketsRepository.getTickets(),
+                eventsRepository.getEvents(),
+            ) { tickets, events ->
+                tickets.map {
+                        ticket ->
+                    TicketWithEvent(
+                        ticket.id,
+                        events.first { it.id == ticket.eventId },
+                        ticket.userEmail,
+                        ticket.seat,
+                        ticket.purchaseDate,
+                    )
+                }
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
         init {
             viewModelScope.launch { ticketsRepository.sync() }
             viewModelScope.launch { eventsRepository.sync() }
-        }
-
-        val tickets: StateFlow<List<Ticket>> =
-            ticketsRepository.getTickets().stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5000),
-                emptyList(),
-            )
-        val events: StateFlow<List<Event>> =
-            eventsRepository.getEvents().stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5000),
-                emptyList(),
-            )
-
-        fun getEventImage(eventId: String): String? {
-            val event = events.value.firstOrNull { it.id == eventId }
-            return event?.imageUrl
         }
     }

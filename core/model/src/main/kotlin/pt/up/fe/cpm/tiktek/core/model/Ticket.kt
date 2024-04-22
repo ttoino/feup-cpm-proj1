@@ -11,3 +11,11 @@ data class Ticket(
     val seat: String,
     val purchaseDate: Instant,
 )
+
+data class TicketWithEvent(
+    val id: String,
+    val event: Event,
+    val userEmail: String,
+    val seat: String,
+    val purchaseDate: Instant,
+)

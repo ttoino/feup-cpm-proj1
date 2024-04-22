@@ -11,11 +11,10 @@ ksp {
 }
 
 dependencies {
-    implementation(projects.core.ui)
 
+    implementation(projects.core.data)
+    implementation(projects.core.model)
+    implementation(projects.core.ui)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.coil.compose)
-    implementation(project(":core:model"))
-    implementation(project(":core:data"))
-    implementation(project(":core:data"))
-    implementation(project(":core:data"))
 }

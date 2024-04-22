@@ -52,8 +52,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import pt.up.fe.cpm.tiktek.core.model.Event
-import pt.up.fe.cpm.tiktek.core.model.Ticket
+import kotlinx.datetime.LocalDate
+import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
@@ -69,19 +69,14 @@ internal fun TicketsRoute(
     viewModel: TicketsViewModel = hiltViewModel(),
 ) {
     val tickets by viewModel.tickets.collectAsStateWithLifecycle()
-    val events by viewModel.events.collectAsStateWithLifecycle()
     TicketsScreen(
         tickets = tickets,
-        events = events,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TicketsScreen(
-    tickets: List<Ticket>,
-    events: List<Event>,
-) {
+internal fun TicketsScreen(tickets: List<TicketWithEvent>) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var tabItems =
         listOf(
@@ -155,7 +150,12 @@ internal fun TicketsScreen(
                             .padding(vertical = 16.dp),
                 ) {
                     for (ticket in tickets) {
-// TODO
+                        EventTicket(
+                            eventImageLink = ticket.event.imageUrl,
+                            eventName = ticket.event.name,
+                            ticketSeat = ticket.seat,
+                            eventDate = ticket.event.date,
+                        )
                     }
                     Box(
                         modifier =
@@ -230,6 +230,8 @@ data class TabItem(
 private fun EventTicket(
     eventImageLink: String,
     eventName: String,
+    ticketSeat: String,
+    eventDate: LocalDate,
 ) {
     Card(
         border =
@@ -264,7 +266,7 @@ private fun EventTicket(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "Por usar\nVálido até [data]",
+                    text = "Seat $ticketSeat \nVálido até $eventDate",
                     fontSize = 15.sp,
                     color = TikTekTheme.extendedColorScheme.success,
                 )
