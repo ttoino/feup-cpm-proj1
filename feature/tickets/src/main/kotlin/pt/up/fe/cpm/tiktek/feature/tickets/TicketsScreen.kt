@@ -46,9 +46,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
@@ -57,15 +60,22 @@ import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun TicketsRoute() {
-    // TODO: Get data
+internal fun TicketsRoute(
+/*
+    navigator: DestinationsNavigator,
+*/
+    viewModel: TicketsViewModel = hiltViewModel(),
+) {
+    val tickets by viewModel.tickets.collectAsStateWithLifecycle()
 
-    TicketsScreen()
+    TicketsScreen(
+        tickets = tickets,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TicketsScreen() {
+internal fun TicketsScreen(tickets: List<Ticket>) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var tabItems =
         listOf(
