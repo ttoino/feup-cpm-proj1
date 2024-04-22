@@ -29,6 +29,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import kotlinx.coroutines.delay
@@ -36,6 +40,7 @@ import pt.up.fe.cpm.tiktek.cafeteria.navigation.PurchasedProductsGraph
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Destination<PurchasedProductsGraph>(
     start = true,
     visibility = CodeGenVisibility.INTERNAL,
@@ -50,6 +55,35 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
         while (true) {
             currentDateAndTime = sdf.format(Date())
             delay(1000) // Update every second
+        }
+    }
+
+    val cameraPermissionState =
+        rememberPermissionState(
+            android.Manifest.permission.CAMERA,
+        )
+
+    if (cameraPermissionState.status.isGranted) {
+        Text("Camera permission Granted")
+        Log.d("MainScreen", "Camera permission granted")
+    } else {
+        Column {
+            val textToShow =
+                if (cameraPermissionState.status.shouldShowRationale) {
+                    // If the user has denied the permission but the rationale can be shown,
+                    // then gently explain why the app requires this permission
+                    "The camera is important for this app. Please grant the permission."
+                } else {
+                    // If it's the first time the user lands on this feature, or the user
+                    // doesn't want to be asked again for this permission, explain that the
+                    // permission is required
+                    "Camera permission required for this feature to be available. " +
+                        "Please grant the permission"
+                }
+            Text(textToShow)
+            Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                Text("Request permission")
+            }
         }
     }
 
@@ -98,7 +132,8 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
             )
             Button(
                 onClick = {
-                    checkCameraPermission(context)
+                    // checkCameraPermission(context)
+                    cameraPermissionState.launchPermissionRequest()
                     Log.d("MainScreen", "Button clicked")
                 },
             ) {
@@ -115,3 +150,53 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
         }
     }
 }
+/*
+var scannedQRCodeResult by mutableStateOf("")
+
+val barCodeLauncher =
+    registerForActivityResult(ScanContract()) {
+            result ->
+        if (result.contents == null) {
+            Toast.makeText(this@MainActivity, "Cancelled", Toast.LENGTH_SHORT).show()
+        } else {
+            scannedQRCodeResult = result.contents
+            Log.d("MainActivity", "Scanned result: ${result.contents}")
+
+            // redirect to PurchasedProductsPage
+        }
+    }
+
+fun showCamera() {
+    val options = ScanOptions()
+    options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+    options.setPrompt("Scan your cart QR code")
+    options.setCameraId(0)
+    options.setBeepEnabled(false)
+    options.setOrientationLocked(false)
+
+    barCodeLauncher.launch((options))
+}
+
+private val requestPermissionLauncher =
+    registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+            isGranted ->
+        if (isGranted) {
+            showCamera()
+        }
+    }
+
+private fun checkCameraPermission(context: Context) {
+    if (ContextCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.CAMERA,
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+        showCamera()
+    } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
+        Toast.makeText(this@MainActivity, "Camera required", Toast.LENGTH_SHORT).show()
+    } else {
+        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+    }
+}*/

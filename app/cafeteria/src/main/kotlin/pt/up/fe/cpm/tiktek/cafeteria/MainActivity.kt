@@ -43,8 +43,6 @@ class MainActivity : ScreenActivity() {
 
     var scannedQRCodeResult by mutableStateOf("")
 
-    // private val navigator: DestinationsNavigator = DestinationsNavigatorImpl() // não funciona
-
     val barCodeLauncher =
         registerForActivityResult(ScanContract()) {
                 result ->
@@ -53,6 +51,8 @@ class MainActivity : ScreenActivity() {
             } else {
                 scannedQRCodeResult = result.contents
                 Log.d("MainActivity", "Scanned result: ${result.contents}")
+
+                // redirect to PurchasedProductsPage
             }
         }
 
