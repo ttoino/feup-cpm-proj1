@@ -20,6 +20,8 @@ class RoomCafeteriaDataSource
         override fun getCafeteriaItems(): Flow<List<CafeteriaItem>> =
             database.cafeteriaItem.getAll().map { it.map { it.toCafeteriaItem() } }
 
+        override fun getCafeteriaItem(id: String): Flow<CafeteriaItem> = database.cafeteriaItem.getById(id).map { it.toCafeteriaItem() }
+
         override suspend fun insert(items: List<CafeteriaItem>) = database.cafeteriaItem.insertAll(items.map { it.toEntity() })
     }
 
@@ -27,6 +29,9 @@ class RoomCafeteriaDataSource
 internal interface CafeteriaItemDao {
     @Query("SELECT * FROM cafeteria_items")
     fun getAll(): Flow<List<CafeteriaItemEntity>>
+
+    @Query("SELECT * FROM cafeteria_items WHERE id = :id")
+    fun getById(id: String): Flow<CafeteriaItemEntity>
 
     @Upsert
     suspend fun insertAll(items: List<CafeteriaItemEntity>)

@@ -11,20 +11,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -61,6 +57,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import pt.up.fe.cpm.tiktek.core.model.Event
+import pt.up.fe.cpm.tiktek.core.ui.Quantity
 import pt.up.fe.cpm.tiktek.core.ui.relativeOffset
 import pt.up.fe.cpm.tiktek.core.ui.snackbar
 import pt.up.fe.cpm.tiktek.feature.events.navigation.EventsGraph
@@ -262,40 +259,12 @@ fun EventDialogContent(
         },
         text = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(stringResource(R.string.purchase_tickets_amount_info, event.name))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 16.dp),
-                ) {
-                    IconButton(
-                        onClick = onRemove,
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Remove,
-                            contentDescription = stringResource(R.string.remove_ticket_action),
-                        )
-                    }
-                    InputChip(
-                        onClick = { },
-                        label = { Text(uiState.ticketAmount.toString()) },
-                        selected = true,
-                    )
 
-                    IconButton(
-                        onClick = onAdd,
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.add_ticket_action),
-                        )
-                    }
-                }
+                Quantity(uiState.ticketAmount, onRemove, onAdd)
             }
         },
         onDismissRequest = onBack,
