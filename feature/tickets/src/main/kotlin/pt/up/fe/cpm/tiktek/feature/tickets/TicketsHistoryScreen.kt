@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.TheaterComedy
@@ -25,11 +23,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -39,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,6 +52,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toLocalDateTime
 import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
+import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
@@ -72,6 +68,7 @@ internal fun TicketsHistoryRoute(
     TicketsHistoryScreen(
         tickets = tickets,
         navigator,
+        onBack = { navigator.navigateUp() },
     )
 }
 
@@ -80,6 +77,7 @@ internal fun TicketsHistoryRoute(
 internal fun TicketsHistoryScreen(
     tickets: List<TicketWithEvent>,
     navigator: DestinationsNavigator,
+    onBack: () -> Unit,
 ) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var tabItems =
@@ -98,110 +96,63 @@ internal fun TicketsHistoryScreen(
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
     }
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                scrollBehavior = scrollBehavior,
-                title = {
-                    Text(
-                        text = "Histórico de compras",
-                    )
-                },
-            )
-        },
+    AppBarLayout(
+        title = "Histórico de compras",
+        onBack = onBack,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(16.dp),
     ) {
         Column(
             modifier =
                 Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxSize(),
         ) {
+            TabRow(selectedTabIndex = selectedTabIndex) {
+                tabItems.forEachIndexed { index, item ->
+                    Tab(
+                        selected = index == selectedTabIndex,
+                        onClick = {
+                            selectedTabIndex = index
+                        },
+                        text = {
+                            Text(text = item.title)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector =
+                                    if (index == selectedTabIndex) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.unselectedIcon
+                                    },
+                                contentDescription = item.title,
+                            )
+                        },
+                    )
+                }
+            }
+        }
+        if (selectedTabIndex == 0) {
             Column(
                 modifier =
                     Modifier
-                        .fillMaxSize(),
+                        .padding(vertical = 16.dp),
             ) {
-                TabRow(selectedTabIndex = selectedTabIndex) {
-                    tabItems.forEachIndexed { index, item ->
-                        Tab(
-                            selected = index == selectedTabIndex,
-                            onClick = {
-                                selectedTabIndex = index
-                            },
-                            text = {
-                                Text(text = item.title)
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector =
-                                        if (index == selectedTabIndex) {
-                                            item.selectedIcon
-                                        } else {
-                                            item.unselectedIcon
-                                        },
-                                    contentDescription = item.title,
-                                )
-                            },
+                for (ticket in tickets) {
+                    if (ticket.event.date.atTime(ticket.event.endTime).compareTo(
+                            Clock.System.now().toLocalDateTime(
+                                TimeZone.UTC,
+                            ),
+                        ) < 0
+                    ) {
+                        EventTicket(
+                            eventImageLink = ticket.event.imageUrl,
+                            eventName = ticket.event.name,
+                            ticketSeat = ticket.seat,
+                            eventDate = ticket.event.date,
                         )
                     }
                 }
-            }
-            if (selectedTabIndex == 0) {
-                Column(
-                    modifier =
-                        Modifier
-                            .padding(vertical = 16.dp),
-                ) {
-                    for (ticket in tickets) {
-                        if (ticket.event.date.atTime(ticket.event.endTime).compareTo(
-                                Clock.System.now().toLocalDateTime(
-                                    TimeZone.UTC,
-                                ),
-                            ) < 0
-                        ) {
-                            EventTicket(
-                                eventImageLink = ticket.event.imageUrl,
-                                eventName = ticket.event.name,
-                                ticketSeat = ticket.seat,
-                                eventDate = ticket.event.date,
-                            )
-                        }
-                    }
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 50.dp),
-                    ) {
-                        Button(
-                            onClick = { navigator.navigateUp()q },
-                            modifier =
-                                Modifier.align(
-                                    Alignment.Center,
-                                ),
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.History,
-                                contentDescription = "Ver bilhetes ativos",
-                                modifier = Modifier.size(18.dp),
-                            )
-                            Spacer(
-                                modifier = Modifier.width(8.dp),
-                            )
-                            Text(text = "Ver bilhetes ativos")
-                        }
-                    }
-                }
-            } else if (selectedTabIndex == 1) {
-                Column(
-                    modifier =
-                        Modifier
-                            .padding(vertical = 16.dp),
-                ) {
-                    // TODO TICKETS DE CAFETERIA
-                }
-
                 Box(
                     modifier =
                         Modifier
@@ -209,7 +160,7 @@ internal fun TicketsHistoryScreen(
                             .padding(vertical = 50.dp),
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navigator.navigateUp() },
                         modifier =
                             Modifier.align(
                                 Alignment.Center,
@@ -217,14 +168,47 @@ internal fun TicketsHistoryScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.History,
-                            contentDescription = "Ver pedidos ativos",
+                            contentDescription = "Ver bilhetes ativos",
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(
                             modifier = Modifier.width(8.dp),
                         )
-                        Text(text = "Ver pedidos ativosf")
+                        Text(text = "Ver bilhetes ativos")
                     }
+                }
+            }
+        } else if (selectedTabIndex == 1) {
+            Column(
+                modifier =
+                    Modifier
+                        .padding(vertical = 16.dp),
+            ) {
+                // TODO TICKETS DE CAFETERIA
+            }
+
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 50.dp),
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier =
+                        Modifier.align(
+                            Alignment.Center,
+                        ),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.History,
+                        contentDescription = "Ver pedidos ativos",
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(
+                        modifier = Modifier.width(8.dp),
+                    )
+                    Text(text = "Ver pedidos ativos")
                 }
             }
         }
