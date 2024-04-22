@@ -46,9 +46,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import kotlinx.datetime.LocalDate
+import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
 import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
 
@@ -57,15 +62,21 @@ import pt.up.fe.cpm.tiktek.feature.tickets.navigation.TicketsGraph
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-internal fun TicketsRoute() {
-    // TODO: Get data
-
-    TicketsScreen()
+internal fun TicketsRoute(
+/*
+    navigator: DestinationsNavigator,
+*/
+    viewModel: TicketsViewModel = hiltViewModel(),
+) {
+    val tickets by viewModel.tickets.collectAsStateWithLifecycle()
+    TicketsScreen(
+        tickets = tickets,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TicketsScreen() {
+internal fun TicketsScreen(tickets: List<TicketWithEvent>) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var tabItems =
         listOf(
@@ -138,18 +149,14 @@ internal fun TicketsScreen() {
                         Modifier
                             .padding(vertical = 16.dp),
                 ) {
-                    EventTicket(
-                        eventImageLink =
-                            "https://cdn-images.rtp.pt/icm/noticias/images/70/" +
-                                "702cd1ace0f478720fcc814e78366ef4?w=860&q=90&rect=0,0,1024,561",
-                        eventName = "Hamilton Infantil",
-                    )
-                    EventTicket(
-                        eventImageLink =
-                            "https://images-na.ssl-images-amazon.com/images/S/" +
-                                "compressed.photo.goodreads.com/books/1379865124i/11347141.jpg",
-                        eventName = "O pequeno mundo de Teresa",
-                    )
+                    for (ticket in tickets) {
+                        EventTicket(
+                            eventImageLink = ticket.event.imageUrl,
+                            eventName = ticket.event.name,
+                            ticketSeat = ticket.seat,
+                            eventDate = ticket.event.date,
+                        )
+                    }
                     Box(
                         modifier =
                             Modifier
@@ -181,10 +188,7 @@ internal fun TicketsScreen() {
                         Modifier
                             .padding(vertical = 16.dp),
                 ) {
-                    EventTicket(
-                        eventImageLink = "https://i.pinimg.com/564x/c9/c3/3a/c9c33a1344689e3dff43e51dddb572ce.jpg",
-                        eventName = "Café",
-                    )
+                    // TODO TICKETS DE CAFETERIA
                 }
 
                 Box(
@@ -226,6 +230,8 @@ data class TabItem(
 private fun EventTicket(
     eventImageLink: String,
     eventName: String,
+    ticketSeat: String,
+    eventDate: LocalDate,
 ) {
     Card(
         border =
@@ -260,7 +266,7 @@ private fun EventTicket(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "Por usar\nVálido até [data]",
+                    text = "Seat $ticketSeat \nVálido até $eventDate",
                     fontSize = 15.sp,
                     color = TikTekTheme.extendedColorScheme.success,
                 )

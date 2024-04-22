@@ -99,6 +99,12 @@ private interface TikTekApi {
         @Header("Authorization") authorization: String,
     ): NetworkResult<List<Ticket>>
 
+    @GET("tickets/{id}")
+    suspend fun getTicket(
+        @Header("Authorization") authorization: String,
+        @Path("id") eventId: String,
+    ): NetworkResult<Ticket>
+
     // Vouchers
     @GET("vouchers")
     suspend fun getVouchers(
@@ -223,6 +229,11 @@ class RetrofitNetworkDataSource
 
         // Tickets
         override suspend fun getTickets(token: String): NetworkResult<List<Ticket>> = api.getTickets(token.auth)
+
+        override suspend fun getTicket(
+            token: String,
+            ticketId: String,
+        ): NetworkResult<Ticket> = api.getTicket(token.auth, ticketId)
 
         // Vouchers
         override suspend fun getVouchers(token: String): NetworkResult<List<Voucher>> = api.getVouchers(token.auth)
