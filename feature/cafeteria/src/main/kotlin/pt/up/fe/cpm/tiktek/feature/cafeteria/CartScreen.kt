@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -13,13 +12,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +44,7 @@ internal fun CartRoute(
     viewModel: CartViewModel = hiltViewModel(),
 ) {
     val cart by viewModel.cart.collectAsStateWithLifecycle()
+    val biometricResult by viewModel.biometricResult.collectAsStateWithLifecycle(initialValue = null)
 
     CartScreen(
         cart = cart,
@@ -62,62 +59,6 @@ internal fun CartRoute(
 
 val promptManager by lazy {
     BiometricPrompt(this)
-}
-
-@Composable
-override fun onCreateAuthPrompt(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContent {
-        BiometricAuthTheme {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background,
-            ) {
-                val biometricResult by promptManager.promptResults.collectAsState(
-                    initial = null,
-                )
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    vertficalArrangement = Arrangement.Center,
-                    horizontalALignment = Alignment.CenterHorizontally,
-                ) {
-                    Button(onClick = {
-                        promptManager.showBiometricPrompt(
-                            title = "Sample Prompt",
-                            description = "DESCRIÇAO",
-                        )
-                    }) {
-                        Text(text = "AUTHENTICATE")
-                    }
-                    biometricResult?.let { result ->
-                        Text(
-                            text =
-                                when (result) {
-                                    is BiometricPrompt.BiometricResult.AuthenticationError -> {
-                                        result.error
-                                    }
-                                    BiometricPrompt.BiometricResult.AuthenticationFailed -> {
-                                        "Authentication Failed"
-                                    }
-                                    BiometricPrompt.BiometricResult.AuthenticationNotSet -> {
-                                        "Authentication not set"
-                                    }
-                                    BiometricPrompt.BiometricResult.AuthenticationSuccess -> {
-                                        "Authentication success"
-                                    }
-                                    BiometricPrompt.BiometricResult.FeatureUnavailable -> {
-                                        "Feature Unavailable"
-                                    }
-                                    BiometricPrompt.BiometricResult.HardwareUnavailable -> {
-                                        "Hardware Unavailable"
-                                    }
-                                },
-                        )
-                    }
-                }
-            } 
-        } 
-    }
 }
 
 @Composable
@@ -332,3 +273,29 @@ fun CafeteriaBuyDialogContent(
         },
     )
 }
+/*
+
+biometricResult?.let { result ->
+    Text(
+        text =
+        when (result) {
+            is BiometricPrompt.BiometricResult.AuthenticationError -> {
+                result.error
+            }
+            BiometricPrompt.BiometricResult.AuthenticationFailed -> {
+                "Authentication Failed"
+            }
+            BiometricPrompt.BiometricResult.AuthenticationNotSet -> {
+                "Authentication not set"
+            }
+            BiometricPrompt.BiometricResult.AuthenticationSuccess -> {
+                "Authentication success"
+            }
+            BiometricPrompt.BiometricResult.FeatureUnavailable -> {
+                "Feature Unavailable"
+            }
+            BiometricPrompt.BiometricResult.HardwareUnavailable -> {
+                "Hardware Unavailable"
+            }
+        },
+*/

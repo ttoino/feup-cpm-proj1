@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.feature.cafeteria
 
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,8 @@ class CartViewModel
         private val cartRepository: CartRepository,
         private val cafeteriaRepository: CafeteriaRepository,
     ) : ViewModel() {
+        val biometricResult = promptManager.promptResults
+
         val cart =
             combine(
                 cartRepository.getCart(),
@@ -47,4 +50,11 @@ class CartViewModel
             viewModelScope.launch {
                 cartRepository.removeItem(itemId)
             }
+
+        fun bioAuth()  {
+            promptManager.showBiometricPrompt(
+                title = "Sample Prompt",
+                description = "DESCRIÇAO",
+            )
+        }
     }
