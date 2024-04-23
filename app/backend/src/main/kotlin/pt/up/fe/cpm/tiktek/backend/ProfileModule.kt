@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.backend.profile
+package pt.up.fe.cpm.tiktek.backend
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.http.HttpStatusCode
