@@ -34,14 +34,14 @@ class VouchersViewModel
                             VoucherWithModels.Discount(
                                 voucher.id,
                                 voucher.discount,
-                                voucher.userEmail,
+                                voucher.userId,
                                 voucher.orderId,
                             )
                         is Voucher.Free ->
                             VoucherWithModels.Free(
                                 voucher.id,
                                 cafeteriaItems.first { item -> item.id == voucher.itemId },
-                                voucher.userEmail,
+                                voucher.userId,
                                 voucher.orderId,
                             )
                     } to cart.vouchers.contains(voucher.id)

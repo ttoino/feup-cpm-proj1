@@ -10,6 +10,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import pt.up.fe.cpm.tiktek.backend.RequestViolationException
 import pt.up.fe.cpm.tiktek.backend.di.database
+import pt.up.fe.cpm.tiktek.backend.uuid
 import pt.up.fe.cpm.tiktek.core.model.PartialRegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
@@ -27,6 +28,7 @@ fun Route.registerRoute() {
 
         val user =
             UserWithPassword(
+                id = uuid(),
                 name = request.name,
                 nif = request.nif,
                 birthdate = request.birthdate,
@@ -40,7 +42,7 @@ fun Route.registerRoute() {
 
         val createdUser = application.database.user.create(user)
 
-        call.respondWithToken(createdUser.email)
+        call.respondWithToken(createdUser.id)
     }
 
     post("/partial-register") {

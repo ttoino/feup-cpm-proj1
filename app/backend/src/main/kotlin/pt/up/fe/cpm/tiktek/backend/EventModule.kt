@@ -11,9 +11,10 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.datetime.Clock
-import pt.up.fe.cpm.tiktek.backend.auth.userEmail
+import pt.up.fe.cpm.tiktek.backend.auth.userId
 import pt.up.fe.cpm.tiktek.backend.di.database
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
+import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.Voucher
 
@@ -42,34 +43,42 @@ fun Application.eventModule() {
 
                 val seat = application.database.ticket.getLastSeatByEventId(id)?.toIntOrNull() ?: 0
 
-                application.database.ticket.createAll(
-                    List(body.ticketAmount) {
-                        Ticket(uuid(), id, call.userEmail, (seat + it + 1).toString(), Clock.System.now())
-                    },
-                )
+                val tickets =
+                    application.database.ticket.createAll(
+                        List(body.ticketAmount) {
+                            Ticket(uuid(), id, call.userId, (seat + it + 1).toString(), Clock.System.now(), null)
+                        },
+                    )
 
                 // Add discount voucher for each 200 eur
                 val total = event.price * body.ticketAmount
                 val discountVouchers = total / 200_00
-                application.database.voucher.createAll(
-                    List(discountVouchers) {
-                        Voucher.Discount(uuid(), 5, call.userEmail, null)
-                    },
-                )
+                val vouchers =
+                    application.database.voucher.createAll(
+                        List(discountVouchers) {
+                            Voucher.Discount(uuid(), 5, call.userId, null)
+                        },
+                    ).toMutableList()
 
                 // Add free voucher for each ticket
-                application.database.voucher.createAll(
-                    List(body.ticketAmount) {
-                        Voucher.Free(
-                            uuid(),
-                            application.database.cafeteriaItem.getRandom().id,
-                            call.userEmail,
-                            null,
-                        )
-                    },
-                )
+                vouchers +=
+                    application.database.voucher.createAll(
+                        List(body.ticketAmount) {
+                            Voucher.Free(
+                                uuid(),
+                                application.database.cafeteriaItem.getRandom().id,
+                                call.userId,
+                                null,
+                            )
+                        },
+                    )
 
-                call.respond(HttpStatusCode.OK)
+                call.respond(
+                    BuyTicketResponse(
+                        tickets = tickets,
+                        vouchers = vouchers,
+                    ),
+                )
             }
         }
     }

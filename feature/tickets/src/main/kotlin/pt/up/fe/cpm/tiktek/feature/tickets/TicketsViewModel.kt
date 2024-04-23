@@ -28,9 +28,10 @@ class TicketsViewModel
                     TicketWithEvent(
                         ticket.id,
                         events.first { it.id == ticket.eventId },
-                        ticket.userEmail,
+                        ticket.userId,
                         ticket.seat,
                         ticket.purchaseDate,
+                        ticket.useDate,
                     )
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

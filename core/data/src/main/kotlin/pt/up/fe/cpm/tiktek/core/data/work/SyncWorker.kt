@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
@@ -43,6 +44,8 @@ class SyncWorker
                     Result.success()
                 }
             }
+
+        override suspend fun getForegroundInfo(): ForegroundInfo = applicationContext.syncForegroundInfo()
 
         companion object {
             fun create() =

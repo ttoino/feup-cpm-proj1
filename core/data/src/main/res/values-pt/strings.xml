@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="background_notification_channel">Plano de fundo</string>
+    <string name="sync_notification_title">A atualizar dados</string>
+    <string name="delete_notification_title">A apagar dados</string>
+</resources>

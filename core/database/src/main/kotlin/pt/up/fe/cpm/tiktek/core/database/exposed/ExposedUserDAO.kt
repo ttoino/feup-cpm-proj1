@@ -18,9 +18,19 @@ class ExposedUserDAO
     constructor(
         private val db: ExposedDatabaseConnection,
     ) : UserDAO {
+        override suspend fun existsById(id: String): Boolean =
+            db.query {
+                !Users.selectAll().where { Users.id eq id }.empty()
+            }
+
         override suspend fun existsByEmail(email: String): Boolean =
             db.query {
                 !Users.selectAll().where { Users.email eq email }.empty()
+            }
+
+        override suspend fun getById(id: String): UserWithPassword? =
+            db.query {
+                Users.selectAll().where { Users.id eq id }.map { it.toUserWithPassword() }.firstOrNull()
             }
 
         override suspend fun getByEmail(email: String): UserWithPassword? =
@@ -52,6 +62,7 @@ class ExposedUserDAO
 
 private fun ResultRow.toUserWithPassword() =
     UserWithPassword(
+        id = this[Users.id],
         name = this[Users.name],
         nif = this[Users.nif],
         birthdate = this[Users.birthdate],
@@ -65,6 +76,7 @@ private fun ResultRow.toUserWithPassword() =
 
 private fun UpdateBuilder<*>.fromUserWithPassword(user: UserWithPassword) =
     apply {
+        this[Users.id] = user.id
         this[Users.name] = user.name
         this[Users.nif] = user.nif
         this[Users.birthdate] = user.birthdate
@@ -77,15 +89,16 @@ private fun UpdateBuilder<*>.fromUserWithPassword(user: UserWithPassword) =
     }
 
 internal object Users : Table() {
-    val name = varchar("name", 255)
-    val nif = char("nif", 9)
+    val id = char("id", UUID_LENGTH)
+    val name = varchar("name", STANDARD_LENGTH)
+    val nif = char("nif", NIF_LENGTH)
     val birthdate = date("birthdate")
-    val email = varchar("email", 255)
-    val nameCc = varchar("name_cc", 255)
-    val numberCc = char("number_cc", 16)
-    val expirationDateCc = char("expiration_date_cc", 5)
-    val cvvCc = char("cvv_cc", 3)
-    val password = varchar("password", 255)
+    val email = varchar("email", STANDARD_LENGTH).uniqueIndex()
+    val nameCc = varchar("name_cc", STANDARD_LENGTH)
+    val numberCc = char("number_cc", NUMBER_CC_LENGTH)
+    val expirationDateCc = char("expiration_date_cc", EXPIRATION_DATA_CC_LENGTH)
+    val cvvCc = char("cvv_cc", CVV_CC_LENGTH)
+    val password = char("password", PASSWORD_HASH_LENGTH)
 
-    override val primaryKey = PrimaryKey(email)
+    override val primaryKey = PrimaryKey(id)
 }

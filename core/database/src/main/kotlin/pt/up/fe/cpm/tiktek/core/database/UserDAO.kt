@@ -3,7 +3,11 @@ package pt.up.fe.cpm.tiktek.core.database
 import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
 
 interface UserDAO {
+    suspend fun existsById(id: String): Boolean
+
     suspend fun existsByEmail(email: String): Boolean
+
+    suspend fun getById(id: String): UserWithPassword?
 
     suspend fun getByEmail(email: String): UserWithPassword?
 

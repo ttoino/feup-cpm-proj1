@@ -14,6 +14,7 @@ import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.validation.SuspendableValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.Violation
 import pt.up.fe.cpm.tiktek.core.model.validation.accessors.email
+import pt.up.fe.cpm.tiktek.core.model.validation.buyTicketRequestValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.loginRequestValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.otherwise
 import pt.up.fe.cpm.tiktek.core.model.validation.partialRegisterRequestValidator
@@ -24,7 +25,7 @@ import dev.nesk.akkurate.ValidationResult as AkkurateResult
 private val Application.serverEmailValidator get() =
     SuspendableValidator<String> {
         constrain {
-            !database.user.existsByEmail(it)
+            !database.user.existsById(it)
         } otherwise Violation.EMAIL_ALREADY_EXISTS
     }
 
@@ -46,6 +47,7 @@ fun Application.validationModule() {
         validator(serverRegisterRequestValidator)
         validator(serverPartialRegisterRequestValidator)
         validator(userValidator)
+        validator(buyTicketRequestValidator)
     }
 }
 

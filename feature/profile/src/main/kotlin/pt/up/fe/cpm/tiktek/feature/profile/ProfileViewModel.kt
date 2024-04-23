@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
@@ -23,7 +25,6 @@ import pt.up.fe.cpm.tiktek.core.model.validation.expirationDateCcValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.nameValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.nifValidator
 import pt.up.fe.cpm.tiktek.core.model.validation.numberCcValidator
-import pt.up.fe.cpm.tiktek.core.model.validation.passwordValidator
 import javax.inject.Inject
 
 data class ProfileUiState(
@@ -37,9 +38,16 @@ class ProfileViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
+        val user =
+            userRepository.getUser().stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                null,
+            )
+
         init {
             viewModelScope.launch {
-                userRepository.getUser().collect {
+                user.collect {
                     if (it == null) return@collect
 
                     name.update(it.name)
@@ -59,7 +67,6 @@ class ProfileViewModel
             private set
 
         val successPersonal = MutableStateFlow(false)
-        val successPassword = MutableStateFlow(false)
         val successCreditCard = MutableStateFlow(false)
 
         // Personal information
@@ -67,28 +74,26 @@ class ProfileViewModel
         val nif = FormFieldUseCase("", nifValidator) { it.filter { it.isDigit() }.take(9) }
         val birthdate = FormFieldUseCase(null, birthdateValidator)
         val email = FormFieldUseCase("", emailValidator)
-        val password = FormFieldUseCase("", passwordValidator)
 
-        val canSavePersonalInformation
+        val canUpdatePersonalInformation
             get() =
                 name.state.valid &&
                     nif.state.valid &&
                     birthdate.state.valid &&
                     email.state.valid
 
-        suspend fun updatePersonalInformation() =
+        fun updatePersonalInformation() =
             viewModelScope.launch {
-                if (!canSavePersonalInformation) return@launch
+                if (!canUpdatePersonalInformation) return@launch
 
                 uiState = uiState.copy(isLoading = true, errorMessage = null)
 
                 val result =
-                    userRepository.editPersonalInfo(
+                    userRepository.updatePersonalInformation(
                         name.state.value,
                         nif.state.value,
                         birthdate.state.value!!,
                         email.state.value,
-                        password.state.value,
                     )
 
                 when (result) {
@@ -97,7 +102,6 @@ class ProfileViewModel
                         uiState =
                             uiState.copy(errorMessage = NetworkErrorUseCase())
                     }
-
                     is NetworkResult.Error -> {
                         when (val error = result.error) {
                             is ErrorResponse.Unknown ->
@@ -115,57 +119,6 @@ class ProfileViewModel
                                         "nif" -> nif.updateError(ViolationUseCase(v))
                                         "birthdate" -> birthdate.updateError(ViolationUseCase(v))
                                         "email" -> email.updateError(ViolationUseCase(v))
-                                        "password" -> password.updateError(ViolationUseCase(v))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                uiState = uiState.copy(isLoading = false)
-            }
-
-        // Password
-        val oldPassword = FormFieldUseCase("", passwordValidator)
-        val newPassword = FormFieldUseCase("", passwordValidator)
-        val new2Password = FormFieldUseCase("", passwordValidator)
-
-        val canUpdatePassword get() =
-            oldPassword.state.valid &&
-                newPassword.state.valid && (newPassword == new2Password)
-
-        fun updatePassword() =
-            viewModelScope.launch {
-                if (!canUpdatePassword) return@launch
-
-                uiState = uiState.copy(isLoading = true, errorMessage = null)
-
-                val result =
-                    userRepository.editPassword(
-                        password.state.value,
-                    )
-
-                when (result) {
-                    is NetworkResult.Success -> successCreditCard.value = true
-                    is NetworkResult.Failure -> {
-                        uiState =
-                            uiState.copy(errorMessage = NetworkErrorUseCase())
-                    }
-
-                    is NetworkResult.Error -> {
-                        when (val error = result.error) {
-                            is ErrorResponse.Unknown ->
-                                uiState =
-                                    uiState.copy(errorMessage = UnknownErrorUseCase())
-
-                            is ErrorResponse.GeneralViolation ->
-                                uiState =
-                                    uiState.copy(errorMessage = ViolationUseCase(error.violation))
-
-                            is ErrorResponse.FieldValidation -> {
-                                error.violations.forEach { (k, v) ->
-                                    when (k) {
-                                        "password" -> password.updateError(ViolationUseCase(v))
                                     }
                                 }
                             }
@@ -195,12 +148,11 @@ class ProfileViewModel
                 uiState = uiState.copy(isLoading = true, errorMessage = null)
 
                 val result =
-                    userRepository.editCreditCard(
+                    userRepository.updatePaymentInformation(
                         nameCc.state.value,
                         numberCc.state.value,
                         expirationDateCc.state.value,
                         cvcCc.state.value,
-                        password.state.value,
                     )
 
                 when (result) {
@@ -227,7 +179,6 @@ class ProfileViewModel
                                         "numberCc" -> numberCc.updateError(ViolationUseCase(v))
                                         "expirationDateCc" -> expirationDateCc.updateError(ViolationUseCase(v))
                                         "cvcCc" -> cvcCc.updateError(ViolationUseCase(v))
-                                        "password" -> password.updateError(ViolationUseCase(v))
                                     }
                                 }
                             }

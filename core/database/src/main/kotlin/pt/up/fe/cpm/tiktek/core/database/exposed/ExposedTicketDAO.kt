@@ -18,9 +18,9 @@ import javax.inject.Inject
 class ExposedTicketDAO
     @Inject
     constructor(private val db: ExposedDatabaseConnection) : TicketDAO {
-        override suspend fun getAllByUser(userEmail: String): List<Ticket> =
+        override suspend fun getAllByUser(userId: String): List<Ticket> =
             db.query {
-                Tickets.selectAll().where { Tickets.user eq userEmail }.map {
+                Tickets.selectAll().where { Tickets.user eq userId }.map {
                     it.toTicket()
                 }
             }
@@ -73,25 +73,28 @@ private fun ResultRow.toTicket() =
     Ticket(
         id = this[Tickets.id],
         eventId = this[Tickets.event],
-        userEmail = this[Tickets.user],
+        userId = this[Tickets.user],
         seat = this[Tickets.seat],
         purchaseDate = this[Tickets.purchaseDate],
+        useDate = this[Tickets.useDate],
     )
 
 private fun UpdateBuilder<*>.fromTicket(ticket: Ticket) {
     this[Tickets.id] = ticket.id
     this[Tickets.event] = ticket.eventId
-    this[Tickets.user] = ticket.userEmail
+    this[Tickets.user] = ticket.userId
     this[Tickets.seat] = ticket.seat
     this[Tickets.purchaseDate] = ticket.purchaseDate
+    this[Tickets.useDate] = ticket.useDate
 }
 
 internal object Tickets : Table() {
-    val id = varchar("id", 128)
+    val id = char("id", UUID_LENGTH)
     val event = reference("event", Events.id)
-    val user = reference("user", Users.email)
-    val seat = varchar("seat", 50)
+    val user = reference("user", Users.id)
+    val seat = varchar("seat", SHORT_LENGTH)
     val purchaseDate = timestamp("purchase_date")
+    val useDate = timestamp("use_date").nullable()
 
     override val primaryKey = PrimaryKey(id)
 

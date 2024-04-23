@@ -16,9 +16,9 @@ import javax.inject.Inject
 class ExposedVoucherDAO
     @Inject
     constructor(private val db: ExposedDatabaseConnection) : VoucherDAO {
-        override suspend fun getAllByUser(userEmail: String): List<Voucher> =
+        override suspend fun getAllByUser(userId: String): List<Voucher> =
             db.query {
-                Vouchers.selectAll().where { Vouchers.user eq userEmail }.map { it.toVoucher() }
+                Vouchers.selectAll().where { Vouchers.user eq userId }.map { it.toVoucher() }
             }
 
         override suspend fun getById(id: String): Voucher? =
@@ -61,14 +61,14 @@ private fun ResultRow.toVoucher(): Voucher =
         Voucher.Discount(
             id = this[Vouchers.id],
             discount = it,
-            userEmail = this[Vouchers.user],
+            userId = this[Vouchers.user],
             orderId = this[Vouchers.order],
         )
     } ?: this[Vouchers.item]?.let {
         Voucher.Free(
             id = this[Vouchers.id],
             itemId = it,
-            userEmail = this[Vouchers.user],
+            userId = this[Vouchers.user],
             orderId = this[Vouchers.order],
         )
     } ?: throw IllegalStateException("Voucher has neither discount nor item")
@@ -76,7 +76,7 @@ private fun ResultRow.toVoucher(): Voucher =
 private fun UpdateBuilder<*>.fromVoucher(voucher: Voucher) =
     apply {
         this[Vouchers.id] = voucher.id
-        this[Vouchers.user] = voucher.userEmail
+        this[Vouchers.user] = voucher.userId
         this[Vouchers.order] = voucher.orderId
 
         when (voucher) {
@@ -92,10 +92,10 @@ private fun UpdateBuilder<*>.fromVoucher(voucher: Voucher) =
     }
 
 internal object Vouchers : Table() {
-    val id = varchar("id", 128)
+    val id = char("id", UUID_LENGTH)
     val discount = integer("discount").nullable()
     val item = reference("item", CafeteriaItems.id).nullable()
-    val user = reference("user", Users.email)
+    val user = reference("user", Users.id)
     val order = reference("order", Orders.id).nullable()
 
     override val primaryKey = PrimaryKey(id)

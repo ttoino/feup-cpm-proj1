@@ -9,6 +9,7 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.work.Deletable
 import pt.up.fe.cpm.tiktek.core.data.work.Syncable
+import pt.up.fe.cpm.tiktek.core.data.work.enqueueDelete
 import pt.up.fe.cpm.tiktek.core.data.work.enqueueSync
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalUserDataSource
@@ -98,16 +99,15 @@ class LocalFirstUserRepository
         ): NetworkResult<Unit> = networkDataSource.partialRegister(name, nif, birthdate, email)
 
         override suspend fun logout() {
-            WorkManager.getInstance(context).cancelAllWork()
+            WorkManager.getInstance(context).enqueueDelete()
             authenticationTokenDataSource.setToken(null)
         }
 
-        override suspend fun editPersonalInfo(
+        override suspend fun updatePersonalInformation(
             name: String,
             nif: String,
             birthdate: LocalDate,
             email: String,
-            password: String,
         ): NetworkResult<Unit> {
             val token = getToken().first() ?: return NetworkResult.Failure
             val user = getUser().first() ?: return NetworkResult.Failure
@@ -115,6 +115,7 @@ class LocalFirstUserRepository
             val result =
                 networkDataSource.updateProfile(
                     token,
+                    id = user.id,
                     name,
                     nif,
                     birthdate,
@@ -123,7 +124,6 @@ class LocalFirstUserRepository
                     numberCc = user.numberCc,
                     expirationDateCc = user.expirationDateCc,
                     cvvCc = user.cvvCc,
-                    password,
                 )
 
             result.getOrNull()?.let {
@@ -133,37 +133,11 @@ class LocalFirstUserRepository
             return result.map { }
         }
 
-        override suspend fun editPassword(password: String): NetworkResult<Unit> {
-            val token = getToken().first() ?: return NetworkResult.Failure
-            val user = getUser().first() ?: return NetworkResult.Failure
-
-            val result =
-                networkDataSource.updateProfile(
-                    token,
-                    name = user.name,
-                    nif = user.nif,
-                    birthdate = user.birthdate,
-                    email = user.email,
-                    nameCc = user.nameCc,
-                    numberCc = user.numberCc,
-                    expirationDateCc = user.expirationDateCc,
-                    cvvCc = user.cvvCc,
-                    password,
-                )
-
-            result.getOrNull()?.let {
-                localDataSource.update(it)
-            }
-
-            return result.map {}
-        }
-
-        override suspend fun editCreditCard(
+        override suspend fun updatePaymentInformation(
             nameCc: String,
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
-            password: String,
         ): NetworkResult<Unit> {
             val token = getToken().first() ?: return NetworkResult.Failure
             val user = getUser().first() ?: return NetworkResult.Failure
@@ -171,6 +145,7 @@ class LocalFirstUserRepository
             val result =
                 networkDataSource.updateProfile(
                     token,
+                    id = user.id,
                     name = user.name,
                     nif = user.nif,
                     birthdate = user.birthdate,
@@ -179,14 +154,12 @@ class LocalFirstUserRepository
                     numberCc,
                     expirationDateCc,
                     cvvCc,
-                    password,
                 )
 
             result.getOrNull()?.let {
                 localDataSource.update(it)
             }
 
-            return result.map {
-            }
+            return result.map {}
         }
     }

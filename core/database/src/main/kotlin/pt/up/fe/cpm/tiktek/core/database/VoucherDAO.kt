@@ -3,7 +3,7 @@ package pt.up.fe.cpm.tiktek.core.database
 import pt.up.fe.cpm.tiktek.core.model.Voucher
 
 interface VoucherDAO {
-    suspend fun getAllByUser(userEmail: String): List<Voucher>
+    suspend fun getAllByUser(userId: String): List<Voucher>
 
     suspend fun getById(id: String): Voucher?
 

@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
+import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
@@ -15,7 +16,6 @@ import pt.up.fe.cpm.tiktek.core.model.PartialRegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.User
-import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
 import pt.up.fe.cpm.tiktek.core.model.Voucher
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
 import retrofit2.Retrofit
@@ -68,7 +68,7 @@ private interface TikTekApi {
         @Header("Authorization") authorization: String,
         @Path("id") eventId: String,
         @Body body: BuyTicketRequest,
-    ): NetworkResult<Unit>
+    ): NetworkResult<BuyTicketResponse>
 
     // Orders
     @GET("orders")
@@ -85,7 +85,7 @@ private interface TikTekApi {
     @PUT("profile")
     suspend fun updateProfile(
         @Header("Authorization") authorization: String,
-        @Body body: UserWithPassword,
+        @Body body: User,
     ): NetworkResult<User>
 
     @DELETE("profile")
@@ -190,7 +190,7 @@ class RetrofitNetworkDataSource
             token: String,
             eventId: String,
             ticketAmount: Int,
-        ): NetworkResult<Unit> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
+        ): NetworkResult<BuyTicketResponse> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
 
         // Orders
         override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)
@@ -200,6 +200,7 @@ class RetrofitNetworkDataSource
 
         override suspend fun updateProfile(
             token: String,
+            id: String,
             name: String,
             nif: String,
             birthdate: LocalDate,
@@ -208,11 +209,11 @@ class RetrofitNetworkDataSource
             numberCc: String,
             expirationDateCc: String,
             cvvCc: String,
-            password: String,
         ): NetworkResult<User> =
             api.updateProfile(
                 token.auth,
-                UserWithPassword(
+                User(
+                    id,
                     name,
                     nif,
                     birthdate,
@@ -221,7 +222,6 @@ class RetrofitNetworkDataSource
                     numberCc,
                     expirationDateCc,
                     cvvCc,
-                    password,
                 ),
             )
 
