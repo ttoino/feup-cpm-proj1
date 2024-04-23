@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,8 @@ internal fun CafeteriaScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16.dp / 9.dp),
+                    .aspectRatio(16.dp / 9.dp)
+                    .clip(MaterialTheme.shapes.medium),
             contentScale = ContentScale.Fit,
         )
 

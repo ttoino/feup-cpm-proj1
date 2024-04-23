@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.backend.ticket
+package pt.up.fe.cpm.tiktek.backend
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.application

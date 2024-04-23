@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.backend.event
+package pt.up.fe.cpm.tiktek.backend
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -13,7 +13,6 @@ import io.ktor.server.routing.routing
 import kotlinx.datetime.Clock
 import pt.up.fe.cpm.tiktek.backend.auth.userEmail
 import pt.up.fe.cpm.tiktek.backend.di.database
-import pt.up.fe.cpm.tiktek.backend.uuid
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.Voucher

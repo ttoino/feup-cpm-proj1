@@ -9,13 +9,7 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.backend.auth.authModule
-import pt.up.fe.cpm.tiktek.backend.cafeteria.cafeteriaModule
-import pt.up.fe.cpm.tiktek.backend.event.eventModule
-import pt.up.fe.cpm.tiktek.backend.order.orderModule
-import pt.up.fe.cpm.tiktek.backend.profile.profileModule
 import pt.up.fe.cpm.tiktek.backend.seed.seedDatabase
-import pt.up.fe.cpm.tiktek.backend.ticket.ticketModule
-import pt.up.fe.cpm.tiktek.backend.voucher.voucherModule
 
 @OptIn(ExperimentalSerializationApi::class)
 fun main() {

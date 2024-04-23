@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.CartRepository
+import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
 import javax.inject.Inject
 
@@ -18,19 +19,23 @@ class CartViewModel
     constructor(
         private val cartRepository: CartRepository,
         private val cafeteriaRepository: CafeteriaRepository,
+        private val vouchersRepository: VouchersRepository,
     ) : ViewModel() {
         val cart =
             combine(
                 cartRepository.getCart(),
                 cafeteriaRepository.getCafeteriaItems(),
-            ) { cart, cafeteriaItems ->
+                vouchersRepository.getVouchers(),
+            ) { cart, cafeteriaItems, vouchers ->
                 CartWithModels(
                     items =
                         cart.items.mapKeys { (id, _) ->
                             cafeteriaItems.first { it.id == id }
                         },
-                    // TODO
-                    vouchers = emptySet(),
+                    vouchers =
+                        cart.vouchers.mapTo(mutableSetOf()) { id ->
+                            vouchers.first { it.id == id }
+                        },
                 )
             }.stateIn(
                 viewModelScope,

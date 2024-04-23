@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
 import pt.up.fe.cpm.tiktek.core.network.retrofit.ResultCallAdapterFactory
@@ -15,11 +16,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal abstract class NetworkModule {
     companion object {
+        @OptIn(ExperimentalSerializationApi::class)
         @Provides
         @Singleton
         fun providesJson() =
             Json {
+                prettyPrint = false
+                isLenient = true
                 ignoreUnknownKeys = true
+                explicitNulls = false
             }
 
         @Provides

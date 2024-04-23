@@ -1,6 +1,10 @@
 package pt.up.fe.cpm.tiktek
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -15,12 +19,12 @@ import com.ramcosta.composedestinations.generated.auth.navgraphs.AuthNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.AuthenticatedNavGraph
 import com.ramcosta.composedestinations.generated.navgraphs.TikTekNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
-import com.ramcosta.composedestinations.navigation.popUpTo
+import com.ramcosta.composedestinations.utils.isDirectionOnBackStack
+import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import pt.up.fe.cpm.tiktek.core.ui.SnackbarProvider
 import pt.up.fe.cpm.tiktek.core.ui.snackbar
 import pt.up.fe.cpm.tiktek.navigation.BottomBar
 import pt.up.fe.cpm.tiktek.navigation.TikTekNavHost
-import pt.up.fe.cpm.tiktek.navigation.currentScreen
 import pt.up.fe.cpm.tiktek.navigation.navigateToScreen
 import timber.log.Timber
 
@@ -30,11 +34,20 @@ fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val loggedIn by viewModel.loggedIn.collectAsStateWithLifecycle()
 
     LaunchedEffect(loggedIn) {
-        Timber.d("Logged in changed")
-        navController.navigate(if (loggedIn ?: return@LaunchedEffect) AuthenticatedNavGraph else AuthNavGraph) {
-            popUpTo(TikTekNavGraph) {
-                inclusive = true
+        try {
+            val route = if (loggedIn ?: return@LaunchedEffect) AuthenticatedNavGraph else AuthNavGraph
+
+            if (!navController.isDirectionOnBackStack(route)) {
+                navController.navigate(route) {
+                    popUpTo(TikTekNavGraph.route) {
+                        inclusive = true
+                    }
+                }
             }
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e)
         }
     }
 
@@ -43,9 +56,13 @@ fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     SnackbarProvider {
         Scaffold(
             bottomBar = {
-                if (loggedIn == true) {
+                AnimatedVisibility(
+                    visible = loggedIn == true,
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it },
+                ) {
                     BottomBar(
-                        navController.currentScreen,
+                        { navController.isRouteOnBackStackAsState(it.graph) },
                         navController::navigateToScreen,
                     )
                 }
@@ -57,7 +74,7 @@ fun MainActivity.MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         ) {
             TikTekNavHost(
                 navController = navController,
-                modifier = Modifier.padding(it),
+                modifier = Modifier.padding(it).fillMaxSize(),
             )
         }
     }

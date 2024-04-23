@@ -1,12 +1,17 @@
 package pt.up.fe.cpm.tiktek.core.data.localfirst
 
+import android.content.Context
+import androidx.work.WorkManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
+import pt.up.fe.cpm.tiktek.core.data.work.Deletable
+import pt.up.fe.cpm.tiktek.core.data.work.Syncable
+import pt.up.fe.cpm.tiktek.core.data.work.enqueueSync
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
-import pt.up.fe.cpm.tiktek.core.local.LocalUsersDataSource
+import pt.up.fe.cpm.tiktek.core.local.LocalUserDataSource
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
@@ -15,25 +20,33 @@ import javax.inject.Inject
 class LocalFirstUserRepository
     @Inject
     constructor(
+        @ApplicationContext private val context: Context,
         private val networkDataSource: NetworkDataSource,
-        private val localDataSource: LocalUsersDataSource,
+        private val localDataSource: LocalUserDataSource,
         private val authenticationTokenDataSource: LocalAuthenticationTokenDataSource,
-    ) : UserRepository {
+    ) : UserRepository, Syncable, Deletable {
+        override suspend fun sync(): NetworkResult<Unit> {
+            val token = getToken().first() ?: return NetworkResult.Failure
+
+            val result = networkDataSource.getProfile(token)
+
+            result.getOrNull()?.let {
+                localDataSource.update(it)
+            }
+
+            return result.map {}
+        }
+
+        override suspend fun delete() {
+            localDataSource.delete()
+        }
+
         override fun getToken(): Flow<String?> = authenticationTokenDataSource.token()
 
-        override fun getUser(): Flow<User?> =
-            authenticationTokenDataSource.token().map {
-                it?.let {
-                    localDataSource.getUserByToken(it)
-                        ?: networkDataSource.getProfile(it).getOrNull()
-                }
-            }
+        override fun getUser(): Flow<User?> = localDataSource.user()
 
         private suspend fun handleToken(token: String) {
-            networkDataSource.getProfile(token).getOrNull()?.let {
-                localDataSource.insert(token, it)
-            }
-            // This needs to be last, because it causes a navigation that kills this repository instance
+            WorkManager.getInstance(context).enqueueSync()
             authenticationTokenDataSource.setToken(token)
         }
 
@@ -85,8 +98,8 @@ class LocalFirstUserRepository
         ): NetworkResult<Unit> = networkDataSource.partialRegister(name, nif, birthdate, email)
 
         override suspend fun logout() {
+            WorkManager.getInstance(context).cancelAllWork()
             authenticationTokenDataSource.setToken(null)
-            localDataSource.deleteAll()
         }
 
         override suspend fun editPersonalInfo(
@@ -114,11 +127,10 @@ class LocalFirstUserRepository
                 )
 
             result.getOrNull()?.let {
-                localDataSource.insert(token, it)
+                localDataSource.update(it)
             }
 
-            return result.map {
-            }
+            return result.map { }
         }
 
         override suspend fun editPassword(password: String): NetworkResult<Unit> {
@@ -140,11 +152,10 @@ class LocalFirstUserRepository
                 )
 
             result.getOrNull()?.let {
-                localDataSource.insert(token, it)
+                localDataSource.update(it)
             }
 
-            return result.map {
-            }
+            return result.map {}
         }
 
         override suspend fun editCreditCard(
@@ -172,7 +183,7 @@ class LocalFirstUserRepository
                 )
 
             result.getOrNull()?.let {
-                localDataSource.insert(token, it)
+                localDataSource.update(it)
             }
 
             return result.map {

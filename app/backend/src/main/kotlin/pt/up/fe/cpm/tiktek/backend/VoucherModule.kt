@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.backend.order
+package pt.up.fe.cpm.tiktek.backend
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
@@ -10,21 +10,21 @@ import io.ktor.server.routing.routing
 import pt.up.fe.cpm.tiktek.backend.auth.userEmail
 import pt.up.fe.cpm.tiktek.backend.di.database
 
-fun Application.orderModule() {
+fun Application.voucherModule() {
     routing {
         authenticate {
-            get("/orders") {
-                val orders = application.database.order.getAllByUser(call.userEmail)
+            get("/vouchers") {
+                val vouchers = application.database.voucher.getAllByUser(call.userEmail)
 
-                call.respond(orders)
+                call.respond(vouchers)
             }
 
-            get("/order/{id}") {
+            get("/voucher/{id}") {
                 val id = call.parameters["id"] ?: return@get call.respond(400)
 
-                val order = application.database.order.getById(id) ?: return@get call.respond(404)
+                val voucher = application.database.voucher.getById(id) ?: return@get call.respond(404)
 
-                call.respond(order)
+                call.respond(voucher)
             }
         }
     }

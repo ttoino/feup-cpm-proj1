@@ -136,45 +136,43 @@ class ProfileViewModel
 
         fun updatePassword() =
             viewModelScope.launch {
-                viewModelScope.launch {
-                    if (!canUpdatePassword) return@launch
+                if (!canUpdatePassword) return@launch
 
-                    uiState = uiState.copy(isLoading = true, errorMessage = null)
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-                    val result =
-                        userRepository.editPassword(
-                            password.state.value,
-                        )
+                val result =
+                    userRepository.editPassword(
+                        password.state.value,
+                    )
 
-                    when (result) {
-                        is NetworkResult.Success -> successCreditCard.value = true
-                        is NetworkResult.Failure -> {
-                            uiState =
-                                uiState.copy(errorMessage = NetworkErrorUseCase())
-                        }
+                when (result) {
+                    is NetworkResult.Success -> successCreditCard.value = true
+                    is NetworkResult.Failure -> {
+                        uiState =
+                            uiState.copy(errorMessage = NetworkErrorUseCase())
+                    }
 
-                        is NetworkResult.Error -> {
-                            when (val error = result.error) {
-                                is ErrorResponse.Unknown ->
-                                    uiState =
-                                        uiState.copy(errorMessage = UnknownErrorUseCase())
+                    is NetworkResult.Error -> {
+                        when (val error = result.error) {
+                            is ErrorResponse.Unknown ->
+                                uiState =
+                                    uiState.copy(errorMessage = UnknownErrorUseCase())
 
-                                is ErrorResponse.GeneralViolation ->
-                                    uiState =
-                                        uiState.copy(errorMessage = ViolationUseCase(error.violation))
+                            is ErrorResponse.GeneralViolation ->
+                                uiState =
+                                    uiState.copy(errorMessage = ViolationUseCase(error.violation))
 
-                                is ErrorResponse.FieldValidation -> {
-                                    error.violations.forEach { (k, v) ->
-                                        when (k) {
-                                            "password" -> password.updateError(ViolationUseCase(v))
-                                        }
+                            is ErrorResponse.FieldValidation -> {
+                                error.violations.forEach { (k, v) ->
+                                    when (k) {
+                                        "password" -> password.updateError(ViolationUseCase(v))
                                     }
                                 }
                             }
                         }
                     }
-                    uiState = uiState.copy(isLoading = false)
                 }
+                uiState = uiState.copy(isLoading = false)
             }
 
         // Payment information

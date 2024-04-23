@@ -41,7 +41,7 @@ fun Quantity(
         InputChip(
             onClick = { },
             label = { Text(amount.toString()) },
-            selected = true,
+            selected = false,
         )
 
         IconButton(
