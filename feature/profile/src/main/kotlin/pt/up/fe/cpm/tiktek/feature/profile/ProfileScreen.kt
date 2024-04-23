@@ -143,7 +143,7 @@ internal fun ProfileScreen(
     ) {
         Box {
             AsyncImage(
-                model = "https://i.pinimg.com/736x/b1/cb/57/b1cb57bcb04183c6aaf293210a6ba8a8.jpg",
+                model = "https://i.pinimg.com/564x/e3/c9/a9/e3c9a9e5934d65cff25d83a2ac655230.jpg",
                 contentDescription = stringResource(R.string.profile_picture),
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Crop,
