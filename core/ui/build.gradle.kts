@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.convention.android.library)
     alias(libs.plugins.convention.compose)
+    alias(libs.plugins.convention.hilt)
 }
 
 android {
