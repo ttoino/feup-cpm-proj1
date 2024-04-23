@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
@@ -34,6 +35,8 @@ class DeleteWorker
 
                 Result.success()
             }
+
+        override suspend fun getForegroundInfo(): ForegroundInfo = applicationContext.deleteForegroundInfo()
 
         companion object {
             fun create() =
