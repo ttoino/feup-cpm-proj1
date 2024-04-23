@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -12,10 +13,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
 import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
+import pt.up.fe.cpm.tiktek.core.ui.BiometricPrompt
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 import pt.up.fe.cpm.tiktek.feature.cafeteria.ui.CartItemCard
 
@@ -53,6 +58,66 @@ internal fun CartRoute(
         onCancel = { navigator.navigateUp() },
         onBuy = { navigator.navigate(CafeteriaBuyDialogDestination()) },
     )
+}
+
+val promptManager by lazy {
+    BiometricPrompt(this)
+}
+
+@Composable
+override fun onCreateAuthPrompt(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+        BiometricAuthTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background,
+            ) {
+                val biometricResult by promptManager.promptResults.collectAsState(
+                    initial = null,
+                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    vertficalArrangement = Arrangement.Center,
+                    horizontalALignment = Alignment.CenterHorizontally,
+                ) {
+                    Button(onClick = {
+                        promptManager.showBiometricPrompt(
+                            title = "Sample Prompt",
+                            description = "DESCRIÇAO",
+                        )
+                    }) {
+                        Text(text = "AUTHENTICATE")
+                    }
+                    biometricResult?.let { result ->
+                        Text(
+                            text =
+                                when (result) {
+                                    is BiometricPrompt.BiometricResult.AuthenticationError -> {
+                                        result.error
+                                    }
+                                    BiometricPrompt.BiometricResult.AuthenticationFailed -> {
+                                        "Authentication Failed"
+                                    }
+                                    BiometricPrompt.BiometricResult.AuthenticationNotSet -> {
+                                        "Authentication not set"
+                                    }
+                                    BiometricPrompt.BiometricResult.AuthenticationSuccess -> {
+                                        "Authentication success"
+                                    }
+                                    BiometricPrompt.BiometricResult.FeatureUnavailable -> {
+                                        "Feature Unavailable"
+                                    }
+                                    BiometricPrompt.BiometricResult.HardwareUnavailable -> {
+                                        "Hardware Unavailable"
+                                    }
+                                },
+                        )
+                    }
+                }
+            } 
+        } 
+    }
 }
 
 @Composable
