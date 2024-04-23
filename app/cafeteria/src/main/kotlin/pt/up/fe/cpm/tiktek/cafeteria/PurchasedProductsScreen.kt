@@ -17,9 +17,7 @@ import androidx.compose.material.icons.outlined.TaskAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,38 +36,57 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.annotation.parameters.DeepLink
 import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.json.JSONObject
-import pt.up.fe.cpm.tiktek.cafeteria.navigation.PurchasedProductsGraph
+import pt.up.fe.cpm.tiktek.cafeteria.navigation.CafeteriaTerminalGraph
 
-@Destination<PurchasedProductsGraph>(
+@Destination<CafeteriaTerminalGraph>(
     visibility = CodeGenVisibility.INTERNAL,
     deepLinks = [
         DeepLink(uriPattern = "tiktek://$FULL_ROUTE_PLACEHOLDER"),
     ],
     route = "purchasedProducts",
 )
-
 @Composable
 internal fun PurchasedProductsRoute(
-    navigator: DestinationsNavigator,
-    screenId: String,
-    qrCodeResult: String
+    /*screenId: String,
+    qrCodeResult: String,*/
 ) {
-    PurchasedProductsScreen(navigator, screenId, qrCodeResult)
+    // PurchasedProductsScreen(navigator, screenId, qrCodeResult)
+    PurchasedProductsScreen()
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PurchasedProductsScreen(
-    navigator: DestinationsNavigator,
-    screenId: String,
-    qrCodeResult: String
+    /*screenId: String,
+    qrCodeResult: String*/
 ) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val purchase = JSONObject(qrCodeResult)
+    val jsonString = """
+    {
+      "orderNumber": 123456,
+      "orderProducts": [
+        {
+          "cafetariaItem": "Coffee",
+          "quantity": 2,
+          "totalPrice": 200
+        },
+        {
+          "cafetariaItem": "Croissant",
+          "quantity": 1,
+          "totalPrice": 50
+        }
+      ],
+      "orderVouchers": [
+        {
+          "voucherName": "1 café grátis",
+          "voucherQuantity": 1
+        }
+      ]
+    }
+    """
 
+    val purchase = JSONObject(jsonString)
 
     val orderNumber = purchase.getInt("orderNumber")
     val orderProducts = purchase.getJSONArray("orderProducts")
@@ -88,9 +105,10 @@ fun PurchasedProductsScreen(
         },
     ) {
         LazyColumn(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(it)
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
@@ -128,9 +146,9 @@ fun PurchasedProductsScreen(
                 Button(
                     onClick = { /*TODO*/ },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.TaskAlt,
@@ -163,11 +181,11 @@ private fun PurchasedProduct(
                 containerColor = MaterialTheme.colorScheme.surface,
             ),
         modifier =
-        Modifier
-            .padding(5.dp)
-            .clickable(
-                onClick = { },
-            ),
+            Modifier
+                .padding(5.dp)
+                .clickable(
+                    onClick = { },
+                ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -203,11 +221,11 @@ private fun Voucher(
                 containerColor = MaterialTheme.colorScheme.surface,
             ),
         modifier =
-        Modifier
-            .padding(5.dp)
-            .clickable(
-                onClick = { },
-            ),
+            Modifier
+                .padding(5.dp)
+                .clickable(
+                    onClick = { },
+                ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
