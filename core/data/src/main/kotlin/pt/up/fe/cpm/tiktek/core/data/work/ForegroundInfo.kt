@@ -39,6 +39,7 @@ private fun Context.notification(
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 
     return NotificationCompat.Builder(this, BACKGROUND_NOTIFICATION_CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_notification)
         .setContentTitle(getString(name))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()
