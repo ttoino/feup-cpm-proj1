@@ -9,6 +9,7 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.work.Deletable
 import pt.up.fe.cpm.tiktek.core.data.work.Syncable
+import pt.up.fe.cpm.tiktek.core.data.work.enqueueDelete
 import pt.up.fe.cpm.tiktek.core.data.work.enqueueSync
 import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalUserDataSource
@@ -98,7 +99,7 @@ class LocalFirstUserRepository
         ): NetworkResult<Unit> = networkDataSource.partialRegister(name, nif, birthdate, email)
 
         override suspend fun logout() {
-            WorkManager.getInstance(context).cancelAllWork()
+            WorkManager.getInstance(context).enqueueDelete()
             authenticationTokenDataSource.setToken(null)
         }
 

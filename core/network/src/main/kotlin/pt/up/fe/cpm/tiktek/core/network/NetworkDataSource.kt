@@ -2,6 +2,7 @@ package pt.up.fe.cpm.tiktek.core.network
 
 import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
+import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
@@ -51,7 +52,7 @@ interface NetworkDataSource {
         token: String,
         eventId: String,
         ticketAmount: Int,
-    ): NetworkResult<Unit>
+    ): NetworkResult<BuyTicketResponse>
 
     // Orders
     suspend fun getOrders(token: String): NetworkResult<List<Order>>

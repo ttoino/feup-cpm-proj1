@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
+import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
@@ -67,7 +68,7 @@ private interface TikTekApi {
         @Header("Authorization") authorization: String,
         @Path("id") eventId: String,
         @Body body: BuyTicketRequest,
-    ): NetworkResult<Unit>
+    ): NetworkResult<BuyTicketResponse>
 
     // Orders
     @GET("orders")
@@ -189,7 +190,7 @@ class RetrofitNetworkDataSource
             token: String,
             eventId: String,
             ticketAmount: Int,
-        ): NetworkResult<Unit> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
+        ): NetworkResult<BuyTicketResponse> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
 
         // Orders
         override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)
