@@ -6,6 +6,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,13 @@ fun AddToCartDialog(
     viewModel: AddToCartViewModel = hiltViewModel(),
 ) {
     val item by viewModel.item.collectAsStateWithLifecycle()
+    val success by viewModel.success.collectAsStateWithLifecycle()
+
+    LaunchedEffect(success) {
+        if (success) {
+            navigator.navigateUp()
+        }
+    }
 
     item?.let {
         AddToCartDialogContent(
@@ -39,10 +47,7 @@ fun AddToCartDialog(
             uiState = viewModel.uiState,
             onRemove = viewModel::remove,
             onAdd = viewModel::add,
-            onAddToCart = {
-                viewModel.addToCart()
-//                navigator.navigateUp()
-            },
+            onAddToCart = { viewModel.addToCart() },
             onCancel = { navigator.navigateUp() },
         )
     }

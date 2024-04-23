@@ -13,6 +13,8 @@ import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.CartRepository
 import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
+import pt.up.fe.cpm.tiktek.core.model.Voucher
+import pt.up.fe.cpm.tiktek.core.model.VoucherWithModels
 import pt.up.fe.cpm.tiktek.core.ui.BiometricPrompt
 import javax.inject.Inject
 
@@ -40,7 +42,22 @@ class CartViewModel
                         },
                     vouchers =
                         cart.vouchers.mapTo(mutableSetOf()) { id ->
-                            vouchers.first { it.id == id }
+                            when (val voucher = vouchers.first { it.id == id }) {
+                                is Voucher.Free ->
+                                    VoucherWithModels.Free(
+                                        id = voucher.id,
+                                        item = cafeteriaItems.first { it.id == voucher.itemId },
+                                        userId = voucher.userId,
+                                        orderId = voucher.orderId,
+                                    )
+                                is Voucher.Discount ->
+                                    VoucherWithModels.Discount(
+                                        id = voucher.id,
+                                        discount = voucher.discount,
+                                        userId = voucher.userId,
+                                        orderId = voucher.orderId,
+                                    )
+                            }
                         },
                 )
             }.stateIn(
