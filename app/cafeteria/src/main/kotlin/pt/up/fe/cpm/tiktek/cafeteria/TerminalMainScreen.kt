@@ -39,18 +39,15 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.PurchasedProductsRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
-import pt.up.fe.cpm.tiktek.cafeteria.navigation.CafeteriaTerminalGraph
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Destination<CafeteriaTerminalGraph>(
-    start = true,
-    visibility = CodeGenVisibility.INTERNAL,
-)
+@Destination<RootGraph>(start = true)
 @Composable
 internal fun TerminalMainScreenRoute(navigator: DestinationsNavigator) {
     TerminalMainScreen(navigator)
@@ -80,7 +77,7 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
                 Log.d("MainActivity", "Scanned result: $result")
 
                 // redirect to PurchasedProductsPage
-                // navigator.navigate(PurchasedProductsDestination())
+                navigator.navigate(PurchasedProductsRouteDestination(scannedQRCodeResult))
             }
         }
 

@@ -33,34 +33,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import com.ramcosta.composedestinations.annotation.parameters.DeepLink
-import com.ramcosta.composedestinations.annotation.parameters.FULL_ROUTE_PLACEHOLDER
+import com.ramcosta.composedestinations.annotation.RootGraph
 import org.json.JSONObject
-import pt.up.fe.cpm.tiktek.cafeteria.navigation.CafeteriaTerminalGraph
 
-@Destination<CafeteriaTerminalGraph>(
-    visibility = CodeGenVisibility.INTERNAL,
-    deepLinks = [
-        DeepLink(uriPattern = "tiktek://$FULL_ROUTE_PLACEHOLDER"),
-    ],
-    route = "purchasedProducts",
-)
+@Destination<RootGraph>()
 @Composable
-internal fun PurchasedProductsRoute(
-    /*screenId: String,
-    qrCodeResult: String,*/
-) {
+internal fun PurchasedProductsRoute(qrCodeResult: String) {
     // PurchasedProductsScreen(navigator, screenId, qrCodeResult)
-    PurchasedProductsScreen()
+    PurchasedProductsScreen(qrCodeResult)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PurchasedProductsScreen(
-    /*screenId: String,
-    qrCodeResult: String*/
-) {
+fun PurchasedProductsScreen(qrCodeResult: String) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val jsonString = """
     {
