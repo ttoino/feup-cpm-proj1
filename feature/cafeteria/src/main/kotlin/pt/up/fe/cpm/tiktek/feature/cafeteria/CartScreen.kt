@@ -15,8 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
 import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
+import pt.up.fe.cpm.tiktek.core.ui.BiometricPrompt
+import pt.up.fe.cpm.tiktek.core.ui.getActivity
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 import pt.up.fe.cpm.tiktek.feature.cafeteria.ui.CartItemCard
 
@@ -42,7 +46,19 @@ internal fun CartRoute(
     navigator: DestinationsNavigator,
     viewModel: CartViewModel = hiltViewModel(),
 ) {
+    val activity = LocalContext.current.getActivity()
+
     val cart by viewModel.cart.collectAsStateWithLifecycle()
+    val biometricResult by viewModel.biometricResult.collectAsStateWithLifecycle(initialValue = null)
+
+    LaunchedEffect(biometricResult) {
+        when (biometricResult) {
+            BiometricPrompt.BiometricResult.AuthenticationSuccess -> {
+                navigator.navigate(CafeteriaBuyDialogDestination())
+            }
+            else -> Unit
+        }
+    }
 
     CartScreen(
         cart = cart,
@@ -51,7 +67,7 @@ internal fun CartRoute(
         onAdd = viewModel::addItem,
         onVouchers = { navigator.navigate(VouchersDestination()) },
         onCancel = { navigator.navigateUp() },
-        onBuy = { navigator.navigate(CafeteriaBuyDialogDestination()) },
+        onBuy = { viewModel.bioAuth(activity!!) },
     )
 }
 

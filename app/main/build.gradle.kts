@@ -14,6 +14,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.appcompat:appcompat:1.6.1")
+
     implementation(projects.feature.auth)
     implementation(projects.feature.cafeteria)
     implementation(projects.feature.events)
