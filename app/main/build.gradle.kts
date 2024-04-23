@@ -14,8 +14,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat-resources:1.6.1")
-    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     implementation(projects.feature.auth)
     implementation(projects.feature.cafeteria)
