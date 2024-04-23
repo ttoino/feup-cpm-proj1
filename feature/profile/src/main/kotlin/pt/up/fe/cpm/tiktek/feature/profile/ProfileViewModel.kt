@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
@@ -36,9 +38,16 @@ class ProfileViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
+        val user =
+            userRepository.getUser().stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                null,
+            )
+
         init {
             viewModelScope.launch {
-                userRepository.getUser().collect {
+                user.collect {
                     if (it == null) return@collect
 
                     name.update(it.name)
@@ -58,7 +67,6 @@ class ProfileViewModel
             private set
 
         val successPersonal = MutableStateFlow(false)
-        val successPassword = MutableStateFlow(false)
         val successCreditCard = MutableStateFlow(false)
 
         // Personal information
@@ -74,7 +82,7 @@ class ProfileViewModel
                     birthdate.state.valid &&
                     email.state.valid
 
-        suspend fun updatePersonalInformation() =
+        fun updatePersonalInformation() =
             viewModelScope.launch {
                 if (!canUpdatePersonalInformation) return@launch
 
