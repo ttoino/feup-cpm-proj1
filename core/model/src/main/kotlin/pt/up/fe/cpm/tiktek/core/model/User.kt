@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Validate
 @Serializable
 data class User(
+    val id: String,
     val name: String,
     val nif: String,
     val birthdate: LocalDate,
@@ -18,6 +19,7 @@ data class User(
 ) {
     fun withPassword(password: String) =
         UserWithPassword(
+            id = id,
             name = name,
             nif = nif,
             birthdate = birthdate,
@@ -33,6 +35,7 @@ data class User(
 @Validate
 @Serializable
 data class UserWithPassword(
+    val id: String,
     val name: String,
     val nif: String,
     val birthdate: LocalDate,
@@ -45,6 +48,7 @@ data class UserWithPassword(
 ) {
     fun withoutPassword() =
         User(
+            id = id,
             name = name,
             nif = nif,
             birthdate = birthdate,

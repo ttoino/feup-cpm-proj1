@@ -7,15 +7,17 @@ import kotlinx.serialization.Serializable
 data class Ticket(
     val id: String,
     val eventId: String,
-    val userEmail: String,
+    val userId: String,
     val seat: String,
     val purchaseDate: Instant,
+    val useDate: Instant?,
 )
 
 data class TicketWithEvent(
     val id: String,
     val event: Event,
-    val userEmail: String,
+    val userId: String,
     val seat: String,
     val purchaseDate: Instant,
+    val useDate: Instant?,
 )

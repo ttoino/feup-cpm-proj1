@@ -1,6 +1,5 @@
-package pt.up.fe.cpm.tiktek.backend.profile
+package pt.up.fe.cpm.tiktek.backend
 
-import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
@@ -13,11 +12,9 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import pt.up.fe.cpm.tiktek.backend.auth.user
-import pt.up.fe.cpm.tiktek.backend.auth.userEmail
+import pt.up.fe.cpm.tiktek.backend.auth.userId
 import pt.up.fe.cpm.tiktek.backend.di.database
-import pt.up.fe.cpm.tiktek.core.model.UserWithPassword
-
-val verifier: BCrypt.Verifyer = BCrypt.verifyer()
+import pt.up.fe.cpm.tiktek.core.model.User
 
 fun Application.profileModule() {
     routing {
@@ -30,24 +27,17 @@ fun Application.profileModule() {
 
             put("/profile") {
                 val currentUser = call.user() ?: return@put call.respond(HttpStatusCode.Forbidden)
-                val newUser = call.receive<UserWithPassword>()
+                val newUser = call.receive<User>()
 
-               /* if (!verifier.verify(
-                        newUser.password.toCharArray(),
-                        currentUser.password,
-                    ).verified
-                ) {
-                    throw RequestViolationException(newUser, Violation.LOGIN, HttpStatusCode.Forbidden)
-                }*/
+                if (newUser.id != currentUser.id) return@put call.respond(HttpStatusCode.Forbidden)
 
-                val updatedUser =
-                    application.database.user.update(newUser.copy(password = currentUser.password))
+                val updatedUser = application.database.user.update(newUser.withPassword(currentUser.password))
 
                 call.respond(updatedUser.withoutPassword())
             }
 
             delete("/profile") {
-                if (application.database.user.delete(call.userEmail)) {
+                if (application.database.user.delete(call.userId)) {
                     call.respond(HttpStatusCode.NoContent)
                 } else {
                     call.respond(HttpStatusCode.Forbidden)

@@ -14,6 +14,7 @@ import com.ramcosta.composedestinations.generated.tickets.navgraphs.TicketsNavGr
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
+import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import pt.up.fe.cpm.tiktek.core.ui.transition.ForwardBackwardTransition
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.authDependencies
 import pt.up.fe.cpm.tiktek.feature.events.navigation.eventsDependencies
@@ -36,15 +37,7 @@ fun TikTekNavHost(
 }
 
 fun NavController.navigateToScreen(screen: Screen) {
-    val route =
-        when (screen) {
-            Screen.EVENTS -> EventsNavGraph
-            Screen.TICKETS -> TicketsNavGraph
-            Screen.CAFETERIA -> CafeteriaNavGraph
-            Screen.PROFILE -> ProfileNavGraph
-        }
-
-    navigate(route) {
+    navigate(screen.graph) {
         popUpTo(AuthenticatedNavGraph) {
             saveState = true
             inclusive = true
@@ -53,16 +46,3 @@ fun NavController.navigateToScreen(screen: Screen) {
         restoreState = true
     }
 }
-
-val NavController.currentScreen: Screen?
-    @Composable get() {
-        val destination = currentDestinationAsState().value ?: return null
-
-        return when {
-            EventsNavGraph.destinations.contains(destination) -> Screen.EVENTS
-            TicketsNavGraph.destinations.contains(destination) -> Screen.TICKETS
-            CafeteriaNavGraph.destinations.contains(destination) -> Screen.CAFETERIA
-            ProfileNavGraph.destinations.contains(destination) -> Screen.PROFILE
-            else -> null
-        }
-    }

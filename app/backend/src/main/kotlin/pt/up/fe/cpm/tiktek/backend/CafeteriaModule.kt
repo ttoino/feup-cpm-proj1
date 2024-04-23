@@ -1,4 +1,4 @@
-package pt.up.fe.cpm.tiktek.backend.voucher
+package pt.up.fe.cpm.tiktek.backend
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
@@ -7,24 +7,23 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import pt.up.fe.cpm.tiktek.backend.auth.userEmail
 import pt.up.fe.cpm.tiktek.backend.di.database
 
-fun Application.voucherModule() {
+fun Application.cafeteriaModule() {
     routing {
         authenticate {
-            get("/vouchers") {
-                val vouchers = application.database.voucher.getAllByUser(call.userEmail)
+            get("/cafeteria") {
+                val cafeteria = application.database.cafeteriaItem.getAll()
 
-                call.respond(vouchers)
+                call.respond(cafeteria)
             }
 
-            get("/voucher/{id}") {
+            get("/cafeteria/{id}") {
                 val id = call.parameters["id"] ?: return@get call.respond(400)
 
-                val voucher = application.database.voucher.getById(id) ?: return@get call.respond(404)
+                val cafeteria = application.database.cafeteriaItem.getById(id) ?: return@get call.respond(404)
 
-                call.respond(voucher)
+                call.respond(cafeteria)
             }
         }
     }

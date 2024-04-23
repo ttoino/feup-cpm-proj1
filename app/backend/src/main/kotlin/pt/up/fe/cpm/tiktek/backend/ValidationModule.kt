@@ -24,7 +24,7 @@ import dev.nesk.akkurate.ValidationResult as AkkurateResult
 private val Application.serverEmailValidator get() =
     SuspendableValidator<String> {
         constrain {
-            !database.user.existsByEmail(it)
+            !database.user.existsById(it)
         } otherwise Violation.EMAIL_ALREADY_EXISTS
     }
 

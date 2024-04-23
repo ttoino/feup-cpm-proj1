@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 
-interface EventsRepository : Syncable {
+interface EventsRepository {
     fun getEvents(): Flow<List<Event>>
 
     fun getEvent(id: String): Flow<Event>

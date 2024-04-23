@@ -1,7 +1,9 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
-import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +35,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import kotlinx.coroutines.delay
@@ -46,10 +50,11 @@ import java.util.Date
     visibility = CodeGenVisibility.INTERNAL,
 )
 @Composable
-fun MainScreen(checkCameraPermission: (Context) -> Unit) {
+fun MainScreen() {
     val sdf = SimpleDateFormat("HH:mm")
     var currentDateAndTime by remember { mutableStateOf(sdf.format(Date())) }
     val context = LocalContext.current
+    var scannedQRCodeResult by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -58,34 +63,19 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
         }
     }
 
-    val cameraPermissionState =
-        rememberPermissionState(
-            android.Manifest.permission.CAMERA,
-        )
+    val barCodeLauncher =
+        rememberLauncherForActivityResult(ScanContract()) {
+                result ->
+            if (result.contents == null) {
+                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
+            } else {
+                scannedQRCodeResult = result.contents
+                Log.d("MainActivity", "Scanned result: $result")
 
-    if (cameraPermissionState.status.isGranted) {
-        Text("Camera permission Granted")
-        Log.d("MainScreen", "Camera permission granted")
-    } else {
-        Column {
-            val textToShow =
-                if (cameraPermissionState.status.shouldShowRationale) {
-                    // If the user has denied the permission but the rationale can be shown,
-                    // then gently explain why the app requires this permission
-                    "The camera is important for this app. Please grant the permission."
-                } else {
-                    // If it's the first time the user lands on this feature, or the user
-                    // doesn't want to be asked again for this permission, explain that the
-                    // permission is required
-                    "Camera permission required for this feature to be available. " +
-                        "Please grant the permission"
-                }
-            Text(textToShow)
-            Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                Text("Request permission")
+                // redirect to PurchasedProductsPage
+                // navigator.navigate(PurchasedProductsDestination())
             }
         }
-    }
 
     Scaffold {
         Column(
@@ -130,43 +120,61 @@ fun MainScreen(checkCameraPermission: (Context) -> Unit) {
             Spacer(
                 modifier = Modifier.height(150.dp),
             )
-            Button(
-                onClick = {
-                    // checkCameraPermission(context)
-                    cameraPermissionState.launchPermissionRequest()
-                    Log.d("MainScreen", "Button clicked")
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.QrCodeScanner,
-                    contentDescription = "Validar carrinho de compras",
-                    modifier = Modifier.size(18.dp),
-                )
-                Spacer(
-                    modifier = Modifier.width(8.dp),
-                )
-                Text(text = "Validar Carrinho")
+            getCameraPermission {
+                Button(
+                    onClick = {
+                        // checkCameraPermission(context)
+                        showCamera(barCodeLauncher)
+                        Log.d("MainScreen", "Button clicked")
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.QrCodeScanner,
+                        contentDescription = "Validar carrinho de compras",
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(
+                        modifier = Modifier.width(8.dp),
+                    )
+                    Text(text = "Validar Carrinho")
+                }
             }
         }
     }
 }
-/*
-var scannedQRCodeResult by mutableStateOf("")
 
-val barCodeLauncher =
-    registerForActivityResult(ScanContract()) {
-            result ->
-        if (result.contents == null) {
-            Toast.makeText(this@MainActivity, "Cancelled", Toast.LENGTH_SHORT).show()
-        } else {
-            scannedQRCodeResult = result.contents
-            Log.d("MainActivity", "Scanned result: ${result.contents}")
-
-            // redirect to PurchasedProductsPage
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun getCameraPermission(content: @Composable () -> Unit) {
+    val cameraPermissionState =
+        rememberPermissionState(
+            android.Manifest.permission.CAMERA,
+        )
+    if (cameraPermissionState.status.isGranted) {
+        content()
+    } else {
+        Column {
+            val textToShow =
+                if (cameraPermissionState.status.shouldShowRationale) {
+                    // If the user has denied the permission but the rationale can be shown,
+                    // then gently explain why the app requires this permission
+                    "The camera is important for this app. Please grant the permission."
+                } else {
+                    // If it's the first time the user lands on this feature, or the user
+                    // doesn't want to be asked again for this permission, explain that the
+                    // permission is required
+                    "Camera permission required for this feature to be available. " +
+                        "Please grant the permission"
+                }
+            Text(textToShow)
+            Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                Text("Request permission")
+            }
         }
     }
+}
 
-fun showCamera() {
+fun showCamera(barCodeLauncher: ActivityResultLauncher<ScanOptions>) {
     val options = ScanOptions()
     options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
     options.setPrompt("Scan your cart QR code")
@@ -174,29 +182,5 @@ fun showCamera() {
     options.setBeepEnabled(false)
     options.setOrientationLocked(false)
 
-    barCodeLauncher.launch((options))
+    barCodeLauncher.launch(options)
 }
-
-private val requestPermissionLauncher =
-    registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) {
-            isGranted ->
-        if (isGranted) {
-            showCamera()
-        }
-    }
-
-private fun checkCameraPermission(context: Context) {
-    if (ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.CAMERA,
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        showCamera()
-    } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
-        Toast.makeText(this@MainActivity, "Camera required", Toast.LENGTH_SHORT).show()
-    } else {
-        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-    }
-}*/

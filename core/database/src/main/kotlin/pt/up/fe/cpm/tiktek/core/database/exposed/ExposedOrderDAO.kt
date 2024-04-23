@@ -17,9 +17,9 @@ import javax.inject.Inject
 class ExposedOrderDAO
     @Inject
     constructor(private val db: ExposedDatabaseConnection) : OrderDAO {
-        override suspend fun getAllByUser(userEmail: String): List<Order> =
+        override suspend fun getAllByUser(userId: String): List<Order> =
             db.query {
-                Orders.selectAll().where { Orders.user eq userEmail }.map {
+                Orders.selectAll().where { Orders.user eq userId }.map {
                     it.toOrder(
                         OrderItems.selectAll().where { OrderItems.order eq it[Orders.id] }.map { item -> item.toOrderItem() },
                     )
@@ -68,7 +68,7 @@ class ExposedOrderDAO
 private fun ResultRow.toOrder(items: List<OrderItem>) =
     Order(
         id = this[Orders.id],
-        userEmail = this[Orders.user],
+        userId = this[Orders.user],
         items = items,
     )
 
@@ -81,7 +81,7 @@ private fun ResultRow.toOrderItem() =
 private fun UpdateBuilder<*>.fromOrder(order: Order) =
     apply {
         this[Orders.id] = order.id
-        this[Orders.user] = order.userEmail
+        this[Orders.user] = order.userId
     }
 
 private fun UpdateBuilder<*>.fromOrderItem(
@@ -94,8 +94,8 @@ private fun UpdateBuilder<*>.fromOrderItem(
 }
 
 internal object Orders : Table() {
-    val id = varchar("id", 128)
-    val user = reference("user", Users.email)
+    val id = char("id", UUID_LENGTH)
+    val user = reference("user", Users.id)
 
     override val primaryKey = PrimaryKey(id)
 }

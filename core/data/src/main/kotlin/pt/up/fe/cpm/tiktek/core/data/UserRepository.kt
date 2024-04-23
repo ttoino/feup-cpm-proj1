@@ -36,21 +36,17 @@ interface UserRepository {
 
     suspend fun logout()
 
-    suspend fun editPersonalInfo(
+    suspend fun updatePersonalInformation(
         name: String,
         nif: String,
         birthdate: LocalDate,
         email: String,
-        password: String,
     ): NetworkResult<Unit>
 
-    suspend fun editPassword(password: String): NetworkResult<Unit>
-
-    suspend fun editCreditCard(
+    suspend fun updatePaymentInformation(
         nameCc: String,
         numberCc: String,
         expirationDateCc: String,
         cvvCc: String,
-        password: String,
     ): NetworkResult<Unit>
 }

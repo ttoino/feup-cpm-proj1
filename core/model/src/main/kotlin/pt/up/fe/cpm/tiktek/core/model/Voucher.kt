@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Voucher {
     abstract val id: String
-    abstract val userEmail: String
+    abstract val userId: String
     abstract val orderId: String?
 
     @Serializable
@@ -14,7 +14,7 @@ sealed class Voucher {
     data class Discount(
         override val id: String,
         val discount: Int,
-        override val userEmail: String,
+        override val userId: String,
         override val orderId: String?,
     ) : Voucher()
 
@@ -23,7 +23,27 @@ sealed class Voucher {
     data class Free(
         override val id: String,
         val itemId: String,
-        override val userEmail: String,
+        override val userId: String,
         override val orderId: String?,
     ) : Voucher()
+}
+
+sealed class VoucherWithModels {
+    abstract val id: String
+    abstract val userId: String
+    abstract val orderId: String?
+
+    data class Discount(
+        override val id: String,
+        val discount: Int,
+        override val userId: String,
+        override val orderId: String?,
+    ) : VoucherWithModels()
+
+    data class Free(
+        override val id: String,
+        val item: CafeteriaItem,
+        override val userId: String,
+        override val orderId: String?,
+    ) : VoucherWithModels()
 }
