@@ -2,13 +2,18 @@ package pt.up.fe.cpm.tiktek.core.data.local
 
 import kotlinx.coroutines.flow.Flow
 import pt.up.fe.cpm.tiktek.core.data.CartRepository
+import pt.up.fe.cpm.tiktek.core.data.work.Deletable
 import pt.up.fe.cpm.tiktek.core.local.LocalCartDataSource
 import pt.up.fe.cpm.tiktek.core.model.Cart
 import javax.inject.Inject
 
 class LocalCartRepository
     @Inject
-    constructor(private val dataSource: LocalCartDataSource) : CartRepository {
+    constructor(private val dataSource: LocalCartDataSource) : CartRepository, Deletable {
+        override suspend fun delete() {
+            resetCart()
+        }
+
         override fun getCart(): Flow<Cart> = dataSource.cart()
 
         override suspend fun resetCart() = dataSource.reset()

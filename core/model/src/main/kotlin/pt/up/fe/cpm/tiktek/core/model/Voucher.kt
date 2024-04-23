@@ -27,3 +27,23 @@ sealed class Voucher {
         override val orderId: String?,
     ) : Voucher()
 }
+
+sealed class VoucherWithModels {
+    abstract val id: String
+    abstract val userEmail: String
+    abstract val orderId: String?
+
+    data class Discount(
+        override val id: String,
+        val discount: Int,
+        override val userEmail: String,
+        override val orderId: String?,
+    ) : VoucherWithModels()
+
+    data class Free(
+        override val id: String,
+        val item: CafeteriaItem,
+        override val userEmail: String,
+        override val orderId: String?,
+    ) : VoucherWithModels()
+}

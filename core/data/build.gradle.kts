@@ -12,5 +12,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.network)
 
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work)
     implementation(libs.kotlinx.datetime)
 }

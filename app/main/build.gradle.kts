@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.android.application)
+    alias(libs.plugins.convention.hilt)
 }
 
 android {
@@ -21,5 +22,9 @@ dependencies {
     implementation(projects.feature.tickets)
 
     implementation(projects.core.data)
+    implementation(projects.core.model)
     implementation(projects.core.ui)
+
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work)
 }

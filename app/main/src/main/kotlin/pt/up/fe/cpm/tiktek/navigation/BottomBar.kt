@@ -9,6 +9,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,12 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BottomBar(
-    currentScreen: Screen?,
+    isCurrentScreen: @Composable (Screen) -> State<Boolean>,
     navigateTo: (Screen) -> Unit,
 ) {
     NavigationBar {
         for (screen in Screen.entries) {
-            val selected = screen == currentScreen
+            val selected by isCurrentScreen(screen)
             NavigationBarItem(
                 selected = selected,
                 icon = {
@@ -52,5 +54,8 @@ private fun BottomBarPreview() {
         mutableStateOf(Screen.EVENTS)
     }
 
-    BottomBar(screen) { screen = it }
+    BottomBar(
+        isCurrentScreen = { derivedStateOf { it == screen } },
+        navigateTo = { screen = it },
+    )
 }

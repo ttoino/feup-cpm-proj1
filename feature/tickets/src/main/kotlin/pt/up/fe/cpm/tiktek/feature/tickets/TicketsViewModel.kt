@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.EventsRepository
 import pt.up.fe.cpm.tiktek.core.data.TicketsRepository
 import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
@@ -35,9 +34,4 @@ class TicketsViewModel
                     )
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
-        init {
-            viewModelScope.launch { ticketsRepository.sync() }
-            viewModelScope.launch { eventsRepository.sync() }
-        }
     }

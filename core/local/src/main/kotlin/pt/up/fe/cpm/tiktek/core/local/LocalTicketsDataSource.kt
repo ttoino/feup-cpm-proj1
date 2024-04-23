@@ -9,4 +9,6 @@ interface LocalTicketsDataSource {
     fun getTicket(id: String): Flow<Ticket>
 
     suspend fun insert(tickets: List<Ticket>)
+
+    suspend fun deleteTickets()
 }

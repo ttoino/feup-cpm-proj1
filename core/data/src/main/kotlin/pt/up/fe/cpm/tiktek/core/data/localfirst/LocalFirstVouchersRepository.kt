@@ -2,27 +2,27 @@ package pt.up.fe.cpm.tiktek.core.data.localfirst
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
+import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
+import pt.up.fe.cpm.tiktek.core.data.work.Deletable
 import pt.up.fe.cpm.tiktek.core.data.work.Syncable
-import pt.up.fe.cpm.tiktek.core.local.LocalCafeteriaDataSource
-import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
+import pt.up.fe.cpm.tiktek.core.local.LocalVouchersDataSource
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
+import pt.up.fe.cpm.tiktek.core.model.Voucher
 import pt.up.fe.cpm.tiktek.core.network.NetworkDataSource
 import javax.inject.Inject
 
-class LocalFirstCafeteriaRepository
+class LocalFirstVouchersRepository
     @Inject
     constructor(
         private val networkDataSource: NetworkDataSource,
-        private val localDataSource: LocalCafeteriaDataSource,
+        private val localDataSource: LocalVouchersDataSource,
         private val userRepository: UserRepository,
-    ) :
-    CafeteriaRepository, Syncable {
+    ) : VouchersRepository, Syncable, Deletable {
         override suspend fun sync(): NetworkResult<Unit> {
             val token = userRepository.getToken().first() ?: return NetworkResult.Failure
 
-            val result = networkDataSource.getCafeteriaItems(token)
+            val result = networkDataSource.getVouchers(token)
 
             result.getOrNull()?.let {
                 localDataSource.insert(it)
@@ -31,7 +31,9 @@ class LocalFirstCafeteriaRepository
             return result.map {}
         }
 
-        override fun getCafeteriaItems(): Flow<List<CafeteriaItem>> = localDataSource.getCafeteriaItems()
+        override suspend fun delete() {
+            localDataSource.deleteVouchers()
+        }
 
-        override fun getCafeteriaItem(id: String): Flow<CafeteriaItem> = localDataSource.getCafeteriaItem(id)
+        override fun getVouchers(): Flow<List<Voucher>> = localDataSource.getVouchers()
     }

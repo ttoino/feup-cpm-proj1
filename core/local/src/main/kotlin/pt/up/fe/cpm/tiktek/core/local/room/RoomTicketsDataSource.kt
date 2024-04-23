@@ -23,6 +23,8 @@ class RoomTicketsDataSource
         override fun getTicket(id: String): Flow<Ticket> = database.ticket.getById(id).map { it.toTicket() }
 
         override suspend fun insert(tickets: List<Ticket>) = database.ticket.insertAll(tickets.map { it.toEntity() })
+
+        override suspend fun deleteTickets() = database.ticket.deleteAll()
     }
 
 @Dao
