@@ -23,8 +23,8 @@ fun Application.jwtModule() {
             verifier(JWT.require(Algorithm.HMAC512(secret)).build())
 
             validate { credential ->
-                val email = credential.payload.getClaim("email").asString()
-                if (application.database.user.existsByEmail(email)) {
+                val id = credential.payload.getClaim("id").asString()
+                if (application.database.user.existsById(id)) {
                     JWTPrincipal(credential.payload)
                 } else {
                     null
@@ -34,14 +34,14 @@ fun Application.jwtModule() {
     }
 }
 
-suspend fun ApplicationCall.respondWithToken(email: String) {
-    respond(AuthResponse(JWT.create().withClaim("email", email).sign(Algorithm.HMAC512(secret))))
+suspend fun ApplicationCall.respondWithToken(id: String) {
+    respond(AuthResponse(JWT.create().withClaim("id", id).sign(Algorithm.HMAC512(secret))))
 }
 
-val ApplicationCall.userEmail
+val ApplicationCall.userId
     get() =
         authentication.principal<JWTPrincipal>()?.payload?.getClaim(
-            "email",
+            "id",
         )?.asString() ?: throw IllegalStateException("No user authenticated")
 
-suspend fun ApplicationCall.user() = application.database.user.getByEmail(userEmail)
+suspend fun ApplicationCall.user() = application.database.user.getById(userId)

@@ -89,16 +89,16 @@ private fun UpdateBuilder<*>.fromEvent(event: Event) =
     }
 
 internal object Events : Table() {
-    val id = varchar("id", 128)
-    val name = varchar("name", 255)
+    val id = varchar("id", STANDARD_LENGTH)
+    val name = varchar("name", STANDARD_LENGTH)
     val description = text("description")
     val date = date("date")
     val startTime = time("start_time")
     val endTime = time("end_time")
-    val location = varchar("location", 128)
-    val locationDetails = varchar("location_details", 128).nullable()
+    val location = varchar("location", STANDARD_LENGTH)
+    val locationDetails = varchar("location_details", STANDARD_LENGTH).nullable()
     val price = integer("price")
-    val imageUrl = varchar("image_url", 256)
+    val imageUrl = varchar("image_url", STANDARD_LENGTH)
 
     override val primaryKey = PrimaryKey(id)
 }

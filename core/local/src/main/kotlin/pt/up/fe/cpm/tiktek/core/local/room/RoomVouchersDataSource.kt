@@ -47,7 +47,7 @@ internal data class VoucherEntity(
     val id: String,
     val discount: Int?,
     val itemId: String?,
-    val userEmail: String,
+    val userId: String,
     val orderId: String?,
 )
 
@@ -56,7 +56,7 @@ internal fun Voucher.toEntity() =
         id = id,
         discount = (this as? Voucher.Discount)?.discount,
         itemId = (this as? Voucher.Free)?.itemId,
-        userEmail = userEmail,
+        userId = userId,
         orderId = orderId,
     )
 
@@ -65,14 +65,14 @@ internal fun VoucherEntity.toVoucher() =
         Voucher.Discount(
             id = id,
             discount = it,
-            userEmail = userEmail,
+            userId = userId,
             orderId = orderId,
         )
     } ?: itemId?.let {
         Voucher.Free(
             id = id,
             itemId = it,
-            userEmail = userEmail,
+            userId = userId,
             orderId = orderId,
         )
     } ?: throw IllegalArgumentException("Invalid voucher entity")

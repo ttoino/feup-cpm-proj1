@@ -72,15 +72,13 @@ internal fun TicketsHistoryRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TicketsHistoryScreen(
     tickets: List<TicketWithEvent>,
     navigator: DestinationsNavigator,
     onBack: () -> Unit,
 ) {
-    var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    var tabItems =
+    val tabItems =
         listOf(
             TabItem(
                 title = "Espetáculo",

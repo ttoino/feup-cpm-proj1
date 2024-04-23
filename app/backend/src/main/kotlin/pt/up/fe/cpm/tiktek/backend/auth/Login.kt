@@ -23,7 +23,7 @@ fun Route.loginRoute() {
                 ?: throw RequestViolationException(request, Violation.LOGIN, HttpStatusCode.Forbidden)
 
         if (verifier.verify(request.password.toCharArray(), user.password).verified) {
-            call.respondWithToken(request.email)
+            call.respondWithToken(user.id)
         } else {
             throw RequestViolationException(request, Violation.LOGIN, HttpStatusCode.Forbidden)
         }

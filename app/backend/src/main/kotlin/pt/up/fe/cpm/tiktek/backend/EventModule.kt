@@ -11,7 +11,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.datetime.Clock
-import pt.up.fe.cpm.tiktek.backend.auth.userEmail
+import pt.up.fe.cpm.tiktek.backend.auth.userId
 import pt.up.fe.cpm.tiktek.backend.di.database
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
@@ -44,7 +44,7 @@ fun Application.eventModule() {
 
                 application.database.ticket.createAll(
                     List(body.ticketAmount) {
-                        Ticket(uuid(), id, call.userEmail, (seat + it + 1).toString(), Clock.System.now())
+                        Ticket(uuid(), id, call.userId, (seat + it + 1).toString(), Clock.System.now(), null)
                     },
                 )
 
@@ -53,7 +53,7 @@ fun Application.eventModule() {
                 val discountVouchers = total / 200_00
                 application.database.voucher.createAll(
                     List(discountVouchers) {
-                        Voucher.Discount(uuid(), 5, call.userEmail, null)
+                        Voucher.Discount(uuid(), 5, call.userId, null)
                     },
                 )
 
@@ -63,7 +63,7 @@ fun Application.eventModule() {
                         Voucher.Free(
                             uuid(),
                             application.database.cafeteriaItem.getRandom().id,
-                            call.userEmail,
+                            call.userId,
                             null,
                         )
                     },

@@ -47,25 +47,28 @@ internal data class TicketEntity(
     @PrimaryKey
     val id: String,
     val eventId: String,
-    val userEmail: String,
+    val userId: String,
     val seat: String,
     val purchaseDate: Instant,
+    val useDate: Instant?,
 )
 
 internal fun Ticket.toEntity() =
     TicketEntity(
         id = id,
         eventId = eventId,
-        userEmail = userEmail,
+        userId = userId,
         seat = seat,
         purchaseDate = purchaseDate,
+        useDate = useDate,
     )
 
 internal fun TicketEntity.toTicket() =
     Ticket(
         id = id,
         eventId = eventId,
-        userEmail = userEmail,
+        userId = userId,
         seat = seat,
         purchaseDate = purchaseDate,
+        useDate = useDate,
     )

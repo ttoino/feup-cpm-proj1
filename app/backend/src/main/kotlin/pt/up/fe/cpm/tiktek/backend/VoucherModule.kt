@@ -7,14 +7,14 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import pt.up.fe.cpm.tiktek.backend.auth.userEmail
+import pt.up.fe.cpm.tiktek.backend.auth.userId
 import pt.up.fe.cpm.tiktek.backend.di.database
 
 fun Application.voucherModule() {
     routing {
         authenticate {
             get("/vouchers") {
-                val vouchers = application.database.voucher.getAllByUser(call.userEmail)
+                val vouchers = application.database.voucher.getAllByUser(call.userId)
 
                 call.respond(vouchers)
             }

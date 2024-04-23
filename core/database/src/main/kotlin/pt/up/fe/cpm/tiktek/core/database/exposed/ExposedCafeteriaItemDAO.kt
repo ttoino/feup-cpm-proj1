@@ -81,10 +81,10 @@ private fun UpdateBuilder<*>.fromCafeteriaItem(cafeteriaItem: CafeteriaItem) =
     }
 
 internal object CafeteriaItems : Table() {
-    val id = varchar("id", 128)
-    val name = varchar("name", 255)
+    val id = varchar("id", STANDARD_LENGTH)
+    val name = varchar("name", STANDARD_LENGTH)
     val price = integer("price")
-    val imageUrl = varchar("image_url", 255)
+    val imageUrl = varchar("image_url", STANDARD_LENGTH)
 
     override val primaryKey = PrimaryKey(id)
 }
