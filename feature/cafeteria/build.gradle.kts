@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.android.feature)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -16,4 +17,6 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(libs.coil.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.zxing)
 }

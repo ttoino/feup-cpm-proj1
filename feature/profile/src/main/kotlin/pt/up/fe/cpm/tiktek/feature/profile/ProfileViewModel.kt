@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.domain.FormFieldUseCase
@@ -38,31 +36,6 @@ class ProfileViewModel
     constructor(
         private val userRepository: UserRepository,
     ) : ViewModel() {
-        val user =
-            userRepository.getUser().stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5000),
-                null,
-            )
-
-        init {
-            viewModelScope.launch {
-                user.collect {
-                    if (it == null) return@collect
-
-                    name.update(it.name)
-                    nif.update(it.nif)
-                    birthdate.update(it.birthdate)
-                    email.update(it.email)
-
-                    nameCc.update(it.nameCc)
-                    numberCc.update(it.numberCc)
-                    expirationDateCc.update(it.expirationDateCc)
-                    cvcCc.update(it.cvvCc)
-                }
-            }
-        }
-
         var uiState by mutableStateOf(ProfileUiState())
             private set
 
@@ -193,4 +166,22 @@ class ProfileViewModel
             viewModelScope.launch {
                 userRepository.logout()
             }
+
+        init {
+            viewModelScope.launch {
+                userRepository.getUser().collect {
+                    if (it == null) return@collect
+
+                    name.update(it.name)
+                    nif.update(it.nif)
+                    birthdate.update(it.birthdate)
+                    email.update(it.email)
+
+                    nameCc.update(it.nameCc)
+                    numberCc.update(it.numberCc)
+                    expirationDateCc.update(it.expirationDateCc)
+                    cvcCc.update(it.cvvCc)
+                }
+            }
+        }
     }
