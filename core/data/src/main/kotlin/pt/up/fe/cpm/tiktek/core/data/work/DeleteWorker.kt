@@ -40,7 +40,7 @@ class DeleteWorker
 
         companion object {
             fun create() =
-                OneTimeWorkRequestBuilder<SyncWorker>()
+                OneTimeWorkRequestBuilder<DeleteWorker>()
                     .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                     .build()
         }
