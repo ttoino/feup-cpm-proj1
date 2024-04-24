@@ -1,5 +1,7 @@
 package pt.up.fe.cpm.tiktek.feature.cafeteria
 
+import androidx.compose.runtime.getValue
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +13,9 @@ import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.CartRepository
 import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
+import pt.up.fe.cpm.tiktek.core.model.Voucher
+import pt.up.fe.cpm.tiktek.core.model.VoucherWithModels
+import pt.up.fe.cpm.tiktek.core.ui.BiometricPrompt
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +25,10 @@ class CartViewModel
         private val cartRepository: CartRepository,
         private val cafeteriaRepository: CafeteriaRepository,
         private val vouchersRepository: VouchersRepository,
+        private val promptManager: BiometricPrompt,
     ) : ViewModel() {
+        val biometricResult = promptManager.promptResults
+
         val cart =
             combine(
                 cartRepository.getCart(),
@@ -34,7 +42,22 @@ class CartViewModel
                         },
                     vouchers =
                         cart.vouchers.mapTo(mutableSetOf()) { id ->
-                            vouchers.first { it.id == id }
+                            when (val voucher = vouchers.first { it.id == id }) {
+                                is Voucher.Free ->
+                                    VoucherWithModels.Free(
+                                        id = voucher.id,
+                                        item = cafeteriaItems.first { it.id == voucher.itemId },
+                                        userId = voucher.userId,
+                                        orderId = voucher.orderId,
+                                    )
+                                is Voucher.Discount ->
+                                    VoucherWithModels.Discount(
+                                        id = voucher.id,
+                                        discount = voucher.discount,
+                                        userId = voucher.userId,
+                                        orderId = voucher.orderId,
+                                    )
+                            }
                         },
                 )
             }.stateIn(
@@ -52,4 +75,12 @@ class CartViewModel
             viewModelScope.launch {
                 cartRepository.removeItem(itemId)
             }
+
+        fun bioAuth(activity: FragmentActivity) {
+            promptManager.showBiometricPrompt(
+                title = "Sample Prompt",
+                description = "DESCRIÇAO",
+                activity,
+            )
+        }
     }

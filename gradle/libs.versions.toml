@@ -42,6 +42,7 @@ timber = "5.0.1"
 sdk = "34"
 minSdk = "24"
 animationGraphicsAndroid = "1.6.5"
+appcompat = "1.6.1"
 
 [libraries]
 akkurate = { group = "dev.nesk.akkurate", name = "akkurate-core", version.ref = "akkurate" }
@@ -124,6 +125,7 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "animationGraphicsAndroid" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

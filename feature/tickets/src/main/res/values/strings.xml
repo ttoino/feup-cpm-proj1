@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name_page">My Purchases</string>
+    <string name="botao_show_1">Purchases history</string>
+    <string name="botao_cafe_1">Orders history</string>
+    <string name="botao_show_2">Check active tickets</string>
+    <string name="botao_cafe_2">Check active orders</string>
+    <string name="name_page_2">Purchases History</string>
+    <string name="title_bar_show">Shows</string>
+    <string name="title_bar_cafe">Cafeteria</string>
+</resources>

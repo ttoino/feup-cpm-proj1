@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.AddToCartDialogDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -43,6 +44,8 @@ class AddToCartViewModel
         var uiState by mutableStateOf(AddToCartUiState())
             private set
 
+        val success = MutableStateFlow(false)
+
         fun remove() {
             uiState = uiState.copy(quantity = maxOf(uiState.quantity - 1, 1))
         }
@@ -54,5 +57,6 @@ class AddToCartViewModel
         fun addToCart() =
             viewModelScope.launch {
                 cartRepository.addItem(itemId, uiState.quantity)
+                success.value = true
             }
     }

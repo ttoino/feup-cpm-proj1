@@ -20,14 +20,11 @@ import androidx.compose.material.icons.outlined.TheaterComedy
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -81,12 +79,12 @@ internal fun TicketsHistoryScreen(
     val tabItems =
         listOf(
             TabItem(
-                title = "Espetáculo",
+                title = stringResource(R.string.title_bar_show),
                 unselectedIcon = Icons.Outlined.TheaterComedy,
                 selectedIcon = Icons.Filled.TheaterComedy,
             ),
             TabItem(
-                title = "Cafetaria",
+                title = stringResource(R.string.title_bar_cafe),
                 unselectedIcon = Icons.Outlined.LocalCafe,
                 selectedIcon = Icons.Filled.LocalCafe,
             ),
@@ -95,7 +93,7 @@ internal fun TicketsHistoryScreen(
         mutableIntStateOf(0)
     }
     AppBarLayout(
-        title = "Histórico de compras",
+        title = stringResource(R.string.name_page_2),
         onBack = onBack,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(16.dp),
@@ -166,13 +164,13 @@ internal fun TicketsHistoryScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.History,
-                            contentDescription = "Ver bilhetes ativos",
+                            contentDescription = stringResource(R.string.botao_show_2),
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(
                             modifier = Modifier.width(8.dp),
                         )
-                        Text(text = "Ver bilhetes ativos")
+                        Text(text = stringResource(R.string.botao_show_2))
                     }
                 }
             }
@@ -200,13 +198,13 @@ internal fun TicketsHistoryScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.History,
-                        contentDescription = "Ver pedidos ativos",
+                        contentDescription = stringResource(R.string.botao_cafe_2),
                         modifier = Modifier.size(18.dp),
                     )
                     Spacer(
                         modifier = Modifier.width(8.dp),
                     )
-                    Text(text = "Ver pedidos ativos")
+                    Text(text = stringResource(R.string.botao_cafe_2))
                 }
             }
         }

@@ -15,8 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,12 +27,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
-import com.ramcosta.composedestinations.generated.cafeteria.destinations.CafeteriaBuyDialogDestination
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartConfirmDialogDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.VouchersDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import pt.up.fe.cpm.tiktek.core.model.CartWithModels
 import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
+import pt.up.fe.cpm.tiktek.core.ui.BiometricPrompt
+import pt.up.fe.cpm.tiktek.core.ui.getActivity
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 import pt.up.fe.cpm.tiktek.feature.cafeteria.ui.CartItemCard
 
@@ -42,7 +46,17 @@ internal fun CartRoute(
     navigator: DestinationsNavigator,
     viewModel: CartViewModel = hiltViewModel(),
 ) {
+    val activity = LocalContext.current.getActivity()
+
     val cart by viewModel.cart.collectAsStateWithLifecycle()
+    val biometricResult by viewModel.biometricResult.collectAsStateWithLifecycle(initialValue = null)
+
+    LaunchedEffect(biometricResult) {
+        when (biometricResult) {
+            BiometricPrompt.BiometricResult.AuthenticationSuccess -> navigator.navigate(CartConfirmDialogDestination())
+            else -> Unit
+        }
+    }
 
     CartScreen(
         cart = cart,
@@ -51,7 +65,7 @@ internal fun CartRoute(
         onAdd = viewModel::addItem,
         onVouchers = { navigator.navigate(VouchersDestination()) },
         onCancel = { navigator.navigateUp() },
-        onBuy = { navigator.navigate(CafeteriaBuyDialogDestination()) },
+        onBuy = { viewModel.bioAuth(activity!!) },
     )
 }
 
@@ -80,9 +94,7 @@ internal fun CartScreen(
             )
         }
 
-        // ------------- fim dos items --------------------
-
-        HorizontalDivider(thickness = 5.dp, color = MaterialTheme.colorScheme.primaryContainer)
+        HorizontalDivider(thickness = 4.dp, color = MaterialTheme.colorScheme.primaryContainer)
 
         Button(
             onClick = onVouchers,
@@ -94,8 +106,6 @@ internal fun CartScreen(
         ) {
             Text(text = "Adicionar voucher")
         }
-
-        // Valor a pagar
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -113,23 +123,21 @@ internal fun CartScreen(
             )
 
             Text(
-                text = "10.9€",
+                text = "${cart.total / 100f}€",
                 modifier =
                     Modifier
                         .weight(1f)
                         .padding(horizontal = 8.dp)
                         .fillMaxWidth(),
                 textAlign = TextAlign.End,
-            ) // TODO MUDAR ISTO
+            )
         }
-        // Botões cancelar ou prodceder à compra
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Button(
-                // TODO APAGAR TUDO OQ TA NO CARRINHO
                 onClick = onCancel,
                 modifier =
                     Modifier
@@ -147,7 +155,6 @@ internal fun CartScreen(
             }
 
             Button(
-                // TODO PROCESSO DE COMPRA
                 onClick = onBuy,
                 modifier =
                     Modifier
@@ -155,7 +162,6 @@ internal fun CartScreen(
                         .padding(horizontal = 8.dp)
                         .padding(vertical = 20.dp)
                         .fillMaxWidth(),
-//                    colors = ButtonDefaults.buttonColors(Color(0xFFD0BCFF)),
             ) {
                 Text(text = "Efetuar compra")
             }
@@ -163,35 +169,33 @@ internal fun CartScreen(
     }
 }
 
-@Destination<CafeteriaGraph>(style = DestinationStyle.Dialog::class)
+@Destination<CafeteriaGraph>(
+    visibility = CodeGenVisibility.INTERNAL,
+    style = DestinationStyle.Dialog::class,
+)
 @Composable
-fun CafeteriaBuyDialog(
-//    orderId: String,
+fun CartConfirmDialog(
     navigator: DestinationsNavigator,
+    viewModel: CartViewModel = hiltViewModel(),
 ) {
-    CafeteriaBuyDialogContent(
-//        orderId,
-        foodItems =
-            arrayOf(
-                Food("Apple", 5),
-                Food("Banana", 3),
-                Food("Orange", 2),
-            ),
-        navigator,
+    val cart by viewModel.cart.collectAsStateWithLifecycle()
+
+    CartConfirmDialogContent(
+        cart = cart,
+        onConfirm = { navigator.navigateUp() },
+        onBack = { navigator.navigateUp() },
     )
 }
 
-data class Food(val name: String, val quantity: Int)
-
 @Composable
-fun CafeteriaBuyDialogContent(
-//    orderId: String,
-    foodItems: Array<Food>,
-    navigator: DestinationsNavigator,
+fun CartConfirmDialogContent(
+    cart: CartWithModels,
+    onConfirm: () -> Unit,
+    onBack: () -> Unit,
 ) {
     AlertDialog(
         title = {
-            Text(text = "Confirmar Compra")
+            Text(text = "Confirmar compra")
         },
         text = {
             Column(
@@ -203,10 +207,8 @@ fun CafeteriaBuyDialogContent(
                     fontSize = 17.sp,
                 )
 
-                for (food in foodItems) {
-                    if (food.quantity > 0) {
-                        Text(text = "- ${food.quantity} ${food.name}")
-                    }
+                cart.items.forEach { (item, quantity) ->
+                    Text(text = "- $quantity ${item.name}")
                 }
 
                 Spacer(
@@ -233,34 +235,28 @@ fun CafeteriaBuyDialogContent(
                     )
 
                     Text(
-                        text = "10.9€",
+                        text = "${cart.total / 100f}€",
                         modifier =
                             Modifier
                                 .weight(1f)
                                 .fillMaxWidth(),
                         fontSize = 17.sp,
                         textAlign = TextAlign.End,
-                    ) // TODO MUDAR ISTO
+                    )
                 }
             }
         },
-        onDismissRequest = {
-            navigator.navigateUp()
-        },
+        onDismissRequest = onBack,
         confirmButton = {
             TextButton(
-                onClick = {
-                    navigator.navigateUp()
-                },
+                onClick = onConfirm,
             ) {
                 Text("Confirmar")
             }
         },
         dismissButton = {
             TextButton(
-                onClick = {
-                    navigator.navigateUp()
-                },
+                onClick = onBack,
             ) {
                 Text("Cancelar")
             }

@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -89,12 +90,12 @@ internal fun TicketsScreen(
     var tabItems =
         listOf(
             TabItem(
-                title = "Espetáculo",
+                title = stringResource(R.string.title_bar_show),
                 unselectedIcon = Icons.Outlined.TheaterComedy,
                 selectedIcon = Icons.Filled.TheaterComedy,
             ),
             TabItem(
-                title = "Cafetaria",
+                title = stringResource(R.string.title_bar_cafe),
                 unselectedIcon = Icons.Outlined.LocalCafe,
                 selectedIcon = Icons.Filled.LocalCafe,
             ),
@@ -109,7 +110,7 @@ internal fun TicketsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = "As minhas compras",
+                        text = stringResource(R.string.name_page),
                     )
                 },
             )
@@ -189,13 +190,13 @@ internal fun TicketsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.History,
-                                contentDescription = "Ver histórico de compras",
+                                contentDescription = stringResource(R.string.botao_show_1),
                                 modifier = Modifier.size(18.dp),
                             )
                             Spacer(
                                 modifier = Modifier.width(8.dp),
                             )
-                            Text(text = "Consultar histórico de compras")
+                            Text(text = stringResource(R.string.botao_show_1))
                         }
                     }
                 }
@@ -223,13 +224,13 @@ internal fun TicketsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.History,
-                            contentDescription = "Ver histórico de compras",
+                            contentDescription = stringResource(R.string.botao_cafe_1),
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(
                             modifier = Modifier.width(8.dp),
                         )
-                        Text(text = "Consultar histórico de compras")
+                        Text(text = stringResource(R.string.botao_cafe_1))
                     }
                 }
             }
