@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,7 +65,7 @@ fun AddToCartDialogContent(
 ) {
     AlertDialog(
         title = {
-            Text(text = "Compra de ${item.name}")
+            Text(text = stringResource(R.string.modal_title_1, item.name))
         },
         text = {
             Column(
@@ -72,7 +73,7 @@ fun AddToCartDialogContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Escolha a quantidade de ${item.name} desejada.",
+                    text = stringResource(R.string.modal_desc_1, item.name),
                 )
 
                 Quantity(uiState.quantity, onRemove, onAdd)
@@ -83,14 +84,14 @@ fun AddToCartDialogContent(
             TextButton(
                 onClick = onAddToCart,
             ) {
-                Text("Colocar no Carrinho")
+                Text(stringResource(R.string.put_cart))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onCancel,
             ) {
-                Text("Cancelar")
+                Text(stringResource(R.string.button_canel))
             }
         },
     )

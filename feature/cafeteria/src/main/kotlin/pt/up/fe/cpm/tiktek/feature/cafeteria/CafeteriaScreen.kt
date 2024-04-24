@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +29,9 @@ import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.AddToCartDialogDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
 import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
 import pt.up.fe.cpm.tiktek.core.ui.theme.TikTekTheme
@@ -59,6 +63,9 @@ internal fun CafeteriaScreen(
     onCart: () -> Unit,
     onAddToCart: (String) -> Unit,
 ) {
+    val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+    val isOpen = now.hour >= 9 && (now.hour < 23 || (now.hour == 23 && now.minute <= 30))
+
     AppBarLayout(
         title = "Cafeteria",
         actions = {
@@ -66,7 +73,7 @@ internal fun CafeteriaScreen(
                 onClick = onCart,
                 modifier = Modifier.padding(8.dp),
             ) {
-                Text("Ver carrinho")
+                Text(stringResource(R.string.button_cart))
             }
         },
         horizontalAlignment = Alignment.Start,
@@ -88,17 +95,20 @@ internal fun CafeteriaScreen(
 
         // __________________________________Time open ________________________________________
 
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp),
+        ) {
             Text(
-                text = "Aberto",
-                color = TikTekTheme.extendedColorScheme.success,
+                text = if (isOpen) stringResource(R.string.open_time) else stringResource(R.string.closed_time),
+                color = if (isOpen) TikTekTheme.extendedColorScheme.success else MaterialTheme.colorScheme.error,
             )
             Spacer(
                 modifier = Modifier.defaultMinSize(minWidth = 16.dp).weight(1f),
             )
             Text(
-                text = "Horário: 9h00 - 23h30",
-                color = TikTekTheme.extendedColorScheme.success,
+                text = stringResource(R.string.time_hours),
+                color = if (isOpen) TikTekTheme.extendedColorScheme.success else MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.End,
             )
         }

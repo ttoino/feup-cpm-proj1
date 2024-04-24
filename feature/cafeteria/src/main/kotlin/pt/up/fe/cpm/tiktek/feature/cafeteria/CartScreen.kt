@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,7 @@ internal fun CartScreen(
     onBuy: () -> Unit,
 ) {
     AppBarLayout(
-        title = "Carrinho",
+        title = stringResource(R.string.cart_title),
         onBack = onBack,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(16.dp),
@@ -104,7 +105,7 @@ internal fun CartScreen(
                     .padding(bottom = 40.dp)
                     .fillMaxWidth(),
         ) {
-            Text(text = "Adicionar voucher")
+            Text(text = stringResource(R.string.button_voucher))
         }
 
         Row(
@@ -112,7 +113,7 @@ internal fun CartScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "Preço a pagar",
+                text = stringResource(R.string.price_to_pay),
                 fontWeight = FontWeight.Bold,
                 modifier =
                     Modifier
@@ -151,7 +152,7 @@ internal fun CartScreen(
                         MaterialTheme.colorScheme.onError,
                     ),
             ) {
-                Text(text = "Cancelar")
+                Text(text = stringResource(R.string.button_canel))
             }
 
             Button(
@@ -163,7 +164,7 @@ internal fun CartScreen(
                         .padding(vertical = 20.dp)
                         .fillMaxWidth(),
             ) {
-                Text(text = "Efetuar compra")
+                Text(text = stringResource(R.string.button_confirm))
             }
         }
     }
@@ -195,14 +196,14 @@ fun CartConfirmDialogContent(
 ) {
     AlertDialog(
         title = {
-            Text(text = "Confirmar compra")
+            Text(text = stringResource(R.string.button_confirm))
         },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Text(
-                    text = "Produtos na lista",
+                    text = stringResource(R.string.products),
                     fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
                 )
@@ -225,7 +226,7 @@ fun CartConfirmDialogContent(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "Preço",
+                        text = stringResource(R.string.price),
                         fontWeight = FontWeight.Bold,
                         modifier =
                             Modifier
@@ -251,14 +252,14 @@ fun CartConfirmDialogContent(
             TextButton(
                 onClick = onConfirm,
             ) {
-                Text("Confirmar")
+                Text(stringResource(R.string.button_confirm))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onBack,
             ) {
-                Text("Cancelar")
+                Text(stringResource(R.string.button_canel))
             }
         },
     )
