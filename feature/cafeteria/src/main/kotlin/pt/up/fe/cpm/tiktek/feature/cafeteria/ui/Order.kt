@@ -15,10 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
+import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.model.VoucherWithModels
 
 @Composable
-fun OrderCard(order: OrderWithModels) {
+fun OrderCard(
+    order: OrderWithModels,
+    user: User,
+) {
     OutlinedCard {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -84,6 +88,22 @@ fun OrderCard(order: OrderWithModels) {
             ) {
                 Text("Total")
                 Text("€${order.total / 100f}")
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Tax number")
+                Text(user.nif)
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(user.name)
+                Text("${order.date}")
             }
         }
     }

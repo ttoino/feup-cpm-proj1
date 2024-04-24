@@ -12,6 +12,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
+import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.ui.AppBarLayout
 import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.CafeteriaGraph
 import pt.up.fe.cpm.tiktek.feature.cafeteria.ui.OrderCard
@@ -25,9 +26,11 @@ fun OrdersRoute(
     viewModel: OrdersViewModel = hiltViewModel(),
 ) {
     val orders by viewModel.orders.collectAsStateWithLifecycle()
+    val user by viewModel.user.collectAsStateWithLifecycle()
 
     OrdersScreen(
         orders = orders,
+        user = user ?: return,
         onBack = { navigator.navigateUp() },
     )
 }
@@ -35,6 +38,7 @@ fun OrdersRoute(
 @Composable
 fun OrdersScreen(
     orders: List<OrderWithModels>,
+    user: User,
     onBack: () -> Unit,
 ) {
     AppBarLayout(
@@ -44,7 +48,7 @@ fun OrdersScreen(
         modifier = Modifier.padding(16.dp),
     ) {
         orders.forEach {
-            OrderCard(it)
+            OrderCard(it, user)
         }
     }
 }

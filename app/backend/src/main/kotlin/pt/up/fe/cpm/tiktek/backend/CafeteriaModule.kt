@@ -10,6 +10,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import kotlinx.datetime.Clock
 import pt.up.fe.cpm.tiktek.backend.di.database
 import pt.up.fe.cpm.tiktek.core.model.Order
 import pt.up.fe.cpm.tiktek.core.model.OrderItem
@@ -54,6 +55,7 @@ fun Application.cafeteriaModule() {
                                     quantity = it.value,
                                 )
                             },
+                        date = Clock.System.now(),
                     ),
                 )
 
@@ -68,6 +70,7 @@ fun Application.cafeteriaModule() {
                 OrderWithModels(
                     id = order.id,
                     userId = order.userId,
+                    date = order.date,
                     items =
                         order.items.map {
                             OrderItemWithModels(

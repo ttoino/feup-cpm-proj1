@@ -49,7 +49,7 @@ internal fun CafeteriaItemCard(
                 )
 
                 Text(
-                    text = (item.price / 100f).toString(),
+                    text = "€${item.price / 100f}",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

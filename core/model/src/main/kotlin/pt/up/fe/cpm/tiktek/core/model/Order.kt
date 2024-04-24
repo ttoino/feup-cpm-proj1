@@ -1,5 +1,6 @@
 package pt.up.fe.cpm.tiktek.core.model
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -7,6 +8,7 @@ data class Order(
     val id: String,
     val userId: String,
     val items: List<OrderItem>,
+    val date: Instant,
 )
 
 @Serializable
@@ -15,8 +17,9 @@ data class OrderWithModels(
     val userId: String,
     val items: List<OrderItemWithModels>,
     val vouchers: List<VoucherWithModels>,
+    val date: Instant,
 ) {
-    val subtotal get() = items.map { (item, quantity) -> item.price * quantity }.sum()
+    val subtotal get() = items.sumOf { (item, quantity) -> item.price * quantity }
 
     val total get() =
         vouchers.sortedBy {

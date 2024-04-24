@@ -118,7 +118,7 @@ internal fun CartScreen(
             )
 
             Text(
-                text = "${cart.total / 100f}€",
+                text = "€${cart.total / 100f}",
                 modifier =
                     Modifier
                         .weight(1f)

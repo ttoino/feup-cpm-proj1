@@ -12,6 +12,7 @@ import androidx.room.Relation
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Instant
 import pt.up.fe.cpm.tiktek.core.local.LocalOrdersDataSource
 import pt.up.fe.cpm.tiktek.core.model.Order
 import pt.up.fe.cpm.tiktek.core.model.OrderItem
@@ -60,6 +61,7 @@ internal data class OrderEntity(
     val id: String,
     @ColumnInfo(name = "user_id")
     val userId: String,
+    val date: Instant,
 )
 
 @Entity(
@@ -87,6 +89,7 @@ internal fun Order.toEntity() =
     OrderEntity(
         id = id,
         userId = userId,
+        date = date,
     )
 
 internal fun OrderItem.toEntity(orderId: String) =
@@ -100,6 +103,7 @@ internal fun OrderWithItemsEntity.toOrder() =
     Order(
         id = order.id,
         userId = order.userId,
+        date = order.date,
         items =
             items.map { item ->
                 OrderItem(

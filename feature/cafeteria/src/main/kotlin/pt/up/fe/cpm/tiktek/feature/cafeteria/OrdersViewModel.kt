@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.OrdersRepository
+import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.model.OrderItemWithModels
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
@@ -22,6 +23,7 @@ class OrdersViewModel
         private val ordersRepository: OrdersRepository,
         private val cafeteriaRepository: CafeteriaRepository,
         private val vouchersRepository: VouchersRepository,
+        private val userRepository: UserRepository,
     ) : ViewModel() {
         val orders =
             combine(
@@ -33,6 +35,7 @@ class OrdersViewModel
                     OrderWithModels(
                         id = order.id,
                         userId = order.userId,
+                        date = order.date,
                         items =
                             order.items.map {
                                 OrderItemWithModels(
@@ -67,4 +70,11 @@ class OrdersViewModel
                     )
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+        val user =
+            userRepository.getUser().stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                null,
+            )
     }

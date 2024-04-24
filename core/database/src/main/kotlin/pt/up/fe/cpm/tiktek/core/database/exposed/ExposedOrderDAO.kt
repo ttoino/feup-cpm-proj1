@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
@@ -70,6 +71,7 @@ private fun ResultRow.toOrder(items: List<OrderItem>) =
         id = this[Orders.id],
         userId = this[Orders.user],
         items = items,
+        date = this[Orders.date],
     )
 
 private fun ResultRow.toOrderItem() =
@@ -82,6 +84,7 @@ private fun UpdateBuilder<*>.fromOrder(order: Order) =
     apply {
         this[Orders.id] = order.id
         this[Orders.user] = order.userId
+        this[Orders.date] = order.date
     }
 
 private fun UpdateBuilder<*>.fromOrderItem(
@@ -96,6 +99,7 @@ private fun UpdateBuilder<*>.fromOrderItem(
 internal object Orders : Table() {
     val id = char("id", UUID_LENGTH)
     val user = reference("user", Users.id)
+    val date = timestamp("date")
 
     override val primaryKey = PrimaryKey(id)
 }

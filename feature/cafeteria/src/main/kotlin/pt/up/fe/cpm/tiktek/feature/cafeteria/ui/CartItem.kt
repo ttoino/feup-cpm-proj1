@@ -15,7 +15,7 @@ internal fun CartItemCard(
 ) {
     CardRow(
         title = item.name,
-        subtitle = (item.price / 100f).toString(),
+        subtitle = "€${item.price / 100f}",
         imageUrl = item.imageUrl,
     ) {
         Quantity(quantity, onRemove, onAdd)
