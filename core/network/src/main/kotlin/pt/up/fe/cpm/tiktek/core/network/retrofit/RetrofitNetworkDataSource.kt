@@ -256,5 +256,5 @@ class RetrofitNetworkDataSource
 
         override suspend fun sendCart(request: SendCartRequest): NetworkResult<OrderWithModels> = api.sendCart(request)
 
-        override suspend fun sendTicket(ticket: Ticket): NetworkResult<TicketWithEvent> = api.sendTicket(SendTicketRequest(ticket))
+        override suspend fun sendTicket(request: SendTicketRequest): NetworkResult<TicketWithEvent> = api.sendTicket(request)
     }

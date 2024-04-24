@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Validate
 @Serializable
 data class SendTicketRequest(
-    val ticket: Ticket,
+    val ticketId: String,
 )

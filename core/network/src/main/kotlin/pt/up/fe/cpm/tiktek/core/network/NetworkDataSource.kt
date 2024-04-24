@@ -9,6 +9,7 @@ import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.Order
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
 import pt.up.fe.cpm.tiktek.core.model.SendCartRequest
+import pt.up.fe.cpm.tiktek.core.model.SendTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
 import pt.up.fe.cpm.tiktek.core.model.User
@@ -93,5 +94,5 @@ interface NetworkDataSource {
     suspend fun sendCart(request: SendCartRequest): NetworkResult<OrderWithModels>
 
     // Ticket Terminal
-    suspend fun sendTicket(ticket: Ticket): NetworkResult<TicketWithEvent>
+    suspend fun sendTicket(request: SendTicketRequest): NetworkResult<TicketWithEvent>
 }

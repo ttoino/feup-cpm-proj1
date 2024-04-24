@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.core.data.TicketsTerminalRepository
+import pt.up.fe.cpm.tiktek.core.model.LoadState
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.SendTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.TicketWithEvent
@@ -24,24 +25,21 @@ class TicketValidatedViewModel
         private val navArgs = TicketValidatedRouteDestination.argsFrom(savedStateHandle)
 
         var qrCodeResult = navArgs.qrCodeResult
-        val returnedTicket = MutableStateFlow<TicketWithEvent?>(null)
+        val returnedTicket = MutableStateFlow<LoadState<TicketWithEvent>>(LoadState.Loading)
 
         init {
-            sendTicket()
-        }
-
-        fun sendTicket() =
             viewModelScope.launch {
-                val sendTicketRequest = Json.decodeFromString<SendTicketRequest>(qrCodeResult)
-                val ticket = sendTicketRequest.ticket
-
-                var result = ticketsTerminalRepository.sendTicket(ticket)
-
-                when (result) {
-                    is NetworkResult.Success -> {
-                        returnedTicket.value = result.value
+                val request =
+                    try {
+                        Json.decodeFromString<SendTicketRequest>(qrCodeResult)
+                    } catch (e: Exception) {
+                        returnedTicket.value = LoadState.Error("Failed to parse QR code")
+                        return@launch
                     }
-                    else -> returnedTicket.value = null
+                when (val result = ticketsTerminalRepository.sendTicket(request)) {
+                    is NetworkResult.Success -> returnedTicket.value = LoadState.Success(result.value)
+                    else -> returnedTicket.value = LoadState.Error("Failed to validate ticket")
                 }
             }
+        }
     }
