@@ -1,24 +1,18 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.TaskAlt
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,20 +20,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import org.json.JSONObject
+import pt.up.fe.cpm.tiktek.core.ui.snackbar
 
 @Destination<RootGraph>()
 @Composable
 internal fun PurchasedProductsRoute(qrCodeResult: String) {
-    // PurchasedProductsScreen(navigator, screenId, qrCodeResult)
     PurchasedProductsScreen(qrCodeResult)
 }
 
@@ -47,35 +44,24 @@ internal fun PurchasedProductsRoute(qrCodeResult: String) {
 @Composable
 fun PurchasedProductsScreen(qrCodeResult: String) {
     var scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val jsonString = """
-    {
-      "orderNumber": 123456,
-      "orderProducts": [
-        {
-          "cafetariaItem": "Coffee",
-          "quantity": 2,
-          "totalPrice": 200
-        },
-        {
-          "cafetariaItem": "Croissant",
-          "quantity": 1,
-          "totalPrice": 50
+
+    val viewModel: PurchasedProductsViewModel = hiltViewModel()
+
+    val result by viewModel.orderWithModels.collectAsStateWithLifecycle()
+    Log.d("resultpurchase", "Result of purchase products: $result")
+
+    val snackbarHostState = snackbar
+
+    LaunchedEffect(viewModel.orderWithModels) {
+        viewModel.orderWithModels.collect {
+            it?.let {
+                snackbarHostState.showSnackbar(
+                    message = "Comprado com sucesso!",
+                )
+            }
         }
-      ],
-      "orderVouchers": [
-        {
-          "voucherName": "1 café grátis",
-          "voucherQuantity": 1
-        }
-      ]
     }
-    """
 
-    val purchase = JSONObject(jsonString)
-
-    val orderNumber = purchase.getInt("orderNumber")
-    val orderProducts = purchase.getJSONArray("orderProducts")
-    val orderVouchers = purchase.getJSONArray("orderVouchers")
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -89,61 +75,58 @@ fun PurchasedProductsScreen(qrCodeResult: String) {
             )
         },
     ) {
-        LazyColumn(
-            modifier =
-                Modifier
-                    .padding(it)
-                    .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+        Column(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            item {
+            // Check if the result is null
+            if (result == null) {
+                // Display a message for unsuccessful purchase
                 Text(
-                    text = "Número de pedido: $orderNumber",
+                    text = "Purchase unsuccessful",
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(16.dp),
                 )
-            }
-
-            items(orderProducts.length()) { index ->
-                val product = orderProducts.getJSONObject(index)
-                PurchasedProduct(
-                    cafetariaItem = product.getString("cafetariaItem"),
-                    quantity = product.getInt("quantity"),
-                )
-            }
-
-            item {
-                Text(
-                    text = "Vouchers utilizados",
-                    fontSize = 25.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-            }
-
-            items(orderVouchers.length()) { index ->
-                val voucher = orderVouchers.getJSONObject(index)
-                Voucher(
-                    voucherName = voucher.getString("voucherName"),
-                    voucherQuantity = voucher.getInt("voucherQuantity"),
-                )
-            }
-            item {
-                Button(
-                    onClick = { /*TODO*/ },
+            } else {
+                LazyColumn(
                     modifier =
                         Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(it)
+                            .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.TaskAlt,
-                        contentDescription = "Validar bilhete",
-                        modifier = Modifier.size(18.dp),
-                    )
-                    Spacer(
-                        modifier = Modifier.width(8.dp),
-                    )
-                    Text(text = "Recolher compra")
+                    item {
+                        Text(
+                            text = "Número de pedido: 2", // ${result?.id}",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        )
+                    }
+                    val orderProducts = result!!.items
+                    val orderVouchers = result!!.vouchers
+
+                    items(orderProducts.size) { index ->
+                        val product = orderProducts.get(index)
+                        PurchasedProduct(
+                            cafetariaItem = product.item.name,
+                            quantity = product.quantity,
+                        )
+                    }
+
+                    item {
+                        Text(
+                            text = "Vouchers utilizados",
+                            fontSize = 25.sp,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        )
+                    }
+
+                    items(orderVouchers.size) { index ->
+                        val voucher = orderVouchers.get(index)
+                        Voucher(
+                            voucherName = voucher.userId,
+                            voucherQuantity = 5, // TODO: MUDARRRRRRRRRRRRRRRRRRRRRRR
+                        )
+                    }
                 }
             }
         }
@@ -151,7 +134,7 @@ fun PurchasedProductsScreen(qrCodeResult: String) {
 }
 
 @Composable
-private fun PurchasedProduct(
+fun PurchasedProduct(
     cafetariaItem: String,
     quantity: Int,
 ) {
@@ -191,7 +174,7 @@ private fun PurchasedProduct(
 }
 
 @Composable
-private fun Voucher(
+fun Voucher(
     voucherName: String,
     voucherQuantity: Int,
 ) {

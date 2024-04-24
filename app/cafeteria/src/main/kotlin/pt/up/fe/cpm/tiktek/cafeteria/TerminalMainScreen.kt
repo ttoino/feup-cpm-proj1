@@ -74,7 +74,7 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
                 Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
             } else {
                 scannedQRCodeResult = result.contents
-                Log.d("MainActivity", "Scanned result: $result")
+                Log.d("MainActivity", "Scanned result: $scannedQRCodeResult")
 
                 // redirect to PurchasedProductsPage
                 navigator.navigate(PurchasedProductsRouteDestination(scannedQRCodeResult))
