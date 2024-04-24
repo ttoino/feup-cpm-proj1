@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaTerminalRepository
+import pt.up.fe.cpm.tiktek.core.model.LoadState
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
 import pt.up.fe.cpm.tiktek.core.model.SendCartRequest
@@ -24,25 +25,21 @@ class PurchasedProductsViewModel
         private val navArgs = PurchasedProductsRouteDestination.argsFrom(savedStateHandle)
 
         val qrCodeResult = navArgs.qrCodeResult
-        val orderWithModels = MutableStateFlow<OrderWithModels?>(null)
+        val orderWithModels = MutableStateFlow<LoadState<OrderWithModels>>(LoadState.Loading)
 
         init {
-            sendCart()
-        }
-
-        fun sendCart() =
             viewModelScope.launch {
-                val sendCartRequest = Json.decodeFromString<SendCartRequest>(qrCodeResult)
-                val userId = sendCartRequest.userId
-                val items = sendCartRequest.cart
-                val result =
-                    cafeteriaTerminalRepository.sendCart(userId, items)
-
-                when (result) {
-                    is NetworkResult.Success -> {
-                        orderWithModels.value = result.value
+                val request =
+                    try {
+                        Json.decodeFromString<SendCartRequest>(qrCodeResult)
+                    } catch (e: Exception) {
+                        orderWithModels.value = LoadState.Error("Failed to parse QR code")
+                        return@launch
                     }
-                    else -> orderWithModels.value = null
+                when (val result = cafeteriaTerminalRepository.sendCart(request)) {
+                    is NetworkResult.Success -> orderWithModels.value = LoadState.Success(result.value)
+                    else -> orderWithModels.value = LoadState.Error("Failed to validate order")
                 }
             }
+        }
     }

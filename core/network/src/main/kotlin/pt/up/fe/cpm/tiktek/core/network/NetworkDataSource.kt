@@ -4,11 +4,11 @@ import kotlinx.datetime.LocalDate
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
-import pt.up.fe.cpm.tiktek.core.model.Cart
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.Order
 import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
+import pt.up.fe.cpm.tiktek.core.model.SendCartRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.model.Voucher
@@ -89,8 +89,5 @@ interface NetworkDataSource {
     suspend fun getVouchers(token: String): NetworkResult<List<Voucher>>
 
     // Cafeteria Terminal
-    suspend fun sendCart(
-        userId: String,
-        items: Cart,
-    ): NetworkResult<OrderWithModels>
+    suspend fun sendCart(request: SendCartRequest): NetworkResult<OrderWithModels>
 }

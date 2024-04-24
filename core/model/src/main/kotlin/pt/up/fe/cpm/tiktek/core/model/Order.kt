@@ -14,7 +14,7 @@ data class OrderWithModels(
     val id: String,
     val userId: String,
     val items: List<OrderItemWithModels>,
-    val vouchers: List<Voucher>,
+    val vouchers: List<VoucherWithModels>,
 )
 
 @Serializable

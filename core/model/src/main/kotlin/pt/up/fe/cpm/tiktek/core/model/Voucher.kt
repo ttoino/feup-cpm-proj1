@@ -26,13 +26,26 @@ sealed class Voucher {
         override val userId: String,
         override val orderId: String?,
     ) : Voucher()
+
+    fun copy(
+        id: String = this.id,
+        userId: String = this.userId,
+        orderId: String? = this.orderId,
+    ): Voucher =
+        when (this) {
+            is Discount -> Discount(id, discount, userId, orderId)
+            is Free -> Free(id, itemId, userId, orderId)
+        }
 }
 
+@Serializable
 sealed class VoucherWithModels {
     abstract val id: String
     abstract val userId: String
     abstract val orderId: String?
 
+    @Serializable
+    @SerialName("discount")
     data class Discount(
         override val id: String,
         val discount: Int,
@@ -40,6 +53,8 @@ sealed class VoucherWithModels {
         override val orderId: String?,
     ) : VoucherWithModels()
 
+    @Serializable
+    @SerialName("free")
     data class Free(
         override val id: String,
         val item: CafeteriaItem,

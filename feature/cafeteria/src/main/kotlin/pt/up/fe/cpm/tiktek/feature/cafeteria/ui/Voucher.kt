@@ -32,15 +32,13 @@ fun VoucherCard(
         is VoucherWithModels.Discount ->
             CardRow(
                 title = "${voucher.discount}% discount",
-                subtitle = "",
-                imageUrl = "",
+                imageUrl = "https://st.depositphotos.com/1010613/1960/i/450/depositphotos_19607305-stock-photo-5-percent-sale-discount.jpg",
                 modifier = modifier,
                 content = content,
             )
         is VoucherWithModels.Free ->
             CardRow(
                 title = "Free ${voucher.item.name}",
-                subtitle = "",
                 imageUrl = voucher.item.imageUrl,
                 modifier = modifier,
                 content = content,

@@ -8,7 +8,6 @@ import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
-import pt.up.fe.cpm.tiktek.core.model.Cart
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
@@ -247,8 +246,5 @@ class RetrofitNetworkDataSource
         // Vouchers
         override suspend fun getVouchers(token: String): NetworkResult<List<Voucher>> = api.getVouchers(token.auth)
 
-        override suspend fun sendCart(
-            userId: String,
-            items: Cart,
-        ): NetworkResult<OrderWithModels> = api.sendCart(SendCartRequest(userId, items))
+        override suspend fun sendCart(request: SendCartRequest): NetworkResult<OrderWithModels> = api.sendCart(request)
     }

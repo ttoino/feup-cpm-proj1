@@ -21,7 +21,6 @@ fun TicketCard(
             title = ticket.event.name,
             subtitle = "Seat ${ticket.seat} | Used on ${ticket.useDate}",
             imageUrl = ticket.event.imageUrl,
-            onClick = onClick,
         )
     }
 }

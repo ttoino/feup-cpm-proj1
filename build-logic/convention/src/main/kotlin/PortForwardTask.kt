@@ -13,7 +13,7 @@ abstract class PortForwardTask : NonIncrementalGlobalTask() {
     abstract val buildTools: BuildToolsExecutableInput
 
     override fun doTaskAction() {
-        AndroidDebugBridge.init(false)
+        AndroidDebugBridge.initIfNeeded(false)
         val adbLocation = buildTools.adbExecutable().get()
         val bridge =
             AndroidDebugBridge.createBridge(

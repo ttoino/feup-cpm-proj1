@@ -43,10 +43,10 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.PurchasedProductsRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Destination<RootGraph>(start = true)
 @Composable
 internal fun TerminalMainScreenRoute(navigator: DestinationsNavigator) {
@@ -68,13 +68,12 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
     }
 
     val barCodeLauncher =
-        rememberLauncherForActivityResult(ScanContract()) {
-                result ->
+        rememberLauncherForActivityResult(ScanContract()) { result ->
             if (result.contents == null) {
                 Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
             } else {
                 scannedQRCodeResult = result.contents
-                Log.d("MainActivity", "Scanned result: $scannedQRCodeResult")
+                Timber.d("Scanned result: $scannedQRCodeResult")
 
                 // redirect to PurchasedProductsPage
                 navigator.navigate(PurchasedProductsRouteDestination(scannedQRCodeResult))
@@ -84,10 +83,10 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
     Scaffold {
         Column(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(it)
-                    .padding(top = 64.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(it)
+                .padding(top = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -129,7 +128,7 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
                     onClick = {
                         // checkCameraPermission(context)
                         showCamera(barCodeLauncher)
-                        Log.d("MainScreen", "Button clicked")
+                        Timber.d("Button clicked")
                     },
                 ) {
                     Icon(
@@ -179,12 +178,12 @@ fun getCameraPermission(content: @Composable () -> Unit) {
 }
 
 fun showCamera(barCodeLauncher: ActivityResultLauncher<ScanOptions>) {
-    val options = ScanOptions()
-    options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-    options.setPrompt("Scan your cart QR code")
-    options.setCameraId(0)
-    options.setBeepEnabled(false)
-    options.setOrientationLocked(false)
-
-    barCodeLauncher.launch(options)
+    barCodeLauncher.launch(
+        ScanOptions()
+            .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            .setPrompt("Scan your cart QR code")
+            .setCameraId(0)
+            .setBeepEnabled(false)
+            .setOrientationLocked(false),
+    )
 }

@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -24,10 +22,10 @@ import coil.compose.AsyncImage
 @Composable
 fun CardRow(
     title: String,
-    subtitle: String,
     imageUrl: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     content: @Composable () -> Unit = {},
 ) {
     OutlinedCard(
@@ -41,9 +39,9 @@ fun CardRow(
 @Composable
 fun CardRow(
     title: String,
-    subtitle: String,
     imageUrl: String,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     content: @Composable () -> Unit = {},
 ) {
     OutlinedCard(
@@ -56,7 +54,7 @@ fun CardRow(
 @Composable
 private fun CardRowContent(
     title: String,
-    subtitle: String,
+    subtitle: String?,
     imageUrl: String,
     content: @Composable () -> Unit = {},
 ) {
@@ -74,10 +72,12 @@ private fun CardRowContent(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
         }
 
         Spacer(Modifier.weight(1f))
