@@ -67,8 +67,8 @@ fun TicketValidatedScreen(
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 CardRow(
-                    title = "${ticket.value.event.name}",
-                    subtitle = "${ticket.value.event.price}",
+                    title = ticket.value.event.name,
+                    subtitle = "Seat ${ticket.value.seat}",
                     imageUrl = ticket.value.event.imageUrl,
                 )
             }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.core.data.TicketsRepository
-import pt.up.fe.cpm.tiktek.core.model.ValidateTicketRequest
+import pt.up.fe.cpm.tiktek.core.model.SendTicketRequest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +33,7 @@ class TicketScanViewModel
 
         val ticketCode =
             ticketsRepository.getTicket(ticketId).map { ticket ->
-                val json = Json.encodeToString(ValidateTicketRequest(ticket.id))
+                val json = Json.encodeToString(SendTicketRequest(ticket.id))
                 val bitMatrix = encoder.encode(json, BarcodeFormat.QR_CODE, 256, 256)
                 Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888).also { bitmap ->
                     for (x in 0 until 256) {

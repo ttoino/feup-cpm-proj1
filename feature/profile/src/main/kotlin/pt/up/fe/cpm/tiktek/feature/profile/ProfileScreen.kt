@@ -11,15 +11,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.AddCard
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -134,8 +135,8 @@ internal fun ProfileScreen(
     AppBarLayout(
         title = stringResource(R.string.profile_title),
         actions = {
-            TextButton(onClick = onLogout) {
-                Text(stringResource(R.string.logout_action))
+            IconButton(onClick = onLogout) {
+                Icon(Icons.AutoMirrored.Default.Logout, stringResource(R.string.logout_action))
             }
         },
         verticalArrangement = Arrangement.spacedBy(16.dp),

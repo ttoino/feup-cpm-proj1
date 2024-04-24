@@ -13,6 +13,7 @@ data class Ticket(
     val useDate: Instant?,
 )
 
+@Serializable
 data class TicketWithEvent(
     val id: String,
     val event: Event,
