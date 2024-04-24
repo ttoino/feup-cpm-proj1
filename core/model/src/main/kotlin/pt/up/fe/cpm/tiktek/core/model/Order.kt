@@ -10,7 +10,21 @@ data class Order(
 )
 
 @Serializable
+data class OrderWithModels(
+    val id: String,
+    val userId: String,
+    val items: List<OrderItemWithModels>,
+    val vouchers: List<Voucher>,
+)
+
+@Serializable
 data class OrderItem(
     val itemId: String,
+    val quantity: Int,
+)
+
+@Serializable
+data class OrderItemWithModels(
+    val item: CafeteriaItem,
     val quantity: Int,
 )

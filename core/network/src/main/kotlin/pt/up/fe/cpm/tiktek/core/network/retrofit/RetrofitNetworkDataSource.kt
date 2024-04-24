@@ -8,12 +8,15 @@ import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
 import pt.up.fe.cpm.tiktek.core.model.CafeteriaItem
+import pt.up.fe.cpm.tiktek.core.model.Cart
 import pt.up.fe.cpm.tiktek.core.model.Event
 import pt.up.fe.cpm.tiktek.core.model.LoginRequest
 import pt.up.fe.cpm.tiktek.core.model.NetworkResult
 import pt.up.fe.cpm.tiktek.core.model.Order
+import pt.up.fe.cpm.tiktek.core.model.OrderWithModels
 import pt.up.fe.cpm.tiktek.core.model.PartialRegisterRequest
 import pt.up.fe.cpm.tiktek.core.model.RegisterRequest
+import pt.up.fe.cpm.tiktek.core.model.SendCartRequest
 import pt.up.fe.cpm.tiktek.core.model.Ticket
 import pt.up.fe.cpm.tiktek.core.model.User
 import pt.up.fe.cpm.tiktek.core.model.Voucher
@@ -110,6 +113,12 @@ private interface TikTekApi {
     suspend fun getVouchers(
         @Header("Authorization") authorization: String,
     ): NetworkResult<List<Voucher>>
+
+    // Send cart -> feature for the terminal
+    @POST("cart")
+    suspend fun sendCart(
+        @Body body: SendCartRequest,
+    ): NetworkResult<OrderWithModels>
 }
 
 private val String.auth
@@ -237,4 +246,9 @@ class RetrofitNetworkDataSource
 
         // Vouchers
         override suspend fun getVouchers(token: String): NetworkResult<List<Voucher>> = api.getVouchers(token.auth)
+
+        override suspend fun sendCart(
+            userId: String,
+            items: Cart,
+        ): NetworkResult<OrderWithModels> = api.sendCart(SendCartRequest(userId, items))
     }
