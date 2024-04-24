@@ -58,9 +58,10 @@ fun Application.cafeteriaModule() {
                 )
 
             val vouchers =
-                body.cart.vouchers.map {
+                body.cart.vouchers.flatMap {
                     val voucher = application.database.voucher.getById(it) ?: return@post call.respond(HttpStatusCode.NotFound)
-                    application.database.voucher.update(voucher.copy(orderId = order.id))
+                    if (voucher.orderId != null || voucher.userId != body.userId) return@flatMap emptyList()
+                    listOf(application.database.voucher.update(voucher.copy(orderId = order.id)))
                 }
 
             call.respond(

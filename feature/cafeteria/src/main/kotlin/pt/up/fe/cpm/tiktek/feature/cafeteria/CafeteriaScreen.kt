@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +32,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.AddToCartDialogDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartRouteDestination
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.OrdersRouteDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -51,6 +56,7 @@ internal fun CafeteriaRoute(
 
     CafeteriaScreen(
         cafeteriaItems = cafeteriaItems,
+        onTransactions = { navigator.navigate(OrdersRouteDestination()) },
         onCart = { navigator.navigate(CartRouteDestination) },
         onAddToCart = { navigator.navigate(AddToCartDialogDestination(it)) },
     )
@@ -60,6 +66,7 @@ internal fun CafeteriaRoute(
 @Composable
 internal fun CafeteriaScreen(
     cafeteriaItems: List<CafeteriaItem> = emptyList(),
+    onTransactions: () -> Unit,
     onCart: () -> Unit,
     onAddToCart: (String) -> Unit,
 ) {
@@ -69,11 +76,22 @@ internal fun CafeteriaScreen(
     AppBarLayout(
         title = "Cafeteria",
         actions = {
-            TextButton(
-                onClick = onCart,
-                modifier = Modifier.padding(8.dp),
+            IconButton(
+                onClick = onTransactions,
             ) {
-                Text(stringResource(R.string.button_cart))
+                Icon(
+                    Icons.Default.History,
+                    stringResource(R.string.button_transactions),
+                )
+            }
+
+            IconButton(
+                onClick = onCart,
+            ) {
+                Icon(
+                    Icons.Default.ShoppingCart,
+                    stringResource(R.string.button_cart),
+                )
             }
         },
         horizontalAlignment = Alignment.Start,
@@ -104,7 +122,10 @@ internal fun CafeteriaScreen(
                 color = if (isOpen) TikTekTheme.extendedColorScheme.success else MaterialTheme.colorScheme.error,
             )
             Spacer(
-                modifier = Modifier.defaultMinSize(minWidth = 16.dp).weight(1f),
+                modifier =
+                    Modifier
+                        .defaultMinSize(minWidth = 16.dp)
+                        .weight(1f),
             )
             Text(
                 text = stringResource(R.string.time_hours),

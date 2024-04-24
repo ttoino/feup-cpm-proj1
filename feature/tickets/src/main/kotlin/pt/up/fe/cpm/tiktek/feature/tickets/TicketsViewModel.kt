@@ -24,8 +24,7 @@ class TicketsViewModel
                 ticketsRepository.getTickets(),
                 eventsRepository.getEvents(),
             ) { tickets, events ->
-                tickets.map {
-                        ticket ->
+                tickets.map { ticket ->
                     TicketWithEvent(
                         ticket.id,
                         events.first { it.id == ticket.eventId },
