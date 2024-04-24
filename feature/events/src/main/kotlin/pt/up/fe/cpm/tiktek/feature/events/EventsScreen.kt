@@ -57,10 +57,12 @@ internal fun EventsRoute(
     navigator: DestinationsNavigator,
     viewModel: EventsViewModel = hiltViewModel(),
 ) {
-    val events by viewModel.events.collectAsStateWithLifecycle()
+    val recommendedEvents by viewModel.recommendedEvents.collectAsStateWithLifecycle()
+    val upcomingEvents by viewModel.upcomingEvents.collectAsStateWithLifecycle()
 
     EventsScreen(
-        events = events,
+        recommendedEvents = recommendedEvents,
+        upcomingEvents = upcomingEvents,
         onNavigateToEvent = { navigator.navigate(EventDestination(it)) },
     )
 }
@@ -68,7 +70,8 @@ internal fun EventsRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun EventsScreen(
-    events: List<Event>,
+    recommendedEvents: List<Event>,
+    upcomingEvents: List<Event>,
     onNavigateToEvent: (String) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -122,10 +125,10 @@ internal fun EventsScreen(
                         .horizontalScroll(rememberScrollState())
                         .padding(vertical = 16.dp),
             ) {
-                events.take(10).forEach { EventColumn(it, onNavigateToEvent) }
+                recommendedEvents.forEach { EventColumn(it, onNavigateToEvent) }
             }
             Text(
-                text = stringResource(R.string.today),
+                text = stringResource(R.string.upcoming),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Column(
@@ -134,7 +137,7 @@ internal fun EventsScreen(
                     Modifier
                         .padding(vertical = 16.dp),
             ) {
-                events.take(10).forEach { EventRow(it, onNavigateToEvent) }
+                upcomingEvents.forEach { EventRow(it, onNavigateToEvent) }
             }
         }
     }
