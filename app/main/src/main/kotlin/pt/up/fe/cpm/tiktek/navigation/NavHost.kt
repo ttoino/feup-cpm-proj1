@@ -11,7 +11,6 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import pt.up.fe.cpm.tiktek.core.ui.transition.ForwardBackwardTransition
 import pt.up.fe.cpm.tiktek.feature.auth.navigation.authDependencies
-import pt.up.fe.cpm.tiktek.feature.cafeteria.navigation.cafeteriaDependencies
 import pt.up.fe.cpm.tiktek.feature.events.navigation.eventsDependencies
 
 @Composable
@@ -26,7 +25,6 @@ fun TikTekNavHost(
         defaultTransitions = ForwardBackwardTransition,
         dependenciesContainerBuilder = {
             authDependencies()
-            cafeteriaDependencies()
             eventsDependencies()
         },
     )

@@ -15,4 +15,5 @@
     <string name="modal_title_1">Purchase %1$s</string>
     <string name="modal_desc_1">Choose the quantity of %1$s wanted</string>
     <string name="put_cart">Add to cart</string>
+    <string name="button_transactions">See previous transactions</string>
 </resources>

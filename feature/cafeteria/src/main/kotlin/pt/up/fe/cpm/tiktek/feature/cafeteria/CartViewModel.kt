@@ -1,6 +1,5 @@
 package pt.up.fe.cpm.tiktek.feature.cafeteria
 
-import androidx.compose.runtime.getValue
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

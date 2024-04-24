@@ -3,6 +3,7 @@ package pt.up.fe.cpm.tiktek.cafeteria
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +51,7 @@ fun PurchasedProductsScreen(
         title = "Compra",
         onBack = onBack,
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(16.dp),
     ) {
         when (order) {
             is LoadState.Loading -> {
@@ -70,7 +72,7 @@ fun PurchasedProductsScreen(
 
                 Text(
                     text = "Vouchers utilizados",
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleSmall,
                 )
 
                 order.value.vouchers.forEach {

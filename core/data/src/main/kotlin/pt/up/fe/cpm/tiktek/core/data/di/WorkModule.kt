@@ -8,6 +8,7 @@ import dagger.multibindings.IntoSet
 import pt.up.fe.cpm.tiktek.core.data.local.LocalCartRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstCafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstEventsRepository
+import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstOrdersRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstTicketsRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstUserRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstVouchersRepository
@@ -27,6 +28,10 @@ abstract class WorkModule {
 
     @Binds
     @IntoSet
+    abstract fun bindSyncableOrdersRepository(ordersRepository: LocalFirstOrdersRepository): Syncable
+
+    @Binds
+    @IntoSet
     abstract fun bindSyncableTicketsRepository(ticketsRepository: LocalFirstTicketsRepository): Syncable
 
     @Binds
@@ -40,6 +45,10 @@ abstract class WorkModule {
     @Binds
     @IntoSet
     abstract fun bindDeletableCartRepository(cartRepository: LocalCartRepository): Deletable
+
+    @Binds
+    @IntoSet
+    abstract fun bindDeletableOrdersRepository(ordersRepository: LocalFirstOrdersRepository): Deletable
 
     @Binds
     @IntoSet

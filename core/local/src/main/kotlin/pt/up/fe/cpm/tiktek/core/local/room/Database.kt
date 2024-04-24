@@ -8,6 +8,8 @@ import androidx.room.TypeConverters
     entities = [
         CafeteriaItemEntity::class,
         EventEntity::class,
+        OrderEntity::class,
+        OrderItemEntity::class,
         TicketEntity::class,
         VoucherEntity::class,
     ],
@@ -17,6 +19,7 @@ import androidx.room.TypeConverters
 abstract class Database : RoomDatabase() {
     internal abstract val cafeteriaItem: CafeteriaItemDao
     internal abstract val event: EventDao
+    internal abstract val order: OrderDao
     internal abstract val ticket: TicketDao
     internal abstract val voucher: VoucherDao
 }
