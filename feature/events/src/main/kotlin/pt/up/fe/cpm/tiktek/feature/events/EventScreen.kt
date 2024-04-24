@@ -75,7 +75,7 @@ internal data class EventArgs(val eventId: String)
 @Composable
 internal fun EventRoute(
     navigator: DestinationsNavigator,
-    viewModel: EventViewModel, // = hiltViewModel(),
+    viewModel: EventViewModel,
 ) {
     val event by viewModel.event.collectAsStateWithLifecycle()
     val snackbarHostState = snackbar
@@ -228,7 +228,7 @@ private fun InfoRow(
 @Composable
 fun EventDialog(
     navigator: DestinationsNavigator,
-    viewModel: EventViewModel, // = hiltViewModel(),
+    viewModel: EventViewModel,
 ) {
     val event by viewModel.event.collectAsStateWithLifecycle()
 
@@ -293,7 +293,7 @@ fun EventDialogContent(
 @Composable
 fun EventConfirmationDialog(
     navigator: DestinationsNavigator,
-    viewModel: EventViewModel, // = hiltViewModel(),
+    viewModel: EventViewModel,
 ) {
     val event by viewModel.event.collectAsStateWithLifecycle()
 

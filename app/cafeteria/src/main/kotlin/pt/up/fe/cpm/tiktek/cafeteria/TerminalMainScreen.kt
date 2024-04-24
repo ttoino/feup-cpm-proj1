@@ -1,7 +1,6 @@
 package pt.up.fe.cpm.tiktek.cafeteria
 
 import android.Manifest
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -83,10 +82,10 @@ fun TerminalMainScreen(navigator: DestinationsNavigator) {
     Scaffold {
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(it)
-                .padding(top = 64.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(it)
+                    .padding(top = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {

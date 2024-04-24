@@ -77,8 +77,8 @@ class CartViewModel
 
         fun bioAuth(activity: FragmentActivity) {
             promptManager.showBiometricPrompt(
-                title = "Sample Prompt",
-                description = "DESCRIÇAO",
+                title = "Confirm purchase",
+                description = "Authenticate to confirm your purchase",
                 activity,
             )
         }
