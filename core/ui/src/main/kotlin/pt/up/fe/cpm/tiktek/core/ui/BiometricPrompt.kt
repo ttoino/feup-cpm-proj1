@@ -57,10 +57,6 @@ class BiometricPrompt
                     resultChannel.trySend(BiometricResult.HardwareUnavailable)
                     return
                 }
-                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                    resultChannel.trySend(BiometricResult.FeatureUnavailable)
-                    return
-                }
                 BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                     resultChannel.trySend(BiometricResult.AuthenticationNotSet)
                     return

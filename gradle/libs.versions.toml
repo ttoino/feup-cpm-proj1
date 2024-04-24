@@ -38,6 +38,7 @@ material = "1.11.0"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 timber = "5.0.1"
+zxing = "3.5.1"
 
 sdk = "34"
 minSdk = "24"
@@ -126,6 +127,7 @@ retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "re
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "animationGraphicsAndroid" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+zxing = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

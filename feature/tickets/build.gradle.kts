@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.android.feature)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -11,10 +12,12 @@ ksp {
 }
 
 dependencies {
-
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.ui)
-    implementation(libs.kotlinx.datetime)
+
     implementation(libs.coil.compose)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.zxing)
 }

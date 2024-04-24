@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="name_page">As minhas compras</string>
-    <string name="botao_show_1">Consultar histórico de compras</string>
-    <string name="botao_cafe_1">Consultar histórico de pedidos</string>
-    <string name="botao_show_2">Ver bilhetes ativos</string>
-    <string name="botao_cafe_2">Ver pedidos ativos</string>
-    <string name="name_page_2">Histórico de compras</string>
-    <string name="title_bar_show">Espetáculos</string>
-    <string name="title_bar_cafe">Cafetaria</string>
+    <string name="tickets_title">Os meus bilhetes</string>
+    <string name="available">Disponíveis</string>
+    <string name="used">Usados</string>
 </resources>

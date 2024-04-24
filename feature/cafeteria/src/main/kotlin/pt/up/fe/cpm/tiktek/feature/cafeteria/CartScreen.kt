@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.parameters.CodeGenVisibility
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartConfirmDialogDestination
+import com.ramcosta.composedestinations.generated.cafeteria.destinations.CartScanRouteDestination
 import com.ramcosta.composedestinations.generated.cafeteria.destinations.VouchersDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
@@ -44,7 +44,7 @@ import pt.up.fe.cpm.tiktek.feature.cafeteria.ui.CartItemCard
 @Composable
 internal fun CartRoute(
     navigator: DestinationsNavigator,
-    viewModel: CartViewModel = hiltViewModel(),
+    viewModel: CartViewModel,
 ) {
     val activity = LocalContext.current.getActivity()
 
@@ -176,13 +176,13 @@ internal fun CartScreen(
 @Composable
 fun CartConfirmDialog(
     navigator: DestinationsNavigator,
-    viewModel: CartViewModel = hiltViewModel(),
+    viewModel: CartViewModel,
 ) {
     val cart by viewModel.cart.collectAsStateWithLifecycle()
 
     CartConfirmDialogContent(
         cart = cart,
-        onConfirm = { navigator.navigateUp() },
+        onConfirm = { navigator.navigate(CartScanRouteDestination()) },
         onBack = { navigator.navigateUp() },
     )
 }
