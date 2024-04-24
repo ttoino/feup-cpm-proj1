@@ -1,3 +1,5 @@
 package pt.up.fe.cpm.tiktek.core.data.remote
 
-class RemoteTicketsTerminalRepository
+import pt.up.fe.cpm.tiktek.core.data.TicketsTerminalRepository
+
+class RemoteTicketsTerminalRepository : TicketsTerminalRepository

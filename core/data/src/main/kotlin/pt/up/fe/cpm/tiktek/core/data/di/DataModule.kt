@@ -46,5 +46,5 @@ abstract class DataModule {
     abstract fun bindCafeteriaTerminalRepository(repo: RemoteCafeteriaTerminalRepository): CafeteriaTerminalRepository
 
     @Binds
-    abstract fun bindCafeteriaTerminalRepository(repo: RemoteTicketsTerminalRepository): TicketsTerminalRepository
+    abstract fun bindTicketsTerminalRepository(repo: RemoteTicketsTerminalRepository): TicketsTerminalRepository
 }
