@@ -41,19 +41,20 @@ Mariana Solange Monteiro Rocha
 </tr>
 </table>
 
+<table border="0" width="max-width>
 
 ## Index
 
 1. [Overview](#overview)
+2. [App Architecture](#development-process)
 2. [App Architecture](#architecture)
 3. [Modularization](#modularization)
 4. [Libraries Used](#libraries-used)
 5. [Server Database](#server-database)
+6. [Security](#security)
 6. [Navigation Map](#navigation-map)
 7. [Implemented Features](#features)
-   
-- [ ] Performed Scenarios Tests
-- [ ] Screenshot e tutorial como usar
+8. [Performed Scenarios Tests and How to use](#performed-scenarios-test-and-how-to-use)
 
 ## Overview
 TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers. 
@@ -126,12 +127,11 @@ Work Manager allows us to schedule tasks that run in the background, not necessa
 
 Models represent the data that is being used in the app. They give us type safety and help us to avoid errors when working with data.
 
+
 <div align="center">
 
-![architecture.png](images-report%2Farchitecture.png)
-###### Figure 1 - TikTek Architecture
 
-</div>
+![architecture.png](images-report%2Farchitecture.png)
 
 
 ## Modularization
@@ -300,6 +300,7 @@ The Ticket schema represents a ticket purchased by a user for a specific event. 
 | Use Date      | Date (Nullable) |
 
 </div>
+
 #### 👥 User
 
 The User schema represents a registered user in the system. It includes attributes such as a unique identifier (ID), name (Name), tax identification number (NIF), birthdate (Birthdate), email address (E-mail), name on credit card (Name CC), credit card number (Number CC), credit card expiration date (Expiration Date CC), and password (Password).
@@ -319,6 +320,7 @@ The User schema represents a registered user in the system. It includes attribut
 | Password           | String |
 
 </div>
+
 ---
 
 ### Navigation Map
@@ -328,10 +330,24 @@ Pages highlighted in pink within the navigation map represent sections accessibl
 <div align="center">
  
 ![navigation-map.png](images-report%2Fnavigation-map.png)
+
 ###### Figure 2 - TikTek Navigation Map
+
 </div>
 
+## Security
+
+The app authentication is done by verifying an email and password pair with the stored user info in the database.
+This password is hashed using the bcrypt algorithm before it's stored.
+
+User sessions are represented using a JSON Web Token, which is signed and encrypted by the server.
+This JWT stores the user id for authorization, and the user public key.
+
+This pulbic key is used to verify the request body signature, which is sent with every request, and signed by the app using the user's private key.
+This key pair is generated each time the user signs in to a new app, and is stored in the android keystore.
+
 ## Features
+
 ### Main Features
 
 #### Authentication
@@ -341,6 +357,7 @@ When users open the app for the first time, they are directed to the "Initial Pa
 The users can create an account if they don't have one or log in in a previously registered account as shown in the screenshots below.
 
 ##### Features:
+
 - [x] Register account
 - [x] Log into account
 - [x] Mathematical Credit card validation upon creation
@@ -350,16 +367,17 @@ The users can create an account if they don't have one or log in in a previously
 <div align="center">
 
 ![authentication.png](images-report%2Fauthentication.png)
-###### Figure 3 - Authentication Pages
-</div>
 
+###### Figure 3 - Authentication Pages
+
+</div>
 
 #### Events
 
 When the users log in, as referred above, they are redirected to the events page. There they can check the upcoming events, buy tickets and collect information about specific events as shown in the pictures below. When an user attempts to finish a purchase they have to confirm that they are the owners of the phone by using biometric authentication.
 
-
 ##### Features:
+
 - [x] Check the next events taking place
 - [x] Check information about a specific event (date, time, price, description)
 - [x] Buy tickets to upcoming events
@@ -374,7 +392,9 @@ When the users log in, as referred above, they are redirected to the events page
 
 
 ![events-screens2.png](images-report%2Fevents-screens-2.png)
+
 ###### Figure 4 - Events' Pages
+
 </div>
 
 
@@ -393,7 +413,7 @@ After a purchase is made, a QR code is generated to be validated on the terminal
 - [x] Cancel cafeteria order
 - [x] Generate QR code to confirm purchase on the terminal
 - [x] Check my cafeteria orders that are still available to be used
-- [x] Check my cafeteria orders history receipt
+- [x] Check my cafeteria orders history and receipts
 
 <div align="center">
 
@@ -401,12 +421,15 @@ After a purchase is made, a QR code is generated to be validated on the terminal
 ![cafeteria-screenS.png](images-report%2Fcafeteria-screens-2.png)
 
 ###### Figure 5 - Cafeteria's Pages
+
 </div>
 
 #### Profile 
+
 Users can access their personal page to update their personal information or their payment details (update outdated credit card). In this page users can log out of the app if they want.
 
 ##### Features:
+
 - [x] Logout
 - [x] Change personal details and payment information
 - [x] Mathematical Credit card validation upon change
@@ -417,6 +440,7 @@ Users can access their personal page to update their personal information or the
 ![profile-screenS.png](images-report%2Fprofile-screens.png)
 
 ###### Figure 6 - Profile's Pages
+
 </div>
 
 
@@ -427,7 +451,9 @@ The ticket terminal allows customers to validate their purchased tickets. Users 
 <div align="center">
 
 ![ticket-terminal.png](images-report%2Fticket-terminal.png)
+
 ###### Figure 7 - Ticket Terminal Pages
+
 </div>
 
 #### Cafeteria Terminal
@@ -437,7 +463,9 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 <div align="center">
 
 ![cafeteria-terminal.png](images-report%2Fcafeteria-terminal.png)
+
 ###### Figure 8 - Cafeterial Terminal Pages
+
 </div>
 
 ### Other Features
@@ -449,22 +477,24 @@ We used Material Theme 3 for the development of our app UI. Depending on the def
 <div align="center">
 
 ![dark-light-screens.png](images-report%2Fdark-light-screens.png)
+
 ###### Figure 9 - Dark and Light Mode Example
+
 </div>
 
 #### Available in English and Portuguese Languages
 
 We made the app available in English and Portuguese using the resource of "strings.xml" to implement so.
 
-
-
-## Performed Scenarios Test/ How to use
+## Performed Scenarios Test and How to use
 
 This section outlines some test scenarios conducted to evaluate the functionality and usability of the TikTek mobile application and the terminals. These scenarios cover key interactions such as user registration, order placement, ticket purchase, validation, and voucher redemption. Each scenario is described along with the expected outcome to ensure thorough testing of the application's features. Screenshots accompany the scenarios to provide visual clarity. This testing phase aims to assess the performance and user experience of the application.
 
 ### 1. User Registration
+
 **Scenario Description:** This scenario tests the user registration process.
 **Test Steps:**
+
 1. User opens the app and selects the "Sign Up" option.
 2. User enters their personal details, including name, email, birthdate, and credit card information.
 3. User submits the registration form.
@@ -472,10 +502,11 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 ![scenario-reg.png](images-report%2Fscenario-reg.png)
 
-
 ### 2. Cafeteria Order
+
 **Scenario Description:** This scenario tests the process of placing a cafeteria order.
 **Test Steps:**
+
 1. User navigates to the cafeteria menu section in the app.
 2. User adds items to their cart, adjusting quantities if necessary.
 3. User proceeds to checkout and confirms the order.
@@ -483,10 +514,11 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 ![scenario-caf-order.png](images-report%2Fscenario-caf-order.png)
 
-
 ### 3. Ticket Purchase
+
 **Scenario Description:** This scenario tests the process of purchasing tickets for an event.
 **Test Steps:**
+
 1. User browses upcoming events in the app.
 2. User selects an event and chooses the desired number of tickets.
 3. User completes the ticket purchase process, entering payment details if necessary.
@@ -496,8 +528,10 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 ![scenario-ticket-purchase2.png](images-report%2Fscenario-ticket-purchase2.png)
 
 ### 4. Ticket Validation
+
 **Scenario Description:** This scenario tests the validation of purchased tickets at the ticket terminal.
 **Test Steps:**
+
 1. User approaches the ticket terminal with their smartphone.
 2. User opens the app and displays the QR code for the purchased ticket in the terminal.
 3. Terminal scans the QR code and sends the ticket information to the server for validation.
@@ -505,10 +539,11 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 ![scenario-validate-ticket.png](images-report%2Fscenario-validate-ticket.png)
 
-
 ### 5. Voucher Redemption
+
 **Scenario Description:** This scenario tests the redemption of vouchers for discounts or special offers.
 **Test Steps:**
+
 1. User selects an item for purchase and proceeds to checkout.
 2. User applies a voucher for a discount or free item, if available.
 3. Terminal sends the order information, including the applied voucher, to the server for validation.
@@ -516,9 +551,7 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 ![scenario-voucher-redemption.png](images-report%2Fscenario-voucher-redemption.png)
 
-
-
 ## References
 
 1. [Google Guide to App Architecture](https://developer.android.com/topic/architecture)
-2. 
+2. [Google Guide to App Modularization](https://developer.android.com/topic/modularization)
