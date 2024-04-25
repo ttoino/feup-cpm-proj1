@@ -220,11 +220,65 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 
 ![cafeteria-terminal.png](images-report%2Fcafeteria-terminal.png)
 
-## Performed Scenarios Test
+## Performed Scenarios Test/ How to use
 
-?? TODO
+This section outlines some test scenarios conducted to evaluate the functionality and usability of the TikTek mobile application and the terminals. These scenarios cover key interactions such as user registration, order placement, ticket purchase, validation, and voucher redemption. Each scenario is described along with the expected outcome to ensure thorough testing of the application's features. Screenshots accompany the scenarios to provide visual clarity. This testing phase aims to assess the performance and user experience of the application.
 
-## How to use
+### 1. User Registration
+**Scenario Description:** This scenario tests the user registration process.
+**Test Steps:**
+1. User opens the app and selects the "Sign Up" option.
+2. User enters their personal details, including name, email, birthdate, and credit card information.
+3. User submits the registration form.
+4. **Expected Outcome:** The user is successfully registered, and a confirmation message is displayed.
+
+![scenario-reg.png](images-report%2Fscenario-reg.png)
+
+
+### 2. Cafeteria Order
+**Scenario Description:** This scenario tests the process of placing a cafeteria order.
+**Test Steps:**
+1. User navigates to the cafeteria menu section in the app.
+2. User adds items to their cart, adjusting quantities if necessary.
+3. User proceeds to checkout and confirms the order.
+4. **Expected Outcome:** The cafeteria order is successfully placed, and a confirmation screen displays the ordered items and total price.
+
+![scenario-caf-order.png](images-report%2Fscenario-caf-order.png)
+
+
+### 3. Ticket Purchase
+**Scenario Description:** This scenario tests the process of purchasing tickets for an event.
+**Test Steps:**
+1. User browses upcoming events in the app.
+2. User selects an event and chooses the desired number of tickets.
+3. User completes the ticket purchase process, entering payment details if necessary.
+4. **Expected Outcome:** The ticket purchase is successful, and the purchased tickets are displayed in the user's account.
+
+![scenario-ticket-purchase1.png](images-report%2Fscenario-ticket-purchase1.png)
+![scenario-ticket-purchase2.png](images-report%2Fscenario-ticket-purchase2.png)
+
+### 4. Ticket Validation
+**Scenario Description:** This scenario tests the validation of purchased tickets at the ticket terminal.
+**Test Steps:**
+1. User approaches the ticket terminal with their smartphone.
+2. User opens the app and displays the QR code for the purchased ticket in the terminal.
+3. Terminal scans the QR code and sends the ticket information to the server for validation.
+4. **Expected Outcome:** The ticket is successfully validated, and the terminal displays a validation confirmation.
+
+![scenario-validate-ticket.png](images-report%2Fscenario-validate-ticket.png)
+
+
+### 5. Voucher Redemption
+**Scenario Description:** This scenario tests the redemption of vouchers for discounts or special offers.
+**Test Steps:**
+1. User selects an item for purchase and proceeds to checkout.
+2. User applies a voucher for a discount or free item, if available.
+3. Terminal sends the order information, including the applied voucher, to the server for validation.
+4. **Expected Outcome:** The voucher is successfully redeemed, and the terminal displays the adjusted total price for the order.
+
+![scenario-voucher-redemption.png](images-report%2Fscenario-voucher-redemption.png)
+
+
 
 ## References
 1. [Google Guide to App Architecture](https://developer.android.com/topic/architecture)
