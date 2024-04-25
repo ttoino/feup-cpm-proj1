@@ -45,15 +45,15 @@ Mariana Solange Monteiro Rocha
 ## Index
 
 1. [Overview](#overview)
-2. [App Architecture](#development-process)
 2. [App Architecture](#architecture)
+2. [Development Process](#development-process)
 3. [Modularization](#modularization)
 4. [Libraries Used](#libraries-used)
 5. [Server Database](#server-database)
 6. [Security](#security)
-6. [Navigation Map](#navigation-map)
-7. [Implemented Features](#features)
-8. [Performed Scenarios Tests and How to use](#performed-scenarios-test-and-how-to-use)
+7. [Navigation Map](#navigation-map)
+8. [Implemented Features](#features)
+9. [Performed Scenarios Tests and How to use](#performed-scenarios-test-and-how-to-use)
 
 ## Overview
 TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers. 
