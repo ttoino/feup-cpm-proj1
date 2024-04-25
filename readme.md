@@ -313,11 +313,12 @@ After a purchase is made, a QR code is generated to be validated on the terminal
 - [x] Cancel cafeteria order
 - [x] Generate QR code to confirm purchase on the terminal
 - [x] Check my cafeteria orders that are still available to be used
-- [x] Check my cafeteria orders history
+- [x] Check my cafeteria orders history receipt
 
 <div align="center">
 
 ![cafeteria-screenS.png](images-report%2Fcafeteria-screens.png)
+![cafeteria-screenS.png](images-report%2Fcafeteria-screens-2.png)
 
 ###### Figure 5 - Cafeteria's Pages
 </div>
@@ -337,7 +338,6 @@ Users can access their personal page to update their personal information or the
 
 ###### Figure 6 - Profile's Pages
 </div>
-
 
 
 #### Ticket Terminal
@@ -360,6 +360,18 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 ###### Figure 8 - Cafeterial Terminal Pages
 </div>
 
+### Other Features
+
+#### Dark and Light Mode
+
+We used Material Theme 3 for the development of our app UI. Depending on the default theme of the user's phone the app will appear on dark or light mode.
+
+![dark-light-screens.png](images-report%2Fdark-light-screens.png)
+###### Figure 9 - Dark and Light Mode Example
+
+#### Available in English and Portuguese Languages
+
+We made the app available in English and Portuguese using the resource of "strings.xml" to implement so.
 
 
 
