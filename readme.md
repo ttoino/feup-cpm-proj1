@@ -468,7 +468,12 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 3. User submits the registration form.
 4. **Expected Outcome:** The user is successfully registered, and a confirmation message is displayed.
 
+<div align="center">
+
 ![scenario-reg.png](images-report%2Fscenario-reg.png)
+###### Figure 10 - User Registration Tutorial
+
+</div>
 
 ### 2. Cafeteria Order
 
@@ -481,6 +486,7 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 4. **Expected Outcome:** The cafeteria order is successfully placed, and a confirmation screen displays the ordered items and total price.
 
 ![scenario-caf-order.png](images-report%2Fscenario-caf-order.png)
+###### Figure 11 - Cafeteria User Tutorial
 
 ### 3. Ticket Purchase
 
@@ -494,6 +500,7 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 ![scenario-ticket-purchase1.png](images-report%2Fscenario-ticket-purchase1.png)
 ![scenario-ticket-purchase2.png](images-report%2Fscenario-ticket-purchase2.png)
+###### Figure 12 - Ticket Purchase Tutorial
 
 ### 4. Ticket Validation
 
@@ -506,6 +513,7 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 4. **Expected Outcome:** The ticket is successfully validated, and the terminal displays a validation confirmation.
 
 ![scenario-validate-ticket.png](images-report%2Fscenario-validate-ticket.png)
+###### Figure 13 - Ticket Validation Tutorial
 
 ### 5. Voucher Redemption
 
@@ -518,6 +526,8 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 4. **Expected Outcome:** The voucher is successfully redeemed, and the terminal displays the adjusted total price for the order.
 
 ![scenario-voucher-redemption.png](images-report%2Fscenario-voucher-redemption.png)
+
+###### Figure 14 - Voucher Redemption Tutorial
 
 ## References
 
