@@ -13,29 +13,29 @@ Anete Medina Pereira
 <td>
 
 [202008856](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202008856)
-    
+
 </td>
 </tr>
 <tr>
 <td>
-    
-João António Semedo Pereira 
+
+João António Semedo Pereira
 
 </td>
 <td>
-    
+
 [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)  
 
 </td>
 </tr>
 <tr>
 <td>
-    
+
 Mariana Solange Monteiro Rocha
 
 </td>
 <td>
-    
+
  [202004656](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)
 
 </td>
@@ -46,17 +46,18 @@ Mariana Solange Monteiro Rocha
 
 1. [Overview](#overview)
 2. [App Architecture](#architecture)
-2. [Development Process](#development-process)
-3. [Modularization](#modularization)
-4. [Libraries Used](#libraries-used)
-5. [Server Database](#server-database)
-6. [Security](#security)
-7. [Navigation Map](#navigation-map)
-8. [Implemented Features](#features)
-9. [Performed Scenarios Tests and How to use](#performed-scenarios-test-and-how-to-use)
+3. [Development Process](#development-process)
+4. [Modularization](#modularization)
+5. [Libraries Used](#libraries-used)
+6. [Server Database](#server-database)
+7. [Security](#security)
+8. [Navigation Map](#navigation-map)
+9. [Implemented Features](#features)
+10. [Performed Scenarios Tests and How to use](#performed-scenarios-test-and-how-to-use)
 
 ## Overview
-TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers. 
+
+TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers.
 
 ## Development Process
 
@@ -71,7 +72,6 @@ The project began with the creation of interactive mock-ups using Figma, providi
 Following the mock-ups creatin, we then started developing the frontend. This phase involved translating the visual design elements from Figma into functional frontend components. Each page and feature outlined in the mock-ups was implemented iteratively, allowing for easier prototyping.
 
 Simultaneously, backend development and server setup were initiated to support the frontend implementation. The backend infrastructure was designed to handle data storage, processing, and user authentication, ensuring seamless communication between the client-side application and the server.
-
 
 ### Iterative Improvement
 
@@ -132,7 +132,7 @@ Models represent the data that is being used in the app. They give us type safet
 
 ## Modularization
 
-Because multiple apps were developed in parallel, they were divided into several modules to make it easier to manage, maintain, and reuse code. 
+Because multiple apps were developed in parallel, they were divided into several modules to make it easier to manage, maintain, and reuse code.
 
 The modules fall into three main categories:
 
@@ -326,7 +326,7 @@ The User schema represents a registered user in the system. It includes attribut
 Pages highlighted in pink within the navigation map represent sections accessible via the bottom navigation bar. These sections offer easy access and, since the user is logged in, can be reached with just a single click.
 
 <div align="center">
- 
+
 ![navigation-map.png](images-report%2Fnavigation-map.png)
 
 ###### Figure 2 - TikTek Navigation Map
@@ -357,7 +357,7 @@ When users open the app for the first time, they are directed to the "Initial Pa
 
 The users can create an account if they don't have one or log in in a previously registered account as shown in the screenshots below.
 
-##### Features:
+##### Features
 
 - [x] Register account
 - [x] Log into account
@@ -377,7 +377,7 @@ The users can create an account if they don't have one or log in in a previously
 
 When the users log in, as referred above, they are redirected to the events page. There they can check the upcoming events, buy tickets and collect information about specific events as shown in the pictures below. When an user attempts to finish a purchase they have to confirm that they are the owners of the phone by using biometric authentication.
 
-##### Features:
+##### Features
 
 - [x] Check the next events taking place
 - [x] Check information about a specific event (date, time, price, description)
@@ -386,11 +386,9 @@ When the users log in, as referred above, they are redirected to the events page
 - [x] Check my event tickets history
 - [x] Generate QR code to confirm purchase on the terminal
 
-
 <div align="center">
 
 ![events-screenS.png](images-report%2Fevents-screens.png)
-
 
 ![events-screens2.png](images-report%2Fevents-screens-2.png)
 
@@ -398,13 +396,13 @@ When the users log in, as referred above, they are redirected to the events page
 
 </div>
 
-
-#### Cafeteria 
+#### Cafeteria
 
 Besides being able to buy and check information about upcoming event, users are also allowed to buy from the local theatre cafeteria using the app. When an user attempts to finish a purchase, just like in events tickets, they have to confirm that they are the owners of the phone by using biometric authentication.
 After a purchase is made, a QR code is generated to be validated on the terminal. It contains all the products bought and their quantity, vouchers used and the price before and after the use of the vouchers.
 
-##### Features:
+##### Features
+
 - [x] Check items available in the cafeteria menu
 - [x] Check if cafeteria is open or closed
 - [x] Add items to cart
@@ -425,11 +423,11 @@ After a purchase is made, a QR code is generated to be validated on the terminal
 
 </div>
 
-#### Profile 
+#### Profile
 
 Users can access their personal page to update their personal information or their payment details (update outdated credit card). In this page users can log out of the app if they want.
 
-##### Features:
+##### Features
 
 - [x] Logout
 - [x] Change personal details and payment information
@@ -443,7 +441,6 @@ Users can access their personal page to update their personal information or the
 ###### Figure 6 - Profile's Pages
 
 </div>
-
 
 #### Ticket Terminal
 
