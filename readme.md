@@ -2,44 +2,12 @@
 
 ## Team
 
-<table border="0" >
-
- <tr>
-<td>
-
-Anete Medina Pereira  
-
-</td>
-<td>
-
-[202008856](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202008856)
-
-</td>
-</tr>
-<tr>
-<td>
-
-João António Semedo Pereira
-
-</td>
-<td>
-
-[202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)  
-
-</td>
-</tr>
-<tr>
-<td>
-
-Mariana Solange Monteiro Rocha
-
-</td>
-<td>
-
- [202004656](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)
-
-</td>
-</tr>
+<table border="0" align="center">
+    <tr><th colspan="2">Group 3</th></tr>
+    <tr><td>Anete Medina Pereira</td><td><a href="https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202008856">202008856</a></td></tr>
+    <tr><td>João António Semedo Pereira</td><td>
+    <a href="https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145">202007145</a></td></tr>
+    <tr><td>Mariana Solange Monteiro Rocha</td><td><a href="https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656">202004656</a></td></tr>
 </table>
 
 ## Index
@@ -69,7 +37,7 @@ The project began with the creation of interactive mock-ups using Figma, providi
 
 ### Frontend and Backend Implementation
 
-Following the mock-ups creatin, we then started developing the frontend. This phase involved translating the visual design elements from Figma into functional frontend components. Each page and feature outlined in the mock-ups was implemented iteratively, allowing for easier prototyping.
+Following the mock-ups creation, we then started developing the frontend. This phase involved translating the visual design elements from Figma into functional frontend components. Each page and feature outlined in the mock-ups was implemented iteratively, allowing for easier prototyping.
 
 Simultaneously, backend development and server setup were initiated to support the frontend implementation. The backend infrastructure was designed to handle data storage, processing, and user authentication, ensuring seamless communication between the client-side application and the server.
 
@@ -79,7 +47,7 @@ Throughout the development process, iterative improvements were made to both fro
 
 ## Architecture
 
-A solid architecture is essential in mobile app development to make it less prone to errors, ensuring flexibility, scalability and maintainability. Well structured components promote modularity, simplyfing app development.
+A solid architecture is essential in mobile app development to make it less prone to errors, ensuring flexibility, scalability and maintainability. Well structured components promote modularity, simplifying app development.
 
 To achieve that, the architecture used in the development of this app follows principles suggested in the [Google Guide to App Architecture](https://developer.android.com/topic/architecture).
 
@@ -87,7 +55,7 @@ Our app is mostly divided into the following components:
 
 ### Screen
 
-What the user sees amd interacts with on their device. Contains all the visual interface definition and structure and components such as buttons, text fields, etc.
+What the user sees and interacts with on their device. Contains all the visual interface definition and structure and components such as buttons, text fields, etc.
 
 ### View Model
 
@@ -127,6 +95,8 @@ Models represent the data that is being used in the app. They give us type safet
 <div align="center">
 
 ![architecture.png](images-report%2Farchitecture.png)
+
+###### Figure 1 - TikTek Architecture
 
 </div>
 
@@ -217,7 +187,7 @@ The following libraries when developing the app:
 
 #### ☕ Cafeteria Item
 
-Cafeteria Items are stored in the database with a string ID, which is the primary key, the item name (Name), price (Price) stored as an integer (because the price is stored in the database as cents of euro and converted for euros everytime it is shown to the user), and an image URL (Image Url) to represent the item visually.
+Cafeteria Items are stored in the database with a string ID, which is the primary key, the item name (Name), price (Price) stored as an integer (because the price is stored in the database as cents of euro and converted for euros every time it is shown to the user), and an image URL (Image Url) to represent the item visually.
 
 <div align="center">
 
@@ -263,7 +233,7 @@ When users spend 200€ on tickets they receive a 5% discount voucher and each t
 
 #### 🎭 Event
 
-The Event schema represents an event avalaible in the app. It includes details such as the event's unique identifier (ID), name (Name), description (Description), date (Date), start time (Start Time), end time (End Time), location (Location), optional location details (Location Details), price (Price), and an image URL (ImageUrl).
+The Event schema represents an event available in the app. It includes details such as the event's unique identifier (ID), name (Name), description (Description), date (Date), start time (Start Time), end time (End Time), location (Location), optional location details (Location Details), price (Price), and an image URL (ImageUrl).
 
 <div align="center">
 
@@ -344,7 +314,7 @@ This JWT stores the user id for authorization, and the user public key.
 This public key is used to verify the request body signature, which is sent with every request, and signed by the app using the user's private key.
 This key pair is generated each time the user signs in to a new app, and is stored in the android keystore.
 
-The terminal apps do not use any authentication, as they are assumed to be in a protected network when deployed correctly, so no attacks are feasable.
+The terminal apps do not use any authentication, as they are assumed to be in a protected network when deployed correctly, so no attacks are feasible.
 In this vein, no encryption is done, because in a correct deployment HTTPS/TLS should be used for encryption.
 
 ## Features
@@ -462,7 +432,7 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 
 ![cafeteria-terminal.png](images-report%2Fcafeteria-terminal.png)
 
-###### Figure 8 - Cafeterial Terminal Pages
+###### Figure 8 - Cafeteria Terminal Pages
 
 </div>
 
