@@ -217,7 +217,7 @@ The users can create an account if they don't have one or log in in a previously
 
 #### Events
 
-When the users log in, as referred above, they are redirected to the events page. There they can check the upcoming events, buy tickets and collect information about specific events as shown in the pictures below.
+When the users log in, as referred above, they are redirected to the events page. There they can check the upcoming events, buy tickets and collect information about specific events as shown in the pictures below. When an user attempts to finish a purchase they have to confirm that they are the owners of the phone by using biometric authentication.
 
 
 ##### Features:
@@ -226,6 +226,8 @@ When the users log in, as referred above, they are redirected to the events page
 - [x] Buy tickets to upcoming events
 - [x] Check my event tickets that are still available to be used
 - [x] Check my event tickets history
+- [x] Generate QR code to confirm purchase on the terminal
+
 
 <div align="center">
 
@@ -233,9 +235,33 @@ When the users log in, as referred above, they are redirected to the events page
 
 
 ![events-screens2.png](images-report%2Fevents-screens-2.png)
-###### Figure 5 - Authentication Pages
+###### Figure 5 - Events' Pages
 </div>
 
+
+#### Cafeteria 
+
+Besides being able to buy and check information about upcoming event, users are also allowed to buy from the local theatre cafeteria using the app.  When an user attempts to finish a purchase, just like in events tickets, they have to confirm that they are the owners of the phone by using biometric authentication.
+After a purchase is made, a QR code is generated to be validated on the terminal. It contains all the products bought and their quantity, vouchers used and the price before and after the use of the vouchers.
+
+##### Features:
+- [x] Check items available in the cafeteria menu
+- [x] Check if cafeteria is open or closed
+- [x] Add items to cart
+- [x] Remove items from cart
+- [x] Change items quantity in cart
+- [x] Buy cafeteria order
+- [x] Cancel cafeteria order
+- [x] Generate QR code to confirm purchase on the terminal
+- [x] Check my cafeteria orders that are still available to be used
+- [x] Check my cafeteria orders history
+
+<div align="center">
+
+![events-screenS.png](images-report%2Fcafeteria-screens.png)
+
+###### Figure 5 - Cafeteria's Pages
+</div>
 
 
 #### Ticket Terminal
