@@ -26,8 +26,21 @@ By acting as a middleman, it provides a **separation of concerns** which inscrea
 Repositories provide a easy way for accessing data. They contain methods for fetching, updating and deleting data. Their service helps centralizing data access and serves as a mediator between the view models' business logic and the data own of storage.
 
 ### Data Sources
+Data sources are the data providers for the app. They include databases and network REST APIs. Data sources are the data providers that repositories use to retrieve and store data. In the context of our app, since it needs to communicate with a server, but also needs to work offline two kinds of data sources are being used: network data sources and local data sources.
+
 #### Network
+Data retrieved from any other source that is not the user's device. Allows real-time updates and access of information that is not locally stored.
+
 #### Local
+Data stored on the user's device. This kind of data source enables offline access and faster retrieval.
+
+### Work Manager
+TODO
+
+### Model
+TODO
+
+![architecture.png](images-report%2Farchitecture.png)
 
 ## Data Schemas
 ### Server Database
