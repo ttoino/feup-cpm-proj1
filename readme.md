@@ -50,8 +50,6 @@ Mariana Solange Monteiro Rocha
 4. [Navigation Map](#navigation-map)
 5. [Implemented Features](#features)
    
-- [ ] Features
-- [ ] Navigation Map
 - [ ] Performed Scenarios Tests
 - [ ] Screenshot e tutorial como usar
 
