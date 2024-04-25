@@ -67,7 +67,6 @@ The development of the TikTek project followed a structured approach, progressin
 
 The project began with the creation of interactive mock-ups using Figma, providing a visual representation of the application's user interface. You can access the Figma mock-ups [here](https://www.figma.com/file/be4fFeNXVfwz2kkCn2Rdp2/App?type=design&node-id=0%3A1&mode=design&t=MxgVdYSaBsSuLdpI-1)
 
-
 ### Frontend and Backend Implementation
 
 Following the mock-ups creatin, we then started developing the frontend. This phase involved translating the visual design elements from Figma into functional frontend components. Each page and feature outlined in the mock-ups was implemented iteratively, allowing for easier prototyping.
@@ -78,7 +77,6 @@ Simultaneously, backend development and server setup were initiated to support t
 ### Iterative Improvement
 
 Throughout the development process, iterative improvements were made to both frontend and backend components based on feedback using the app and evolving requirements, ensuring a user-friendly and robust application.
-
 
 ## Architecture
 
@@ -127,12 +125,11 @@ Work Manager allows us to schedule tasks that run in the background, not necessa
 
 Models represent the data that is being used in the app. They give us type safety and help us to avoid errors when working with data.
 
-
 <div align="center">
-
 
 ![architecture.png](images-report%2Farchitecture.png)
 
+</div>
 
 ## Modularization
 
