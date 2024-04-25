@@ -166,6 +166,8 @@ These modules are:
 
 Cafeteria Items are stored in the database with a string ID, which is the primary key, the item name (Name), price (Price) stored as an integer (because the price is stored in the database as cents of euro and converted for euros everytime it is shown to the user), and an image URL (Image Url) to represent the item visually.
 
+<div align="center">
+
 | Name      | Type    |
 | --------- | ------- |
 | **ID\***  | String  |
@@ -173,18 +175,26 @@ Cafeteria Items are stored in the database with a string ID, which is the primar
 | Price     | Integer |
 | Image Url | String  |
 
+</div>
+
 #### 📋 Order
 
 The Order schema represents an order made by a customer. Each order has a unique identifier (ID) and a date (Date) indicating when the order was made.
+
+<div align="center">
 
 | Attribute | Type   |
 | --------- | ------ |
 | **ID\***  | String |
 | Date      | Date   |
 
+</div>
+
 #### 🏷️ Voucher
 
 The Voucher schema represents a voucher that can be redeemed by a user for discounts or special offers. Each voucher has a unique identifier (ID), a discount amount (Discount), an optional associated item (Item), a user who owns the voucher (User), and an optional associated order (Order).
+
+<div align="center">
 
 | Attribute | Type               |
 | --------- | ------------------ |
@@ -194,9 +204,13 @@ The Voucher schema represents a voucher that can be redeemed by a user for disco
 | User      | User               |
 | Order     | Order (Nullable)   |
 
+</div>
+
 #### 🎭 Event
 
 The Event schema represents an event avalaible in the app. It includes details such as the event's unique identifier (ID), name (Name), description (Description), date (Date), start time (Start Time), end time (End Time), location (Location), optional location details (Location Details), price (Price), and an image URL (ImageUrl).
+
+<div align="center">
 
 | Attribute        | Type              |
 | ---------------- | ----------------- |
@@ -211,9 +225,13 @@ The Event schema represents an event avalaible in the app. It includes details s
 | Price            | Integer           |
 | ImageUrl         | String            |
 
+</div>
+
 #### 🎟️ Ticket
 
 The Ticket schema represents a ticket purchased by a user for a specific event. Each ticket has a unique identifier (ID), an associated event (Event), user who purchased the ticket (User), associated seat (Seat), purchase date (Purchase Date), and optional use date (Use Date).
+
+<div align="center">
 
 | Attribute     | Type            |
 | ------------- | --------------- |
@@ -224,9 +242,12 @@ The Ticket schema represents a ticket purchased by a user for a specific event. 
 | Purchase Date | Date            |
 | Use Date      | Date (Nullable) |
 
+</div>
 #### 👥 User
 
 The User schema represents a registered user in the system. It includes attributes such as a unique identifier (ID), name (Name), tax identification number (NIF), birthdate (Birthdate), email address (E-mail), name on credit card (Name CC), credit card number (Number CC), credit card expiration date (Expiration Date CC), and password (Password).
+
+<div align="center">
 
 | Attribute          | Type   |
 | ------------------ | ------ |
@@ -240,6 +261,7 @@ The User schema represents a registered user in the system. It includes attribut
 | Expiration Date CC | String |
 | Password           | String |
 
+</div>
 ---
 
 ### Navigation Map
@@ -367,8 +389,11 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 
 We used Material Theme 3 for the development of our app UI. Depending on the default theme of the user's phone the app will appear on dark or light mode.
 
+<div align="center">
+
 ![dark-light-screens.png](images-report%2Fdark-light-screens.png)
 ###### Figure 9 - Dark and Light Mode Example
+</div>
 
 #### Available in English and Portuguese Languages
 
