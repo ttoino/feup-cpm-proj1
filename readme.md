@@ -471,6 +471,7 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 <div align="center">
 
 ![scenario-reg.png](images-report%2Fscenario-reg.png)
+
 ###### Figure 10 - User Registration Tutorial
 
 </div>
@@ -485,8 +486,13 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 3. User proceeds to checkout and confirms the order.
 4. **Expected Outcome:** The cafeteria order is successfully placed, and a confirmation screen displays the ordered items and total price.
 
+<div align="center">
+
 ![scenario-caf-order.png](images-report%2Fscenario-caf-order.png)
+
 ###### Figure 11 - Cafeteria User Tutorial
+
+</div>
 
 ### 3. Ticket Purchase
 
@@ -498,9 +504,14 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 3. User completes the ticket purchase process, entering payment details if necessary.
 4. **Expected Outcome:** The ticket purchase is successful, and the purchased tickets are displayed in the user's account.
 
+<div align="center">
+
 ![scenario-ticket-purchase1.png](images-report%2Fscenario-ticket-purchase1.png)
 ![scenario-ticket-purchase2.png](images-report%2Fscenario-ticket-purchase2.png)
+
 ###### Figure 12 - Ticket Purchase Tutorial
+
+</div>
 
 ### 4. Ticket Validation
 
@@ -512,8 +523,13 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 3. Terminal scans the QR code and sends the ticket information to the server for validation.
 4. **Expected Outcome:** The ticket is successfully validated, and the terminal displays a validation confirmation.
 
+<div align="center">
+
 ![scenario-validate-ticket.png](images-report%2Fscenario-validate-ticket.png)
+
 ###### Figure 13 - Ticket Validation Tutorial
+
+</div>
 
 ### 5. Voucher Redemption
 
@@ -525,9 +541,13 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 3. Terminal sends the order information, including the applied voucher, to the server for validation.
 4. **Expected Outcome:** The voucher is successfully redeemed, and the terminal displays the adjusted total price for the order.
 
+<div align="center">
+
 ![scenario-voucher-redemption.png](images-report%2Fscenario-voucher-redemption.png)
 
 ###### Figure 14 - Voucher Redemption Tutorial
+
+</div>
 
 ## References
 
