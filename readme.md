@@ -101,12 +101,13 @@ Work Manager allows us to schedule tasks that run in the background, not necessa
 
 Models represent the data that is being used in the app. They give us type safety and help us to avoid errors when working with data.
 
-<div>
+<div align="center">
 
 ![architecture.png](images-report%2Farchitecture.png)
 ###### Figure 1 - TikTek Architecture
 
 </div>
+
 
 ## Modularization
 
