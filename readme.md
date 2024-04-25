@@ -47,9 +47,10 @@ Mariana Solange Monteiro Rocha
 1. [Overview](#overview)
 2. [App Architecture](#architecture)
 3. [Modularization](#modularization)
-4. [Server Database](#server-database)
-5. [Navigation Map](#navigation-map)
-6. [Implemented Features](#features)
+4. [Libraries Used](#libraries-used)
+5. [Server Database](#server-database)
+6. [Navigation Map](#navigation-map)
+7. [Implemented Features](#features)
    
 - [ ] Performed Scenarios Tests
 - [ ] Screenshot e tutorial como usar
@@ -160,6 +161,38 @@ These modules are:
 - **core:model**: Contains the code for the different models used throughout the apps.
 - **core:network**: Contains the code for the different network data sources used throughout the apps.
 - **core:ui**: Contains the code for the common UI components used throughout the apps.
+
+### Build Logic
+
+A separate module, `build-logic`, contains the common build logic used by all the modules, such as convention plugins, which standardize the build process across all the modules, and custom tasks, such as the port forwarding task.
+
+## Libraries Used
+
+The following libraries when developing the app:
+
+- **Akkurate**: A kotlin library for data validation. Used to validate the forms client-side and to validate the requests server-side.
+- **AndroidX Compose**: A modern toolkit for building native Android UI. Used to build the UI of the app.
+- **AndroidX DataStore**: A modern data storage solution that allows the app to store key-value pairs or typed objects. Used to store the user's authentication token, profile, and cart locally.
+- **AndroidX Lifecycle**: A library that provides lifecycle-aware components, such as View Models. Used to observe data changes in the app.
+- **AndroidX Navigation**: A library that provides a framework for navigating between different screens in the app.
+- **AndroidX Room**: A library that provides an abstraction layer over SQLite. Used to store data locally in the app.
+- **AndroidX SplashScreen**: A library that provides a splash screen API for Android. Used to show a splash screen when the app is launched.
+- **AndroidX Work**: A library that provides a way to schedule tasks that run in the background. Used to synchronize data with the server and delete personal information when the user logs out.
+- **BCrypt**: A library that provides a way to hash passwords using the BCrypt algorithm. Used to hash passwords before storing them in the database.
+- **Coil**: A modern image loading library for Android. Used to load images in the app.
+- **Compose Destinations**: A wrapper around AndroidX Compose and AndroidX Navigation that uses annotations and code generation to simplify navigation in Android apps. Used to define destinations in the app.
+- **Dagger**: A dependency injection library. Used to inject dependencies into the app.
+- **Exposed**: A Kotlin ORM library. Used to interact with the database in the backend server.
+- **Faker**: A library that generates fake data. Used to generate fake events for testing purposes.
+- **H2**: An in-memory database. Used to store data in the backend server.
+- **Hilt**: A dependency injection library for Android. Uses Dagger under the hood. Used to inject dependencies into the app.
+- **KotlinX DateTime**: A library that provides a way to work with dates and times in Kotlin. Used to work with dates and times in the app.
+- **KotlinX Serialization**: A library that provides a way to serialize and deserialize data in Kotlin. Used to serialize and deserialize data for communication between apps and the server.
+- **KTLint**: A static code analysis tool for Kotlin. Used to enforce coding standards in the app.
+- **Ktor**: A Kotlin networking library. Used to implement the server in the backend server.
+- **Retrofit**: A type-safe HTTP client for Android. Used to make network requests in the app.
+- **Timber**: A logging library for Android. Used to log messages in the app.
+- **ZXing**: A barcode scanning library for Android. Used to scan and generate QR codes in the app.
 
 ## Data Schemas
 
