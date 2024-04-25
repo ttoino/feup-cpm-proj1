@@ -57,6 +57,27 @@ Mariana Solange Monteiro Rocha
 ## Overview
 TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers. 
 
+## Development Process
+
+The development of the TikTek project followed a structured approach, progressing through key stages to ensure the successful delivery of the application.
+
+### Mock-ups on Figma
+
+The project began with the creation of interactive mock-ups using Figma, providing a visual representation of the application's user interface. You can access the Figma mock-ups [here](https://www.figma.com/file/be4fFeNXVfwz2kkCn2Rdp2/App?type=design&node-id=0%3A1&mode=design&t=MxgVdYSaBsSuLdpI-1)
+
+
+### Frontend and Backend Implementation
+
+Following the mock-ups creatin, we then started developing the frontend. This phase involved translating the visual design elements from Figma into functional frontend components. Each page and feature outlined in the mock-ups was implemented iteratively, allowing for easier prototyping.
+
+Simultaneously, backend development and server setup were initiated to support the frontend implementation. The backend infrastructure was designed to handle data storage, processing, and user authentication, ensuring seamless communication between the client-side application and the server.
+
+
+### Iterative Improvement
+
+Throughout the development process, iterative improvements were made to both frontend and backend components based on feedback using the app and evolving requirements, ensuring a user-friendly and robust application.
+
+
 ## Architecture
 
 A solid architecture is essential in mobile app development to make it less prone to errors, ensuring flexibility, scalability and maintainability. Well structured components promote modularity, simplyfing app development.
@@ -467,4 +488,4 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 ## References
 
 1. [Google Guide to App Architecture](https://developer.android.com/topic/architecture)
-2.
+2. 
