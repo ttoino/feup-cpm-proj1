@@ -1,18 +1,55 @@
 # M.EIC 2023/2024 CPM - 1st Assignment
 
 ## Team
+<table border="0" >
+
+ <tr>
+<td>
+
+Anete Medina Pereira  
+
+</td>
+<td>
+
+[202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145) 
+    
+</td>
+</tr>
+<tr>
+<td>
+    
+João António Semedo Pereira 
+
+</td>
+<td>
+    
+[202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)  
+
+</td>
+</tr>
+<tr>
+<td>
+    
+Mariana Solange Monteiro Rocha
+
+</td>
+<td>
+    
+ [202004656](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)
+
+</td>
+</tr>
+</table>
 
 
-Anete Medina Pereira         [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
+## Index
 
-João António Semedo Pereira          [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
-
-Mariana Solange Monteiro Rocha       [202004656](<(https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)>)
-
-## Topics
-
-- [ ] Architecture
-- [ ] Data Schemas (server database, a ticket, an order, a voucher)
+1. [Overview](#CHANGE)
+2. [App Architecture](#architecture)
+3. [Server Database](#server-database)
+4. [Navigation Map](#navigation-map)
+5. [Implemented Features](#features)
+   
 - [ ] Features
 - [ ] Navigation Map
 - [ ] Performed Scenarios Tests
