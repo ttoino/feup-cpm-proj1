@@ -2,6 +2,7 @@ package pt.up.fe.cpm.tiktek.core.data.localfirst
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import pt.up.fe.cpm.tiktek.core.data.KeysRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.data.work.Deletable
@@ -18,11 +19,12 @@ class LocalFirstVouchersRepository
         private val networkDataSource: NetworkDataSource,
         private val localDataSource: LocalVouchersDataSource,
         private val userRepository: UserRepository,
+        private val keysRepository: KeysRepository,
     ) : VouchersRepository, Syncable, Deletable {
         override suspend fun sync(): NetworkResult<Unit> {
             val token = userRepository.getToken().first() ?: return NetworkResult.Failure
 
-            val result = networkDataSource.getVouchers(token)
+            val result = networkDataSource.getVouchers(token, keysRepository.privateKey)
 
             result.getOrNull()?.let {
                 localDataSource.insert(it)

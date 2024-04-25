@@ -42,7 +42,7 @@ fun Route.registerRoute() {
 
         val createdUser = application.database.user.create(user)
 
-        call.respondWithToken(createdUser.id)
+        call.respondWithToken(createdUser.id, request.key)
     }
 
     post("/partial-register") {

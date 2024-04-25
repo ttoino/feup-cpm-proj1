@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import pt.up.fe.cpm.tiktek.core.data.local.LocalCartRepository
+import pt.up.fe.cpm.tiktek.core.data.local.LocalKeysRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstCafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstEventsRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstOrdersRepository
@@ -45,6 +46,10 @@ abstract class WorkModule {
     @Binds
     @IntoSet
     abstract fun bindDeletableCartRepository(cartRepository: LocalCartRepository): Deletable
+
+    @Binds
+    @IntoSet
+    abstract fun bindDeletableKeysRepository(keysRepository: LocalKeysRepository): Deletable
 
     @Binds
     @IntoSet

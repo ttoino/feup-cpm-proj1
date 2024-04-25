@@ -6,6 +6,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.doublereceive.DoubleReceive
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import pt.up.fe.cpm.tiktek.backend.auth.authModule
@@ -27,6 +28,7 @@ fun main() {
                 },
             )
         }
+        install(DoubleReceive)
 
         authModule()
         cafeteriaModule()

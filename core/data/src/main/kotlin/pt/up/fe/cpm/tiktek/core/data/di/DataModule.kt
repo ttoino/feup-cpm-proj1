@@ -8,12 +8,14 @@ import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaTerminalRepository
 import pt.up.fe.cpm.tiktek.core.data.CartRepository
 import pt.up.fe.cpm.tiktek.core.data.EventsRepository
+import pt.up.fe.cpm.tiktek.core.data.KeysRepository
 import pt.up.fe.cpm.tiktek.core.data.OrdersRepository
 import pt.up.fe.cpm.tiktek.core.data.TicketsRepository
 import pt.up.fe.cpm.tiktek.core.data.TicketsTerminalRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.VouchersRepository
 import pt.up.fe.cpm.tiktek.core.data.local.LocalCartRepository
+import pt.up.fe.cpm.tiktek.core.data.local.LocalKeysRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstCafeteriaRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstEventsRepository
 import pt.up.fe.cpm.tiktek.core.data.localfirst.LocalFirstOrdersRepository
@@ -34,6 +36,9 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindEventsRepository(repo: LocalFirstEventsRepository): EventsRepository
+
+    @Binds
+    abstract fun bindKeysRepository(repo: LocalKeysRepository): KeysRepository
 
     @Binds
     abstract fun bindOrdersRepository(repo: LocalFirstOrdersRepository): OrdersRepository

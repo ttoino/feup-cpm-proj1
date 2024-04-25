@@ -3,6 +3,7 @@ package pt.up.fe.cpm.tiktek.core.data.localfirst
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import pt.up.fe.cpm.tiktek.core.data.CafeteriaRepository
+import pt.up.fe.cpm.tiktek.core.data.KeysRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.work.Syncable
 import pt.up.fe.cpm.tiktek.core.local.LocalCafeteriaDataSource
@@ -17,12 +18,13 @@ class LocalFirstCafeteriaRepository
         private val networkDataSource: NetworkDataSource,
         private val localDataSource: LocalCafeteriaDataSource,
         private val userRepository: UserRepository,
+        private val keysRepository: KeysRepository,
     ) :
     CafeteriaRepository, Syncable {
         override suspend fun sync(): NetworkResult<Unit> {
             val token = userRepository.getToken().first() ?: return NetworkResult.Failure
 
-            val result = networkDataSource.getCafeteriaItems(token)
+            val result = networkDataSource.getCafeteriaItems(token, keysRepository.privateKey)
 
             result.getOrNull()?.let {
                 localDataSource.insert(it)
