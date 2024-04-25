@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
+import okhttp3.OkHttpClient
 import pt.up.fe.cpm.tiktek.core.model.AuthResponse
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketRequest
 import pt.up.fe.cpm.tiktek.core.model.BuyTicketResponse
@@ -30,6 +31,9 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Tag
+import java.security.PrivateKey
+import java.security.PublicKey
 import javax.inject.Inject
 
 private interface TikTekApi {
@@ -53,23 +57,27 @@ private interface TikTekApi {
     @GET("cafeteria")
     suspend fun getCafeteriaItems(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<List<CafeteriaItem>>
 
     // Events
     @GET("events")
     suspend fun getEvents(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<List<Event>>
 
     @GET("events/{id}")
     suspend fun getEvent(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
         @Path("id") eventId: String,
     ): NetworkResult<Event>
 
     @POST("events/{id}/buy")
     suspend fun buyTickets(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
         @Path("id") eventId: String,
         @Body body: BuyTicketRequest,
     ): NetworkResult<BuyTicketResponse>
@@ -78,34 +86,40 @@ private interface TikTekApi {
     @GET("orders")
     suspend fun getOrders(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<List<Order>>
 
     // Profile
     @GET("profile")
     suspend fun getProfile(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<User>
 
     @PUT("profile")
     suspend fun updateProfile(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
         @Body body: User,
     ): NetworkResult<User>
 
     @DELETE("profile")
     suspend fun deleteProfile(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<Boolean>
 
     // Tickets
     @GET("tickets")
     suspend fun getTickets(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<List<Ticket>>
 
     @GET("tickets/{id}")
     suspend fun getTicket(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
         @Path("id") eventId: String,
     ): NetworkResult<Ticket>
 
@@ -113,6 +127,7 @@ private interface TikTekApi {
     @GET("vouchers")
     suspend fun getVouchers(
         @Header("Authorization") authorization: String,
+        @Tag key: PrivateKey,
     ): NetworkResult<List<Voucher>>
 
     // Send cart -> feature for cafeteria terminal
@@ -135,11 +150,13 @@ class RetrofitNetworkDataSource
     @Inject
     internal constructor(
         json: Json,
+        client: OkHttpClient,
         adapterFactory: ResultCallAdapterFactory,
     ) : NetworkDataSource {
         private val api =
             Retrofit.Builder()
                 .baseUrl("http://localhost:8080")
+                .client(client)
                 .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
                 .addCallAdapterFactory(adapterFactory)
                 .build()
@@ -147,11 +164,13 @@ class RetrofitNetworkDataSource
 
         // Auth
         override suspend fun login(
+            key: PublicKey,
             email: String,
             password: String,
-        ) = api.login(LoginRequest(email, password))
+        ) = api.login(LoginRequest(key, email, password))
 
         override suspend fun register(
+            key: PublicKey,
             name: String,
             nif: String,
             birthdate: LocalDate,
@@ -164,6 +183,7 @@ class RetrofitNetworkDataSource
         ): NetworkResult<AuthResponse> =
             api.register(
                 RegisterRequest(
+                    key,
                     name,
                     nif,
                     birthdate,
@@ -192,30 +212,45 @@ class RetrofitNetworkDataSource
             )
 
         // Cafeteria
-        override suspend fun getCafeteriaItems(token: String): NetworkResult<List<CafeteriaItem>> = api.getCafeteriaItems(token.auth)
+        override suspend fun getCafeteriaItems(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<List<CafeteriaItem>> = api.getCafeteriaItems(token.auth, key)
 
         // Events
-        override suspend fun getEvents(token: String): NetworkResult<List<Event>> = api.getEvents(token.auth)
+        override suspend fun getEvents(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<List<Event>> = api.getEvents(token.auth, key)
 
         override suspend fun getEvent(
             token: String,
+            key: PrivateKey,
             eventId: String,
-        ): NetworkResult<Event> = api.getEvent(token.auth, eventId)
+        ): NetworkResult<Event> = api.getEvent(token.auth, key, eventId)
 
         override suspend fun buyTickets(
             token: String,
+            key: PrivateKey,
             eventId: String,
             ticketAmount: Int,
-        ): NetworkResult<BuyTicketResponse> = api.buyTickets(token.auth, eventId, BuyTicketRequest(ticketAmount))
+        ): NetworkResult<BuyTicketResponse> = api.buyTickets(token.auth, key, eventId, BuyTicketRequest(ticketAmount))
 
         // Orders
-        override suspend fun getOrders(token: String): NetworkResult<List<Order>> = api.getOrders(token.auth)
+        override suspend fun getOrders(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<List<Order>> = api.getOrders(token.auth, key)
 
         // Profile
-        override suspend fun getProfile(token: String): NetworkResult<User> = api.getProfile(token.auth)
+        override suspend fun getProfile(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<User> = api.getProfile(token.auth, key)
 
         override suspend fun updateProfile(
             token: String,
+            key: PrivateKey,
             id: String,
             name: String,
             nif: String,
@@ -228,6 +263,7 @@ class RetrofitNetworkDataSource
         ): NetworkResult<User> =
             api.updateProfile(
                 token.auth,
+                key,
                 User(
                     id,
                     name,
@@ -241,18 +277,28 @@ class RetrofitNetworkDataSource
                 ),
             )
 
-        override suspend fun deleteProfile(token: String): NetworkResult<Boolean> = api.deleteProfile(token.auth)
+        override suspend fun deleteProfile(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<Boolean> = api.deleteProfile(token.auth, key)
 
         // Tickets
-        override suspend fun getTickets(token: String): NetworkResult<List<Ticket>> = api.getTickets(token.auth)
+        override suspend fun getTickets(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<List<Ticket>> = api.getTickets(token.auth, key)
 
         override suspend fun getTicket(
             token: String,
+            key: PrivateKey,
             ticketId: String,
-        ): NetworkResult<Ticket> = api.getTicket(token.auth, ticketId)
+        ): NetworkResult<Ticket> = api.getTicket(token.auth, key, ticketId)
 
         // Vouchers
-        override suspend fun getVouchers(token: String): NetworkResult<List<Voucher>> = api.getVouchers(token.auth)
+        override suspend fun getVouchers(
+            token: String,
+            key: PrivateKey,
+        ): NetworkResult<List<Voucher>> = api.getVouchers(token.auth, key)
 
         override suspend fun sendCart(request: SendCartRequest): NetworkResult<OrderWithModels> = api.sendCart(request)
 

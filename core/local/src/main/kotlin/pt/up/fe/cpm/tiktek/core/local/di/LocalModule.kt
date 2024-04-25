@@ -8,6 +8,7 @@ import pt.up.fe.cpm.tiktek.core.local.LocalAuthenticationTokenDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalCafeteriaDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalCartDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalEventsDataSource
+import pt.up.fe.cpm.tiktek.core.local.LocalKeysDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalOrdersDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalTicketsDataSource
 import pt.up.fe.cpm.tiktek.core.local.LocalUserDataSource
@@ -15,6 +16,7 @@ import pt.up.fe.cpm.tiktek.core.local.LocalVouchersDataSource
 import pt.up.fe.cpm.tiktek.core.local.datastore.DataStoreAuthenticationTokenDataSource
 import pt.up.fe.cpm.tiktek.core.local.datastore.DataStoreCartDataSource
 import pt.up.fe.cpm.tiktek.core.local.datastore.DataStoreUserDataSource
+import pt.up.fe.cpm.tiktek.core.local.keystore.KeystoreKeysDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomCafeteriaDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomEventsDataSource
 import pt.up.fe.cpm.tiktek.core.local.room.RoomOrdersDataSource
@@ -35,6 +37,9 @@ abstract class LocalModule {
 
     @Binds
     abstract fun bindLocalEventsDataSource(source: RoomEventsDataSource): LocalEventsDataSource
+
+    @Binds
+    abstract fun bindLocalKeysDataSource(source: KeystoreKeysDataSource): LocalKeysDataSource
 
     @Binds
     abstract fun bindLocalOrdersDataSource(source: RoomOrdersDataSource): LocalOrdersDataSource

@@ -6,6 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.LocalDate
+import pt.up.fe.cpm.tiktek.core.data.KeysRepository
 import pt.up.fe.cpm.tiktek.core.data.UserRepository
 import pt.up.fe.cpm.tiktek.core.data.work.Deletable
 import pt.up.fe.cpm.tiktek.core.data.work.Syncable
@@ -25,11 +26,12 @@ class LocalFirstUserRepository
         private val networkDataSource: NetworkDataSource,
         private val localDataSource: LocalUserDataSource,
         private val authenticationTokenDataSource: LocalAuthenticationTokenDataSource,
+        private val keysRepository: KeysRepository,
     ) : UserRepository, Syncable, Deletable {
         override suspend fun sync(): NetworkResult<Unit> {
             val token = getToken().first() ?: return NetworkResult.Failure
 
-            val result = networkDataSource.getProfile(token)
+            val result = networkDataSource.getProfile(token, keysRepository.privateKey)
 
             result.getOrNull()?.let {
                 localDataSource.update(it)
@@ -55,7 +57,9 @@ class LocalFirstUserRepository
             email: String,
             password: String,
         ): NetworkResult<Unit> {
-            val result = networkDataSource.login(email, password)
+            keysRepository.generateKeys()
+
+            val result = networkDataSource.login(keysRepository.publicKey, email, password)
 
             result.getOrNull()?.let { handleToken(it.token) }
 
@@ -73,8 +77,11 @@ class LocalFirstUserRepository
             expirationDateCc: String,
             cvvCc: String,
         ): NetworkResult<Unit> {
+            keysRepository.generateKeys()
+
             val result =
                 networkDataSource.register(
+                    keysRepository.publicKey,
                     name,
                     nif,
                     birthdate,
@@ -115,6 +122,7 @@ class LocalFirstUserRepository
             val result =
                 networkDataSource.updateProfile(
                     token,
+                    keysRepository.privateKey,
                     id = user.id,
                     name,
                     nif,
@@ -145,6 +153,7 @@ class LocalFirstUserRepository
             val result =
                 networkDataSource.updateProfile(
                     token,
+                    keysRepository.privateKey,
                     id = user.id,
                     name = user.name,
                     nif = user.nif,

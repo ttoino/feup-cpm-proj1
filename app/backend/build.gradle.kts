@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.double.receive)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.request.validation)
     implementation(libs.ktor.server.status.pages)
