@@ -65,28 +65,28 @@ Pages highlighted in pink within the navigation map represent sections accessibl
 
 
 ## Features
-[X] Login
-[X] Register account
-[X] Logout
-[X] Change personal details and payment information
-[X] Credit card validation  (MATEMATICO)
-[X] SSN validation  (MATEMATICO)
-[X] Check items available in the cafeteria menu 
-[X] Check if cafeteria is open or closed
-[X] Add items to cart
-[X] Remove items from cart
-[X] Change items quantity in cart
-[X] Buy cafeteria order
-[X] Cancel cafeteria order
-[X] Check my cafeteria orders that are still available to be used
-[X] Check my cafeteria orders history
-[X] Check next events
-[X] Check information about a specific event (date, time, price, description)
-[X] Buy tickets to upcoming events
-[X] Check my event tickets that are still available to be used
-[X] Check my event tickets history
-[X] Available in Portuguese and English
-[ ] SECURITY <-----------
+- [X] Login
+- [X] Register account
+- [X] Logout
+- [X] Change personal details and payment information
+- [X] Credit card validation  (MATEMATICO)
+- [X] SSN validation  (MATEMATICO)
+- [X] Check items available in the cafeteria menu 
+- [X] Check if cafeteria is open or closed
+- [X] Add items to cart
+- [X] Remove items from cart
+- [X] Change items quantity in cart
+- [X] Buy cafeteria order
+- [X] Cancel cafeteria order
+- [X] Check my cafeteria orders that are still available to be used
+- [X] Check my cafeteria orders history
+- [X] Check next events
+- [X] Check information about a specific event (date, time, price, description)
+- [X] Buy tickets to upcoming events
+- [X] Check my event tickets that are still available to be used
+- [X] Check my event tickets history
+- [X] Available in Portuguese and English
+- [ ] SECURITY <-----------
 
 ----------------------
 
