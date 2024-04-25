@@ -46,9 +46,10 @@ Mariana Solange Monteiro Rocha
 
 1. [Overview](#CHANGE)
 2. [App Architecture](#architecture)
-3. [Server Database](#server-database)
-4. [Navigation Map](#navigation-map)
-5. [Implemented Features](#features)
+3. [Modularization](#modularization)
+4. [Server Database](#server-database)
+5. [Navigation Map](#navigation-map)
+6. [Implemented Features](#features)
    
 - [ ] Performed Scenarios Tests
 - [ ] Screenshot e tutorial como usar
@@ -68,11 +69,17 @@ What the user sees amd interacts with on their device. Contains all the visual i
 ### View Model
 
 The view model acts as a middleman between the UI and the data. Contains the business logic required to transform raw data into a appropriate format to be presented in the UI.
-By acting as a middleman, it provides a **separation of concerns** which inscreases app modularity.
+By acting as a middleman, it provides a **separation of concerns** which increases app modularity.
+
+### Use Case
+
+Optional layer that contains reusable business logic. It is used when appropriate to reduce code duplication and increase code reusability.
 
 ### Repositories
 
-Repositories provide a easy way for accessing data. They contain methods for fetching, updating and deleting data. Their service helps centralizing data access and serves as a mediator between the view models' business logic and the data own of storage.
+Repositories provide a easy way to access data. They contain methods for fetching, updating and deleting data.
+Their usage allows us to abstract the data sources, making it easier to switch between different data sources.
+They can also use network and local data sources to provide local first data access, even when offline.
 
 ### Data Sources
 
@@ -88,11 +95,11 @@ Data stored on the user's device. This kind of data source enables offline acces
 
 ### Work Manager
 
-TODO
+Work Manager allows us to schedule tasks that run in the background, not necessarily tied to any of the app's components. It is used to perform synchronization tasks with the server, but also to delete personal information when the user logs out.
 
 ### Model
 
-TODO
+Models represent the data that is being used in the app. They give us type safety and help us to avoid errors when working with data.
 
 <div>
 
@@ -100,6 +107,55 @@ TODO
 ###### Figure 1 - TikTek Architecture
 
 </div>
+
+## Modularization
+
+Because multiple apps were developed in parallel, they were divided into several modules to make it easier to manage, maintain, and reuse code. 
+
+The modules fall into three main categories:
+
+### App Modules
+
+The app modules are the main modules that contain the code specific to each app/service.
+
+For example, the `app:main` module contains the code for the main app, while the `app:backend` module contains the code for the backend server.
+
+These modules are:
+
+- **app:backend**: Contains the code for the backend server.
+- **app:cafeteria**: Contains the code for the cafeteria terminal.
+- **app:main**: Contains the code for the main app.
+- **app:tickets**: Contains the code for the ticket terminal.
+
+### Feature Modules
+
+The feature modules contain the code for the different features of the main app.
+Each feature module contains the code for a different feature, and these are totally independent from each other.
+This way, if a feature is not needed, it can be easily removed without affecting the rest of the app.
+
+These modules are:
+
+- **feature:auth**: Contains the code for the authentication feature.
+- **feature:cafeteria**: Contains the code for the cafeteria feature.
+- **feature:events**: Contains the code for the events feature.
+- **feature:profile**: Contains the code for the profile feature.
+- **feature:tickets**: Contains the code for the tickets feature.
+
+### Core Modules
+
+The core modules contain the code that can be shared between the different modules.
+This way, the code is not duplicated, and it is easier to maintain and update.
+
+These modules are:
+
+- **core:app**: Contains the code that is shared between the different app modules, such as helpers for Applications and Activities.
+- **core:data**: Contains the code for the different data repositories used throughout the apps.
+- **core:database**: Contains the code for the database used by the backend server.
+- **core:domain**: Contains the code for the different use cases used throughout the apps.
+- **core:local**: Contains the code for the different local data sources used throughout the apps.
+- **core:model**: Contains the code for the different models used throughout the apps.
+- **core:network**: Contains the code for the different network data sources used throughout the apps.
+- **core:ui**: Contains the code for the common UI components used throughout the apps.
 
 ## Data Schemas
 
@@ -368,5 +424,6 @@ This section outlines some test scenarios conducted to evaluate the functionalit
 
 
 ## References
+
 1. [Google Guide to App Architecture](https://developer.android.com/topic/architecture)
 2.

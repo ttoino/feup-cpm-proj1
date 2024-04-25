@@ -26,7 +26,6 @@ include(
     ":feature:auth",
     ":feature:cafeteria",
     ":feature:events",
-    ":feature:orders",
     ":feature:profile",
     ":feature:tickets",
     ":core:app",
