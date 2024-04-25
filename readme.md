@@ -3,11 +3,11 @@
 ## Team
 
 
-Anete Medina Pereira &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
+Anete Medina Pereira         [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
 
-João António Semedo Pereira &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
+João António Semedo Pereira          [202007145](https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202007145)
 
-Mariana Solange Monteiro Rocha &nbsp; &nbsp; [202004656](<(https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)>)
+Mariana Solange Monteiro Rocha       [202004656](<(https://sigarra.up.pt/feup/pt/fest_geral.cursos_list?pv_num_unico=202004656)>)
 
 ## Topics
 
@@ -59,7 +59,12 @@ TODO
 
 TODO
 
+<div>
+
 ![architecture.png](images-report%2Farchitecture.png)
+###### Figure 1 - TikTek Architecture
+
+</div>
 
 ## Data Schemas
 
