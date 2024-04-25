@@ -277,7 +277,7 @@ Users can access their personal page to update their personal information or the
 
 <div align="center">
 
-![profile-screenS.png](images-report%profile-screens.png)
+![profile-screenS.png](images-report%2Fprofile-screens.png)
 
 ###### Figure 6 - Profile's Pages
 </div>
@@ -291,7 +291,7 @@ The ticket terminal allows customers to validate their purchased tickets. Users 
 <div align="center">
 
 ![ticket-terminal.png](images-report%2Fticket-terminal.png)
-###### Figure X - Authentication Pages
+###### Figure 7 - Ticket Terminal Pages
 </div>
 
 #### Cafeteria Terminal
@@ -301,7 +301,7 @@ The cafeteria terminal facilitates ordering and payment for cafeteria items. Cus
 <div align="center">
 
 ![cafeteria-terminal.png](images-report%2Fcafeteria-terminal.png)
-###### Figure X - Authentication Pages
+###### Figure 8 - Cafeterial Terminal Pages
 </div>
 
 
