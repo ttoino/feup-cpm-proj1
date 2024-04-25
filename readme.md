@@ -346,6 +346,9 @@ This JWT stores the user id for authorization, and the user public key.
 This pulbic key is used to verify the request body signature, which is sent with every request, and signed by the app using the user's private key.
 This key pair is generated each time the user signs in to a new app, and is stored in the android keystore.
 
+The terminal apps do not use any authentication, as they are assumed to be in a protected network when deployed correctly, so no attacks are feasable.
+In this vein, no encryption is done, because in a correct deployment HTTPS/TLS should be used for encryption.
+
 ## Features
 
 ### Main Features
