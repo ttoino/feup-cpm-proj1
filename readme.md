@@ -65,20 +65,28 @@ Pages highlighted in pink within the navigation map represent sections accessibl
 
 
 ## Features
-Pomos prints ou??
-- [x] Register Account
-- [x] Login
-- [x] Log Out
-- [ ] Place a Cafeteria Order
-- [ ] Buy Tickets
-- [ ] See past tickets acquired
-- [ ] Check cafeteria orders history
-- [x] Change user's personal information and payment data
-- [ ] Check information about a certain event
-- [ ] Validate orders
-- [ ] Insert Cafeteria Items in a Cart
-- [ ] Validate event tickets
-
+[X] Login
+[X] Register account
+[X] Logout
+[X] Change personal details and payment information
+[X] Credit card validation  (MATEMATICO)
+[X] SSN validation  (MATEMATICO)
+[X] Check items available in the cafeteria menu 
+[X] Check if cafeteria is open or closed
+[X] Add items to cart
+[X] Remove items from cart
+[X] Change items quantity in cart
+[X] Buy cafeteria order
+[X] Cancel cafeteria order
+[X] Check my cafeteria orders that are still available to be used
+[X] Check my cafeteria orders history
+[X] Check next events
+[X] Check information about a specific event (date, time, price, description)
+[X] Buy tickets to upcoming events
+[X] Check my event tickets that are still available to be used
+[X] Check my event tickets history
+[X] Available in Portuguese and English
+[ ] SECURITY <-----------
 
 ----------------------
 
