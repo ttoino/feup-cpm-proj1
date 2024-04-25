@@ -247,6 +247,8 @@ The Order schema represents an order made by a customer. Each order has a unique
 
 The Voucher schema represents a voucher that can be redeemed by a user for discounts or special offers. Each voucher has a unique identifier (ID), a discount amount (Discount), an optional associated item (Item), a user who owns the voucher (User), and an optional associated order (Order).
 
+When users spend 200€ on tickets they receive a 5% discount voucher and each time they buy a ticket for an event they receive a free product voucher with a random product.
+
 <div align="center">
 
 | Attribute | Type               |
