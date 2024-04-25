@@ -44,7 +44,7 @@ Mariana Solange Monteiro Rocha
 
 ## Index
 
-1. [Overview](#CHANGE)
+1. [Overview](#overview)
 2. [App Architecture](#architecture)
 3. [Modularization](#modularization)
 4. [Server Database](#server-database)
@@ -53,6 +53,9 @@ Mariana Solange Monteiro Rocha
    
 - [ ] Performed Scenarios Tests
 - [ ] Screenshot e tutorial como usar
+
+## Overview
+TikTek is a mobile app created on a project regarding the Mobile Computing course. Its main functionalities include buying event tickets and ordering from the theater cafeteria, offering an immersive experience for customers. 
 
 ## Architecture
 
