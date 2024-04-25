@@ -207,6 +207,9 @@ The users can create an account if they don't have one or log in in a previously
 ##### Features:
 - [x] Register account
 - [x] Log into account
+- [x] Mathematical Credit card validation upon creation
+- [x] Mathematical SSN validation upon creation
+- [x] User needs to be 13 years-old or older to register an account
 
 <div align="center">
 
@@ -235,13 +238,13 @@ When the users log in, as referred above, they are redirected to the events page
 
 
 ![events-screens2.png](images-report%2Fevents-screens-2.png)
-###### Figure 5 - Events' Pages
+###### Figure 4 - Events' Pages
 </div>
 
 
 #### Cafeteria 
 
-Besides being able to buy and check information about upcoming event, users are also allowed to buy from the local theatre cafeteria using the app.  When an user attempts to finish a purchase, just like in events tickets, they have to confirm that they are the owners of the phone by using biometric authentication.
+Besides being able to buy and check information about upcoming event, users are also allowed to buy from the local theatre cafeteria using the app. When an user attempts to finish a purchase, just like in events tickets, they have to confirm that they are the owners of the phone by using biometric authentication.
 After a purchase is made, a QR code is generated to be validated on the terminal. It contains all the products bought and their quantity, vouchers used and the price before and after the use of the vouchers.
 
 ##### Features:
@@ -258,10 +261,27 @@ After a purchase is made, a QR code is generated to be validated on the terminal
 
 <div align="center">
 
-![events-screenS.png](images-report%2Fcafeteria-screens.png)
+![cafeteria-screenS.png](images-report%2Fcafeteria-screens.png)
 
 ###### Figure 5 - Cafeteria's Pages
 </div>
+
+#### Profile 
+Users can access their personal page to update their personal information or their payment details (update outdated credit card). In this page users can log out of the app if they want.
+
+##### Features:
+- [x] Logout
+- [x] Change personal details and payment information
+- [x] Mathematical Credit card validation upon change
+- [x] Mathematical SSN validation upon change
+
+<div align="center">
+
+![profile-screenS.png](images-report%profile-screens.png)
+
+###### Figure 6 - Profile's Pages
+</div>
+
 
 
 #### Ticket Terminal
