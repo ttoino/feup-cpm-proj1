@@ -12,7 +12,7 @@ class BaseConventionPlugin : Plugin<Project> {
 
             extensions.configure<KtlintExtension> {
                 filter {
-                    exclude { it.path.contains("generated/") }
+                    exclude { it.file.absolutePath.contains("/build/generated/") }
                 }
             }
         }
