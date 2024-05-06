@@ -1,6 +1,6 @@
 [versions]
 akkurate = "0.7.0"
-androidGradlePlugin = "8.2.0"
+androidGradlePlugin = "8.4.0"
 androidTools = "31.4.0"
 androidxActivity = "1.8.2"
 androidxComposeBom = "2024.02.02"
